@@ -1,0 +1,17 @@
+<script>
+    Nylon.addReducer('app', function (state, action) {
+        state = state || {
+            name: 'ระบบทดสอบ',
+            menu: [
+                {
+                    label: 'โมดูล',
+                    sub: [
+                        { icon: 'info', label: 'example', path: '/example' },
+                        { icon: 'info', label: '404', path: '/404' }
+                    ]
+                }
+            ]
+        }
+        return state
+    })
+</script>

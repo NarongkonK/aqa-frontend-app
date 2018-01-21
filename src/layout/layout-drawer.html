@@ -1,0 +1,278 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+
+<link rel="import" href="../../bower_components/aqa-font/aqa-mitr-font.html">
+<link rel="import" href="../../bower_components/aqa-styles/flexbox-grid.html">
+<link rel="import" href="../../bower_components/aqa-icons/aqa-icon-menu.html">
+
+
+<link rel="import" href="../redux-mixin.html">
+<link rel="import" href="../redux/app-redux.html">
+
+<dom-module id="layout-drawer">
+    <template>
+        <style include="flexbox-grid"></style>
+        <style>
+            :host {
+                --main-color: #e0e0e0
+            }
+
+            * {
+                font-family: MitrLight, sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            :host {
+                display: block;
+                z-index: 1;
+            }
+
+            #drawer {
+                z-index: 1
+            }
+
+            iron-selector>paper-icon-item {
+                cursor: pointer;
+                font-family: mitr-light, sans-serif;
+                -webkit-font-smoothing: antialiased;
+                background-color: #263238;
+                color: #b0bec5;
+            }
+
+            paper-icon-item {
+                --paper-item-min-height: 30px;
+                line-height: 30px;
+                font-size: 14px;
+            }
+
+            iron-selector>paper-icon-item:hover {
+                background-color: #192125;
+                color: #ffffff;
+            }
+
+            iron-selector>paper-icon-item.iron-selected {
+                color: #ffffff;
+                background-color: #232C33;
+            }
+
+            iron-selector>.menu-item {
+                cursor: pointer;
+                font-family: mitr-light, sans-serif;
+                -webkit-font-smoothing: antialiased;
+                background-color: #263238;
+                color: #a3afb7;
+            }
+
+            .menu-item {
+                padding:3px 10px 3px 20px;
+                display: -webkit-flex;
+                display: flex;
+                -webkit-align-items: center;
+                align-items: center;
+
+
+                --paper-item-min-height: 30px;
+                line-height: 30px;
+                font-size: 1rem;
+            }
+
+            iron-selector>.menu-item:hover {
+                background-color: #1e282c;
+                color: #2196f3;
+            }
+
+            iron-selector>.menu-item.iron-selected {
+                color: #ffffff;
+                background-color: #192125;
+            }
+
+            .menu-item > div {
+                padding-left:15px;
+            }
+
+            .title-menu {
+                display: -webkit-flex;
+                display: flex;
+                -webkit-align-items: center;
+                align-items: center;
+                -webkit-justify-content: space-between;
+                justify-content: space-between;
+                font-family: MitrRegular;
+                height: 45px;
+                padding-left: 16px;
+                background-color: #161d21;
+                border-bottom: 1px solid #333;
+                color: #ffffff;
+                cursor: pointer;
+            }
+
+            iron-icon.icon-menu {
+                /* --iron-icon-stroke-color: #FFF; */
+                color: #efeff1;
+                cursor: pointer;
+                /* fill: red; */
+            }
+
+            .home-icon {
+                color: var(--main-color);
+                --iron-icon-height: 45px;
+                --iron-icon-width: 45px;
+            }
+
+          
+
+            #style-4::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                background-color: #F5F5F5;
+            }
+
+            #style-4::-webkit-scrollbar {
+                width: 4px;
+                background-color: #F5F5F5;
+            }
+
+            #style-4::-webkit-scrollbar-thumb {
+                background-color: #000000;
+                border: 2px solid #555555;
+            }
+
+            .page {
+                background-color: #263238;
+                height: 100vh;
+            }
+
+            .icon-page {
+                height: 128px;
+            }
+
+            .icon-page>iron-icon {
+                height: 80%;
+                width: 80%;
+            }
+
+            app-toolbar{
+                font-family: MitrLight;
+                font-size: 1.6rem;
+                height: 60px;
+                color: #fff;
+                background-color: #62a8ea;
+                text-align: center;
+            }
+            
+        </style>
+        <div class="page">
+            <app-toolbar>
+                <div main-title>Automated QA </div>
+            </app-toolbar>
+            <div style="height:100%">
+                <div name="menu">
+                    <template is="dom-repeat" items="{{menu}}">
+                        <div class="title-menu" on-click="toggle">
+                            [[item.label]]
+                            <paper-icon-button icon="my-icons:expand-more"></paper-icon-button>
+                        </div>
+                        <iron-collapse opened>
+                            <iron-selector attr-for-selected="path" selected="[[pathName]]">
+                                <template is="dom-repeat" items="{{item.sub}}">
+                                    <div class="menu-item" path$="[[item.path]][[item.label]]" on-click="_changePage">
+                                        <iron-icon icon="aqa-menu:[[item.icon]]"></iron-icon>
+                                        <div>[[item.label]]</div>
+                                    </div>
+                                </template>
+                            </iron-selector>
+                        </iron-collapse>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+        class LayoutDrawer extends ReduxMixin(Polymer.Element) {
+
+            static get is() { return 'layout-drawer'; }
+
+            static get properties() {
+                return {
+                    page: String,
+                    i18n: {
+                        statePath: 'i18n'
+                    },
+                    menu:{
+                        type:Array,
+                        statePath: 'app.menu'
+                    },
+                    pathName:String
+                }
+            }
+
+            toggle(e) {
+                let getElement = e.currentTarget.nextElementSibling
+                getElement.toggle()
+                let icon = e.currentTarget.childNodes[1].icon
+                if (icon === 'my-icons:expand-more') {
+                    e.currentTarget.childNodes[1].icon = 'my-icons:chevron-right'
+                } else {
+                    e.currentTarget.childNodes[1].icon = 'my-icons:expand-more'
+                }
+            }
+
+            ready() {
+                super.ready()
+                
+            }
+
+            toogleMenu(index) {
+                this.$.drawer.toggle();
+            }
+
+            _changePage(e) {
+                let path = `${e.model.item.path}`
+                Nylon.redirect(path)
+                setTimeout(()=>{
+                    this.dispatchEvent(new CustomEvent('layout-close-drawer'));
+                },500)
+            }
+            changeMenu(e) {
+                let page = (this.menuPage === 'main' ? 'menu' : 'main')
+                // ถ้า this.menuIsUse ว่าง ให้เอาเมนูอันแรกไปใส่
+                if (this.menuIsUse.length < 1) {
+                    this.set('menuIsUse', this.menu[0].sub_title_menu)
+                }
+                this.set('menuPage', page)
+                // console.log(page);
+            }
+
+            changeToMenu(e) {
+                // console.log(e.currentTarget.name);
+                let item = e.model.__data.item.sub_title_menu
+
+                this.set('menuIsUse', item)
+                // console.log(e.model.__data.item.sub_title_menu);
+                this.changeMenu()
+            }
+            
+            checklingth(text) {
+                if (this._changeTotext(text).length >= 25) {
+                    return 'padding-left: 13px;'
+                } else {
+                    return ''
+                }
+            }
+
+        }
+
+        window.customElements.define(LayoutDrawer.is, LayoutDrawer);
+    </script>
+</dom-module>

@@ -1,0 +1,33 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/nylon-app.html",
+  "fragments": [
+    "src/pages/page-register/page-register.html",
+    "src/pages/page-test-login/page-test-login.html",
+    "src/pages/page-profile/page-profile.html",
+    "src/pages/page-404/page-404.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "service-worker.js",
+    "bower_components/webcomponentsjs/*.js"
+    
+  ],
+  "lint": {
+    "rules": ["polymer-2"]
+  },
+  "builds": [{
+    "js": {
+      "compile": true,
+      "minify": true
+    },
+    "css": {"minify": true},
+    "html": {"minify": true},
+    "bundle": true
+  }]
+}

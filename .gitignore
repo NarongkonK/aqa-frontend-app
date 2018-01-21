@@ -1,0 +1,9 @@
+bower_components/
+build/
+node_modules/
+loggers/
+.vscode/settings.json
+.vscode/launch.json
+yarn.lock
+package-lock.json
+src/nylon-init.html

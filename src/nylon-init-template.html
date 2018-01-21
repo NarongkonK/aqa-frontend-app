@@ -1,0 +1,65 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/nylon-pages/nylon-pages.html">
+<link rel="import" href="./layout/layout-main.html">
+
+<!-- [[gen_import]] -->
+
+<link rel="lazy-import" href="pages/page-404/page-404.html">
+<!-- เรียกล็อกอิน -->
+
+<link rel="import" href="./redux-mixin.html">
+
+<dom-module id="nylon-init">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+      [hidden] {
+        display: none;
+      }
+    </style>
+
+   
+    <layout-main id="layoutMain" path-name="[[pathName]]">
+      <nylon-pages id="nylonPage">
+        <!-- [[gen_route]] -->
+        <page-404 path="*"></page-404>
+      </nylon-pages>
+    </layout-main>
+
+
+
+  </template>
+
+  <script>
+    class NylonInit extends ReduxMixin(Polymer.Element) {
+
+      static get is() { return 'nylon-init' }
+
+      static get properties() {
+        return {
+          pathName: {
+            type: String
+          },
+          login: {
+            type: Boolean,
+            value: true
+          },
+          dashboard: {
+            type: Boolean,
+            value: false
+          },
+          checkUrl: {
+            type: Boolean,
+            value: true
+          },
+        }
+      }
+     
+    }
+
+    window.customElements.define(NylonInit.is, NylonInit);
+  </script>
+</dom-module>

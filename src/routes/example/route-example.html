@@ -1,0 +1,33 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+
+<link rel="import" href="../../redux-mixin.html">
+<link rel="import" href="../../i18n/example-i18n.html">
+
+<dom-module id="route-example" topic="หัวข้อของหน้า">
+    <template>
+        <style include="aqa-styles"></style>
+        <div class="page-container">
+            
+        </div>
+    </template>
+    <script>
+        class RouteExample extends ReduxMixin(Polymer.Element) {
+            static get is() {
+                return 'route-example';
+            }
+
+            static get properties() {
+                return {
+                    i18n: {
+                        type: Object,
+                        statePath: ''
+                    }
+                };
+            }
+
+            
+        }
+        window.customElements.define(RouteExample.is, RouteExample);
+    </script>
+</dom-module>

@@ -1,0 +1,53 @@
+<script>
+    window.Nylon = window.Nylon || {}
+
+    const i18nReducer = (function () {
+        
+        const getCurrentLang = function(lang){
+            if(!localStorage.lang){
+                localStorage.setItem("lang", lang);
+            }
+            return localStorage.lang
+        }
+
+        const initial = {
+            language: getCurrentLang('en'),
+            resource:{}
+        }
+        const reducer = function (state=initial, action) {
+            switch (action.type) {
+                case 'CHANGE_LANGUAGE': 
+                    return Object.assign({},state,{language:action.language},state.resource[action.language])
+                case 'ADD_LANGUAGE': 
+                    var resource = state.resource
+                    for (key in action.resource) {
+                        var preData = {}
+                        preData[action.name] = action.resource[key]
+                        resource[key] = Object.assign({},resource[key],preData)
+                    }
+                    
+                    return Object.assign({},state,{resource:resource},resource[state.language])
+                default: return state
+            }
+        };
+
+        return reducer
+
+    })()
+    
+    Nylon.addLanguage = (name, resource) => {
+        Nylon.store.dispatch({
+            type: 'ADD_LANGUAGE',
+            name,
+            resource
+        })
+    }
+
+    Nylon.changeLanguage = (language) => {
+        localStorage.setItem("lang", language);
+        Nylon.store.dispatch({
+            type: 'CHANGE_LANGUAGE',
+            language
+        })
+    }
+</script>

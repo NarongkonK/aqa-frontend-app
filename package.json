@@ -1,0 +1,24 @@
+{
+  "name": "polymer-starter-kit",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "async": "^2.6.0",
+    "cheerio": "^1.0.0-rc.2",
+    "eslint": "^3.19.0",
+    "eslint-config-google": "^0.7.0",
+    "eslint-plugin-html": "^2.0.0",
+    "glob": "^7.1.2",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
+    "npm-run-all": "^4.0.2"
+  },
+  "scripts": {
+    "serve:dev": "polymer serve ./ --port 8080 --hostname 0.0.0.0",
+    "gulp:route": "gulp route"
+  },
+  "dependencies": {
+    "redux": "^3.7.1",
+    "redux-thunk": "^2.2.0"
+  }
+}

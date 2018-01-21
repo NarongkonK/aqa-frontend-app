@@ -1,0 +1,27 @@
+<script>
+    Nylon.addReducer('example', function (state, action) {
+        state = state || {
+            list: []
+        }
+
+        switch (action.type) {
+            case 'EXAMPLE_GET_LIST':
+                return Object.assign(state,{
+                    list:action.payload 
+                })
+            default:
+                return state
+        }
+        return state
+    })
+
+
+    Nylon.addAction({
+        exampleGetList:function(data){
+            return dispatch => {
+                dispatch({ type: 'EXAMPLE_GET_LIST', payload: data })
+            }
+        }
+    })
+
+</script>

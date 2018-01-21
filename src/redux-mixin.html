@@ -1,0 +1,74 @@
+<script src="../node_modules/redux/dist/redux.min.js"></script>
+<script src="../node_modules/redux-thunk/dist/redux-thunk.min.js"></script>
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
+<link rel="import" href="./nylon-i18n.html">
+
+<script>
+    // Setup a Redux store
+    Nylon.createReducer = (asyncReducers) => {
+        return Redux.combineReducers(
+            Object.assign({}, {
+                i18n: i18nReducer
+            }, asyncReducers)
+        )
+    }
+
+    Nylon.store = Redux.createStore(
+        Nylon.createReducer(),
+        // Open the dev tools extension
+        Redux.compose(
+            Redux.applyMiddleware(ReduxThunk.default),
+            window.devToolsExtension ? window.devToolsExtension() : v => v
+        )
+    )
+
+    // Reducer spliter
+    Nylon.store.asyncReducers = {}
+    Nylon.addReducer = (name, reducer) => {
+        Nylon.store.asyncReducers[name] = reducer
+        Nylon.store.replaceReducer(
+            Nylon.createReducer(Nylon.store.asyncReducers)
+        )
+    }
+
+
+    // Merge action
+    Nylon.store.actions = {}
+    Nylon.addAction = (actions) => {
+        Nylon.store.actions = Object.assign({}, Nylon.store.actions, actions)
+    }
+
+    // Dispatch store
+    Nylon.dispatch = function () {
+        var args = [];
+        if (arguments.length > 1) {
+            var argumentsArr = Array.prototype.slice.call(arguments)
+            args = argumentsArr.slice(1, argumentsArr.length)
+        } else if (arguments.length == 0) {
+            console.error('Nylon :: dispatch  must have arguments.')
+            return
+        }
+        if (el !== undefined) {
+            var el = args.filter(function (a) {
+                return a.localName
+            })
+
+            if (el.length != 0) {
+                console.error(`Nylon :: Do not have element in arguments. \n Error at ${arguments[0]} action.`)
+                return
+            }
+        }
+
+        if (Nylon.store.actions[arguments[0]]) {
+            Nylon.store.dispatch(
+                Nylon.store.actions[arguments[0]].apply(this, args)
+            )
+        }
+    }
+
+    // Create Mixin
+    window.ReduxMixin = PolymerRedux(Nylon.store)
+
+</script>

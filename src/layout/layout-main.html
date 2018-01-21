@@ -1,0 +1,337 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+
+<link rel="import" href="../../bower_components/aqa-title/aqa-title.html">
+
+
+<link rel="import" href="../../bower_components/aqa-font/aqa-mitr-font.html">
+<link rel="import" href="../../bower_components/aqa-styles/flexbox-grid.html">
+
+<link rel="import" href="./layout-drawer.html">
+
+<link rel="import" href="../redux-mixin.html">
+<link rel="import" href="../redux/app-redux.html">
+
+<dom-module id="layout-main">
+    <template>
+        <style>
+            :host {
+                --app-primary-color: #0288D1;
+                --app-secondary-color: black;
+                display: block;
+                --paper-listbox: {
+                    padding: 0.2rem;
+                    min-width: 300px;
+                    border-radius: 0.2rem;
+                }
+                --paper-item: {
+                    padding: 0.2rem 1rem;
+                    color: #76838f;
+                    font-weight: 100;
+                }
+                --paper-item-focused: {
+                    background-color: #f3f7f9;
+                    font-weight: 100;
+                    text-decoration: none;
+                }
+                ;
+                --paper-item-focused-before: {
+                    opacity: 0;
+                }
+                ;
+                --paper-item-selected: {
+                    background-color: #f3f7f9;
+                }
+                --paper-item-disabled: {
+                    background-color: #f3f7f9;
+                }
+                --paper-item-selected-weight:100;
+            }
+
+            iron-icon {
+                cursor: pointer;
+            }
+
+            .icon-sm {
+                --iron-icon-height: 16px;
+                --iron-icon-width: 16px;
+            }
+
+            .icon-md {
+                margin-left: 0.4rem;
+                margin-right: 0.4rem;
+                --iron-icon-height: 24px;
+                --iron-icon-width: 24px;
+            }
+
+            .icon-lg {
+                --iron-icon-height: 32px;
+                --iron-icon-width: 32px;
+            }
+
+            paper-item,
+            paper-item-body {
+                height: 1px;
+                font-family: MitrLight;
+                /* edit for ie.*/
+            }
+
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
+
+            /* 
+            app-header {
+                position: fixed;
+                z-index: 1;
+                width: 100%;
+            } */
+
+            app-toolbar.header {
+                height: 60px;
+
+                background-color: #fff;
+            }
+
+            [main-title] {
+                font-family: MitrLight;
+                color: #0288D1;
+                font-size: 1.6rem
+            }
+
+            @media screen and (max-width: 480px) {
+                [main-title] {
+                    font-family: MitrLight;
+                    color: #0288D1;
+                    font-size: 1.2rem
+                }
+            }
+
+
+
+            paper-icon-button {
+                color: #777;
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+
+
+            paper-progress {
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                --paper-progress-active-color: #FFFF8D;
+            }
+
+            .img-circle {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+            }
+        </style>
+
+        <app-drawer-layout responsive-width="1024px">
+            <app-drawer slot="drawer" id="drawer">
+                <layout-drawer id="layoutDrawer" path-name="[[pathName]]" on-layout-close-drawer="_closeDrawer"></layout-drawer>
+            </app-drawer>
+            <app-header-layout>
+                <app-header slot="header" fixed condenses effects="waterfall">
+                    <app-toolbar class="header">
+                        <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+                        <div main-title>[[appName]]</div>
+                        <!-- <paper-icon-button icon="social:notifications"></paper-icon-button>
+                        <paper-icon-button icon="icons:mail"></paper-icon-button>
+                        <paper-menu-button no-overlap horizontal-align="right">
+                            <div class="divImage" slot="dropdown-trigger" alt="menu">
+                                <img class="img-circle" src$="[[rootPath]][[info.profile_url]]" />
+                            </div>
+                            <paper-listbox slot="dropdown-content">
+
+                                <paper-icon-item disabled>
+                                    <img class="img-circle" src$="[[rootPath]][[info.profile_url]]" / slot="item-icon">
+                                    <paper-item-body two-line>
+                                        <div>[[info.type_academic.POSITIONTHAIDESC]][[info.firstname_th]] [[info.lastname_th]]</div>
+                                    </paper-item-body>
+                                </paper-icon-item>
+
+                                <paper-item>
+                                    <iron-icon icon="social:person"></iron-icon>
+                                    &nbsp;&nbsp;Profile
+                                </paper-item>
+                                <paper-item>
+                                    <iron-icon icon="icons:settings"></iron-icon>
+                                    <paper-item-body two-line>
+                                        &nbsp;&nbsp;Setting
+                                    </paper-item-body>
+                                    <iron-icon class="icon-sm" icon="editor:format-size" size="0.8" on-tap="chFont"></iron-icon>
+                                    <iron-icon class="icon-md" icon="editor:format-size" size="1" on-tap="chFont"></iron-icon>
+                                    <iron-icon class="icon-lg" icon="editor:format-size" size="1.2" on-tap="chFont"></iron-icon>
+                                </paper-item>
+                                <paper-item on-tap="logout">
+                                    <iron-icon icon="icons:exit-to-app"></iron-icon>
+                                    &nbsp;&nbsp;Log-out
+                                </paper-item>
+                            </paper-listbox>
+                        </paper-menu-button> -->
+
+                    </app-toolbar>
+                    <template is="dom-if" if="[[progressEnable]]">
+                        <paper-progress id="progress" value="[[progressValue]]" indeterminate="[[progressIndeterminate]]"></paper-progress>
+                    </template>
+                </app-header>
+                <div id="slotMain">
+                    <div style="padding-left:1rem;padding-top:1rem;">
+                        <aqa-title>[[topic]]</aqa-title>
+                    </div>
+
+                    <slot></slot>
+                </div>
+            </app-header-layout>
+        </app-drawer-layout>
+
+
+    </template>
+
+    <script>
+        class LayoutMain extends ReduxMixin(Polymer.Element) {
+
+            static get is() { return 'layout-main'; }
+
+            static get properties() {
+                return {
+                    i18n: {
+                        type: Object,
+                        statePath: 'i18n'
+                    },
+                    progressEnable: Boolean,
+                    progressIndeterminate: Boolean,
+                    progressValue: Number,
+                    showDrawer: {
+                        type: Boolean,
+                        value: false
+                    },
+                    pathName: {
+                        type: String,
+                        value: "/",
+                        observer: 'setFullScreen'
+                    },
+                    info: {
+                        type: Object,
+                        statePath: 'profile.info.basic'
+                    },
+                    topic: String,
+                    appName: {
+                        type: String,
+                        statePath: 'app.name'
+                    }
+                };
+            }
+
+            logout(){
+                Nylon.dispatch('authLogout') 
+            }
+            ready() {
+                super.ready()
+                Nylon.changeLanguage('th')
+            }
+            setFullScreen(e) {
+                if (e === '/') {
+                    this.set('showDrawer', false)
+                } else {
+                    this.set('showDrawer', true)
+                }
+
+            }
+            changeLanguage() {
+                if (this.i18n.language == "en") {
+                    Nylon.changeLanguage('th')
+                } else {
+                    Nylon.changeLanguage('en')
+                }
+            }
+
+
+            _closeDrawer() {
+                if (document.body.offsetWidth <= 1024) {
+                    this.$.drawer.close()
+                }
+
+            }
+
+            progress() {
+
+                if (this.progressEnable) {
+                    this.progressClose()
+                } else {
+                    this.progressEnable = true
+                    this.progressIndeterminate = true
+                    this.progressValue = Math.random() * (95 - 70) + 70
+
+                    setTimeout(() => {
+                        this.progressIndeterminate = false;
+                    }, 800)
+
+                    return this.progressClose.bind(this)
+                }
+
+
+            }
+
+            progressClose(callback) {
+                this.progressValue = 100
+                setTimeout(() => {
+                    this.progressIndeterminate = false;
+                    if (callback)
+                        callback()
+                }, 300)
+
+                setTimeout(() => {
+                    this.progressEnable = false
+                }, 500)
+            }
+
+            chFont(e) {
+                document.querySelector('body').style.fontSize = e.currentTarget.getAttribute('size') + 'rem'
+            }
+
+            // smFont(){
+            //     console.log({x:document.querySelector('body')})
+            //     document.querySelector('body').style.fontSize = '0.8rem'
+            //     console.log('smFont')
+            // }
+            // mdFont(){
+            //     console.log('mdFont')
+            //     document.querySelector('body').style.fontSize = '1rem'
+            // }
+            // lgFont(){
+            //     console.log('lgFont')
+            //     document.querySelector('body').style.fontSize = '1.2rem'
+            // }
+        }
+
+        window.customElements.define(LayoutMain.is, LayoutMain);
+    </script>
+</dom-module>
