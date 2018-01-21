@@ -7,3 +7,7 @@ loggers/
 yarn.lock
 package-lock.json
 src/nylon-init.html
+
+src/i18n
+src/redux
+src/routes
