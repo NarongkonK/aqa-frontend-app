@@ -1,0 +1,148 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="./../../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="nylon-panel-right">
+    <template>
+        <style>
+            app-drawer {
+                /*--app-drawer-width: 80%;*/
+                z-index: 1;
+            }
+
+            paper-icon-button {
+                width: 40px;
+                height: 40px;
+            }
+
+            paper-icon-button:hover {
+                /*background-color: #C8C8C8;*/
+                border-radius: 100%;
+            }
+
+            app-toolbar {
+                height: 48px;
+                color: #fff;
+                background-color: #0288D1;
+            }
+
+            .iconLeft {
+                position: absolute;
+                left: 95%;
+            }
+
+            #bgPanel {
+                position: fixed;
+                background-color: #000;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                right: 0;
+                opacity: 0.5;
+                z-index: 1;
+            }
+
+            .font {
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .content {
+                height: 90%;
+                overflow: auto;
+                background-color: #EFEFEF;
+                text-align: left;
+                /* padding:0.5rem; */
+            }
+
+            .content ::slotted([slot=content]) {
+                margin: 1rem;
+            }
+        </style>
+        <div id="bgPanel" hidden$="[[!opened]]" on-tap="close"></div>
+        <app-drawer id="appDrawer" align="end" persistent opened="{{opened}}" on-tap="closeBgAppDrawer">
+
+            <!-- <paper-material elevation="1"> -->
+            <app-toolbar>
+                <div main-title style="text-align:left">[[title]]</div>
+                <paper-icon-button icon="close" on-tap="close"></paper-icon-button>
+            </app-toolbar>
+            <!-- </paper-material> -->
+            <div class="content">
+                <slot name="header"></slot>
+                <slot name="content"></slot>
+            </div>
+        </app-drawer>
+    </template>
+    <script>
+        class NylonPanelRight extends Polymer.Element {
+            static get is() { return 'nylon-panel-right' }
+            static get properties() {
+                return {
+                    title: {
+                        type: String,
+                        value: 'title'
+                    },
+                    width: {
+                        type: String,
+                        value: '80%'
+                    }
+                }
+            }
+            // constructor() {
+            //     super()
+            //     try {
+            //         // console.log(typeof window.nylonPanelRight );
+            //         if (typeof window.nylonPanelRight === "undefined") {
+            //             window.nylonPanelRight = document.createElement('nylon-panel-right')
+            //             nylonPanelRight.setAttribute('id', "nylonPanelRight")
+            //             document.querySelector('body').appendChild(nylonPanelRight)
+            //         }
+            //     } catch (error) {
+            //         console.log(error);
+            //     }
+
+            // }
+            connectedCallback() {
+                super.connectedCallback()
+                this.setWidth();
+                window.addEventListener('resize', this.setWidth.bind(this), true);
+            }
+
+            setWidth() {
+                if (window.innerWidth <= 768) {
+                    this.updateStyles({
+                        '--app-drawer-width': '100%'
+                    })
+                } else {
+                    this.updateStyles({
+                        '--app-drawer-width': this.width
+                    })
+                }
+            }
+
+            toggle() {
+                this.$.appDrawer.toggle();
+            }
+
+            open() {
+                document.documentElement.style.overflow = 'hidden';
+                this.$.appDrawer.open();
+            }
+
+            close(e) {
+                document.documentElement.style.overflow = 'auto';
+                this.$.appDrawer.close();
+            }
+
+            closeBgAppDrawer(e) {
+                if (e.target.is == "app-drawer") {
+                    this.close();
+                }
+            }
+        }
+
+        window.customElements.define(NylonPanelRight.is, NylonPanelRight);
+    </script>
+</dom-module>

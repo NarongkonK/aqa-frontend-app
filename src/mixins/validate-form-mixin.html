@@ -1,0 +1,24 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<script>
+    ValidateFormMixin = Parent => class TestMixin extends polymerElementPlusMixin {
+        queryFrom(required) {
+            return this.shadowRoot.querySelectorAll(required)
+        }
+        extarFrom(required){
+            let arr = this.queryFrom(required)
+            let allTrue = []
+            for (var index = 0; index < arr.length; index++) {
+                allTrue.push(arr[index].validate())
+            }
+            return allTrue
+        }
+        validateForm(required) {
+            return this.extarFrom(required).every(elem => elem == true)
+        }
+        // resetFrom(required) {
+        //     return this.queryFrom(required).map((el) => el.reset())
+        // }
+    }
+
+</script>

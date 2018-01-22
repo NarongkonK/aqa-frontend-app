@@ -1,0 +1,53 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../layout/shared-styles.html">
+
+<link rel="import" href="d3-js.html">
+<link rel="import" href="c3-js.html">
+<link rel="import" href="c3-css.html">
+
+<dom-module id="nylon-c3">
+    <template>
+        <style include="shared-styles c3-css">
+            :host {
+                display: block;
+            }
+
+            /* .c3-shapes,
+            .c3-shapes-2,
+            .c3-arcs,
+            .c3-arcs-2 {
+                color: red;
+            } */
+
+            .c3-legend-item,
+            .c3-shape,
+            .c3-arc,
+            .c3-chart-arc,
+            .c3-target,
+            .c3-tooltip,
+            .c3-axis-y-label,
+            .c3-axis-x-label,
+            .c3-chart-arcs-title,
+            .tick {
+                @apply --nylon-font-mitr-family
+            }
+        </style>
+        <div id="chart"></div>
+    </template>
+
+    <script>
+        class NylonC3 extends Polymer.Element {
+            static get is() { return 'nylon-c3' }
+            ready() {
+                super.ready()
+                console.log('NylonC3')
+            }
+            generate(obj) {
+                obj.bindto = this.$.chart
+                this.chart = c3.generate(obj)
+            }
+        }
+
+        window.customElements.define(NylonC3.is, NylonC3);
+    </script>
+</dom-module>

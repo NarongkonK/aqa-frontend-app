@@ -1,0 +1,110 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- <script src="../../node_modules/numeral/min/numeral.min.js"></script> -->
+<script>
+    CommonMixin = Parent => class TestMixin extends Parent {
+
+        queryFrom(required) {
+            return this.shadowRoot.querySelectorAll(required)
+        }
+
+        extarFrom(required) {
+            let arr = this.queryFrom(required)
+            let allTrue = [];
+            let fc = false;
+            for (var index = 0; index < arr.length; index++) {
+                allTrue.push(arr[index].validate())
+                if (!arr[index].validate() && fc == false) {
+                    arr[index].focus();
+                    fc = true;
+                }
+            }
+            return allTrue
+        }
+
+        validateForm(required) {
+            // console.log(this.extarFrom(required));
+            return this.extarFrom(required).every(elem => elem === false)
+        }
+
+        autoIndex(index) {
+            return index + 1
+        }
+
+        getObjectCombobox(e) {
+            if ((e.detail.queueProperty === true)
+                && (e.detail.value !== null)) {
+                // console.log(e.detail.value)
+                this.set(`data.${e.currentTarget.getAttribute('object-name')}`, e.detail.value)
+                // console.log(this.data)
+            } else {
+                delete this.data[e.currentTarget.getAttribute('object-name')]
+            }
+        }
+        getObject(e) {
+            // console.log(e);
+            if ((e.detail.queueProperty === true)
+                && (e.detail.value !== null)) {
+                this.set(`${e.currentTarget.getAttribute('object-name')}`, e.detail.value)
+                // console.log(this[e.currentTarget.getAttribute('object-name')]);
+            } else {
+                // console.log(this.bank);
+                // console.log(e.currentTarget.getAttribute('object-name'));
+                // console.log(this.get[e.currentTarget.getAttribute('object-name')]);
+                this.set(`${e.currentTarget.getAttribute('object-name')}`, {})
+                delete this.get[e.currentTarget.getAttribute('object-name')]
+            }
+        }
+        changeDate(date) {
+            if (date !== undefined) {
+                let time = new Date(date)
+                date = new Date(time.setHours(time.getHours() + 7)).toISOString()
+                date = date.split("T")[0]
+                if (date.split('-')[0] !== '9999')
+                    return `${date.split('-')[2]}/${date.split('-')[1]}/${Number(date.split('-')[0]) + 543}`
+                return '-'//date//'ปัจจุบัน'
+            }
+        }
+        genUrl(url) {
+            let data = new String()
+            let url_length = Object.getOwnPropertyNames(url).length
+            let count = new Number()
+            // //console.log(url);
+            for (var variable in url) {
+                if (url[variable] != '') {
+                    data = data + variable + "=" + url[variable];
+                    (count < url_length - 1) ? data += '&' : '';
+                }
+                count++
+            }
+            // //console.log(data);
+            return data
+        }
+        // formatNumber(number) {
+        //     //    console.log(number);
+        //     if (number == null) {
+        //         return "";
+        //     } else {
+        //         var num = numeral(number).format('0,0.00');
+        //         return num
+        //     }
+
+        // }
+        // changeString2Num (ob, param) {
+        //     if (typeof ob.value == "string") {
+        //         var pathChange = ob.path.split(".");
+        //         // undefined
+        //         if (pathChange.length == 2) {
+        //             if (pathChange[1] == param) {
+        //                 // console.log(numeral().unformat(ob.value));
+        //                 // console.log(ob.value);
+        //                 ob.base[param] = numeral(ob.value).format('0,0.00')
+        //                 // ob.base[param] = numeral().unformat(ob.value);
+        //                 // // console.log(ob.base[param]);
+        //             }
+        //         }
+        //     }
+        // }
+
+    }
+
+</script>

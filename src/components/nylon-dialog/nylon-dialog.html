@@ -1,0 +1,250 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../aqa-button/aqa-button.html">
+
+<link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../nylon-i18n.html">
+<link rel="import" href="../../i18n/toast-i18n.html">
+<link rel="import" href="../../layout/shared-styles.html">
+<link rel="import" href="../../redux-mixin.html">
+<link rel="import" href="../../my-icons.html">
+
+
+<dom-module id="nylon-dialog">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            .icon-dialog {
+                width: 4em;
+                height: 4em;
+            }
+
+            .delete {
+                color: var(--paper-red-400);
+            }
+        </style>
+        <paper-toast id="elToast" horizontal-align="right">
+            <iron-icon icon="[[icon]]"></iron-icon>&nbsp;&nbsp;[[msg]]
+        </paper-toast>
+        <!-- <paper-dialog id="elConfirm" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+            <h2>[[title]]</h2>
+            <div>[[msg]]</div>
+            <div class="buttons">
+                <paper-button dialog-dismiss on-click="takeAction" ans="cancel">Cancel</paper-button>
+                <paper-button dialog-confirm autofocus on-click="takeAction" ans="ok">OK</paper-button>
+            </div>
+        </paper-dialog> -->
+        <paper-dialog id="elConfirm" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+            <div class="middle center-lg cente-md center-sm center-xl">
+                <div>
+                    <iron-icon id='iconDialog' class="icon-dialog" icon="{{icon}}"></iron-icon>
+                </div>
+                <div>
+                    <h2>[[title]]</h2>
+                </div>
+                <div>
+                    <div>[[msg]]</div>
+                </div>
+            </div>
+            <div id="buttonsdialog" class="buttons">
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        class NylonDialog extends ReduxMixin(Polymer.Element) {
+            static get is() { return 'nylon-dialog'; }
+
+            static get properties() {
+                return {
+                    title: String,
+                    msg: String,
+                    icon: String,
+                    i18n: {
+                        type: Object,
+                        statePath: 'i18n'
+                    },
+                }
+            }
+
+            constructor() {
+                super()
+                Nylon.confirm = Nylon.confirm || {}
+                Nylon.confirm = this.openConfirm.bind(this)
+
+                Nylon.dialog = Nylon.dialog || {}
+                Nylon.dialog = this.openDialog.bind(this)
+
+                Nylon.toast = Nylon.toast || {}
+                Nylon.toast = this.openToast.bind(this)
+            }
+
+            connectedCallback() {
+                super.connectedCallback()
+
+                // Nylon.confirm({
+                //     status:'waring',
+                //     title:'ยืนยันการลบ',
+                //     msg:'หากต้องการลบให้กดปุ่ม ok'
+                // },(confirm)=>{
+                //     console.log('callback ok')
+                // })
+
+
+                // Nylon.toast({
+                //     msg:'ดีจร้า'
+                // })
+            }
+
+            openToast(op = 'insert', obj = { icon: '', msg: '' }) {
+                let title = { icon: '', msg: '' }
+                switch (op) {
+                    case 'insert':
+                        title.icon = obj.icon || this.i18n.toast.insert.icon
+                        title.msg = obj.msg || this.i18n.toast.insert.msg
+                        break;
+                    case 'required':
+                        title.icon = obj.icon || this.i18n.toast.required.icon
+                        title.msg = obj.msg || this.i18n.toast.required.msg
+                        break;
+                    case 'update':
+                        title.icon = obj.icon || this.i18n.toast.update.icon
+                        title.msg = obj.msg || this.i18n.toast.update.msg
+                        break;
+                    case 'delete':
+                        title.icon = obj.icon || this.i18n.toast.delete.icon
+                        title.msg = obj.msg || this.i18n.toast.delete.msg
+                        break;
+                    case 'error':
+                        title.icon = obj.icon || this.i18n.toast.error.icon
+                        title.msg = obj.msg || this.i18n.toast.error.msg
+                        break;
+                    default:
+                        title.icon = obj.icon || 'speaker-notes'
+                        title.msg = obj.msg || ''
+                        break;
+                }
+                this.icon = title.icon
+                this.msg = title.msg
+                this.$.elToast.open()
+            }
+            // openConfirm(op, callbackOk, callbackCancel) {
+            //     this.icon = op.icon || 'speaker-notes'
+            //     this.msg = op.msg
+            //     this.title = op.title
+            //     this.callbackOk = callbackOk
+            //     this.callbackCancel = callbackCancel
+            //     this.$.elConfirm.open()
+            // }
+            // takeAction(e) {
+            //     if (e.currentTarget.getAttribute('ans') == "ok") {
+            //         this.callbackOk()
+            //     } else {
+            //         if (this.callbackCancel)
+            //             this.callbackCancel()
+            //     }
+            //     // console.log(111);
+            // }
+            openDialog(op) {
+                let title = {
+                    title: 'บันทึกเรียบร้อยแล้ว',
+                    // msg: 'อัพเดตข้อมูลสำเร็จ',
+                    style: 'color:#59c203',
+                    icon: 'check',
+                    btn: [
+                        {
+                            label: 'ปิด',
+                            icon: '',
+                            type: 'success btn-full-width',
+                            'dialog-dismiss': true,
+                        }
+                    ]
+                }
+                switch (op) {
+                    case 'save':
+                        title = title
+                        break;
+                    case 'delete':
+                        title = {
+                            title: 'ลบเรียบร้อยแล้ว',
+                            // msg: 'อัพเดตข้อมูลสำเร็จ',
+                            style: 'color:#df6a68',
+                            icon: 'check',
+                            btn: [
+                                {
+                                    label: 'ปิด',
+                                    icon: '',
+                                    type: 'success btn-full-width',
+                                    'dialog-dismiss': true,
+                                }
+                            ]
+                        }
+                        break;
+                    default:
+                        title = title
+                        break;
+                }
+                Nylon.confirm(title)
+                // this.openConfirm(title)
+            }
+            openConfirm(op) {
+                this.icon = op.icon || 'speaker-notes'
+                this.msg = op.msg
+                this.title = op.title
+                this.$.iconDialog.icon = op.icon || 'speaker-notes'
+                this.$.iconDialog.style = op.style || ''
+                const setAttValue = (newElement, att, value) => {
+                    switch (att) {
+                        case 'label':
+                            newElement.innerHTML = value
+                            break;
+                        case 'action':
+                            newElement.addEventListener('tap', value)
+                            break;
+                        default:
+                            let newClass = document.createAttribute(att)
+                            newClass.value = value
+                            newElement.setAttributeNode(newClass)
+                            break;
+                    }
+                    return newElement
+                }
+
+                if (op.btn !== undefined && op.btn.length !== 0 && Array.isArray(op.btn)) {
+                    // ลบ element ออก
+                    while (this.$.buttonsdialog.firstChild) {
+                        this.$.buttonsdialog.removeChild(this.$.buttonsdialog.firstChild);
+                    }
+                    // เพิ่มปุ่มเข้าไป
+                    for (let i = 0; i < op.btn.length; i++) {
+                        let newElement = document.createElement('aqa-button')
+
+                        for (var att in op.btn[i]) {
+                            if (op.btn[i].hasOwnProperty(att)) {
+                                newElement = setAttValue(newElement, 'raised', true)
+                                newElement = setAttValue(newElement, att, op.btn[i][att])
+                            }
+                        }
+                        Polymer.dom(this.$.buttonsdialog).appendChild(newElement)
+                    }
+                } else {
+                    // console.log(111);
+                }
+
+                this.$.elConfirm.open()
+            }
+        }
+
+        window.customElements.define(NylonDialog.is, NylonDialog);
+    </script>
+</dom-module>

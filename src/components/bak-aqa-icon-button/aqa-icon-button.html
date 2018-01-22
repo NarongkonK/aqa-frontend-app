@@ -1,0 +1,115 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<dom-module id="aqa-icon-button">
+    <template>
+        <style>
+
+            .tooltip {
+                position: relative;
+                display: inline-block;
+            }
+            .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            top: -5px;
+            left: 110%;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            margin-top: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent black transparent transparent;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+
+         /*
+            .tooltip .tooltiptext {
+                visibility: hidden;
+                width: 120px;  
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 0.2rem 0;
+                position: absolute;
+                z-index: 1;
+                bottom: 120%;
+                left: 50%;
+                margin-left: -60px;
+                opacity: 0.8;
+            }
+
+            .tooltip .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color:black transparent transparent transparent;
+            }
+
+            .tooltip:hover .tooltiptext {
+                visibility: visible;
+            } */
+        </style>
+        <!-- <button class="tooltip"> -->
+            <paper-tooltip id="tooltip" offset="0"></paper-tooltip>
+            <div class="tooltip">
+                <slot></slot>
+                <template is="dom-if" if="[[showTooltip(label)]]">
+                    <span class="tooltiptext">
+                        [[label]]
+                    </span>
+                </template>
+            </div>
+        <!-- </button> -->
+    </template>
+    <script>
+        class AqaIconButton extends Polymer.Element {
+            static get is() { return 'aqa-icon-button'; }
+            static get properties() {
+                return {
+                    label:{
+                        type:String,
+                        value:''
+                    }
+                }
+            }
+            ready(){
+                // super.ready()
+                const elementList = Polymer.dom(this.root).querySelector('body').children
+                console.log(elementList)
+                for (var index = 0; index < elementList.length; index++) {
+                    console.log(elementList[index].tagName);
+                    if(elementList[index].tagName == "NYLON-APP"){
+                        console.log(elementList[index]);
+                    }
+                }
+                // console.log(this.$.tooltip)
+                // console.log(Polymer.dom(this.root).querySelector('body').children)
+            }
+            showTooltip(val){
+                if(val) return true;
+                else return false;
+            }
+        }
+        window.customElements.define(AqaIconButton.is, AqaIconButton);
+    </script>
+</dom-module>

@@ -1,0 +1,34 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="./aqa-lightbox-img.html">
+
+<dom-module id="aqa-lightbox">
+    <template>
+        <style></style>
+        <slot on-click="_showImage"></slot>
+    </template>
+    <script>
+        class aqaLightbox extends Polymer.Element {
+            static get is() { return 'aqa-lightbox'; }
+            static get properties() {
+                return {
+                }
+            }
+            constructor(){
+                super()
+                if(typeof  window.lightboxImg == "undefined"){
+                    window.lightboxImg = document.createElement('aqa-lightbox-img')
+                    lightboxImg.setAttribute('id',"lightboxImg")
+                    document.querySelector('body').appendChild(lightboxImg)
+                }                
+            }
+
+            _showImage(e){
+                // this.$.img.src = e.target.src;
+                var element = document.getElementById('lightboxImg');
+                element.open(e.target.src);
+            }
+        }
+        window.customElements.define(aqaLightbox.is, aqaLightbox);
+
+    </script>
+</dom-module>

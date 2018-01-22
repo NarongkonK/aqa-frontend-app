@@ -19,13 +19,13 @@
     "aqa-vaadin-grid": "9lon/aqa-vaadin-grid#^0.0.3",
     "aqa-tooltip": "9lon/aqa-tooltip#^0.0.2",
     "aqa-icons": "9lon/aqa-icons#^0.0.3",
-    "aqa-form": "9lon/aqa-form#^0.0.2",
+    "aqa-form": "9lon/aqa-form#^0.0.3",
     "aqa-styles": "9lon/aqa-styles#^0.0.2",
     "app-layout": "PolymerElements/app-layout#^2.0.1",
     "aqa-sweet-alert": "9lon/aqa-sweet-alert#^0.0.2",
     "aqa-title": "9lon/aqa-title#^0.0.3",
     "aqa-navbar": "9lon/aqa-navbar#^0.0.1",
-    "nylon-pages": "9lon/nylon-pages#^0.0.6",
+    "nylon-pages": "9lon/nylon-pages#^0.0.7",
     "vaadin-grid": "vaadin/vaadin-grid#^4.0.0",
     "polymer-redux": "tur-nr/polymer-redux#^1.0.2",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
@@ -53,7 +53,6 @@
     "l2t-paper-rating": "Link2Twenty/l2t-paper-rating#^1.2.0",
     "paper-menu-button": "PolymerElements/paper-menu-button#^2.0.0",
     "iron-dropdown": "PolymerElements/iron-dropdown#^2.0.0",
-    "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^2.0.0",
     "c3": "^0.4.17",
     "jwt-decode": "^2.2.0",
     "iron-collapse": "PolymerElements/iron-collapse#^2.0.0",
@@ -62,7 +61,7 @@
     "paper-badge": "PolymerElements/paper-badge#^2.0.0",
     "paper-tooltip": "PolymerElements/paper-tooltip#^2.0.1",
     "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
-    "nylon-checked-group": "9lon/nylon-checked-group#^0.0.1"
-   
+    "nylon-checked-group": "9lon/nylon-checked-group#^0.0.2",
+    "aqa-rating": "9lon/aqa-rating#^0.0.1"
   }
 }

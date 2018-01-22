@@ -1,0 +1,181 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../../bower_components/aqa-styles/flexbox-grid.html">
+<link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
+
+<link rel="import" href="../../redux-mixin.html">
+<link rel="import" href="../../i18n/confirm-i18n.html">
+
+<dom-module id="aqa-title-name">
+    <template>
+        <style include="flexbox-grid">
+            .header-content>b {
+                font-family: MitrLight;
+                text-align: left;
+            }
+
+            .flex-container {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .img-circle {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+            }
+
+            iron-icon {
+                margin-right: 0.5rem;
+                --iron-icon-width: 24px;
+                --iron-icon-height: 24px;
+            }
+
+            #output_image {
+                width: 42px;
+                height: 42px;
+                margin-right: 0.5rem;
+            }
+        </style>
+        <!-- <div class="flex-container">
+            <div class="flex-item" style="display:flex">
+                <div style="margin:auto">
+                    <img id="output_image" src$="[[item.profile_url]]" />
+                </div>
+                <div style="margin:auto">
+                    <div class="header-content">
+                        <b>[[item.type_academic.POSITIONTHAIDESC]][[item.firstname_th]] [[item.lastname_th]]</b>
+                    </div>
+                    <div class="header-content">
+                        <b>ผู้ประเมินระดับการศึกษาขั้นพื้นฐาน (ปฐมวัย)</b>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <br>
+        <div class="row between-md">
+            <div class="col-md-5">
+                <div class="box ">
+                    <div class="flex-item" style="display:flex">
+                        <div style="margin:auto">
+                            <img id="output_image" src$="[[item.basic.profile_url]]" />
+                        </div>
+                        <div style="margin:auto">
+                            <div class="header-content">
+                                <b>[[item.basic.type_academic.POSITIONTHAIDESC]][[item.basic.firstname_th]] [[item.basic.lastname_th]]</b>
+                            </div>
+                            <div class="header-content">
+                                <b>[[item.type_assessor.ASSESSORTYPDESC]]</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box">
+                    <!-- <aqa-button raised type="login " on-tap=_openPanelRight>[[i18n.approve.meeting]]</aqa-button> -->
+                    <div class="col-md-12">
+                        <div class="end-xs">
+                            <aqa-button raised type="login" id="btnApprove" on-click="_confirmApprove" disabled="{{props}}">
+                                <iron-icon icon="offline-pin"></iron-icon>
+                                ผ่านคุณสมบัติ
+                                <!-- [[i18n.profile.approve]] -->
+                            </aqa-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+
+    </template>
+
+    <script>
+        class AqaTitleName extends ReduxMixin(Polymer.Element) {
+
+            static get is() {
+                return 'aqa-title-name';
+            }
+
+            static get properties() {
+                return {
+                    i18n: {
+                        type: Object,
+                        statePath: 'i18n'
+                    },
+                    picUrl: {
+                        type: String,
+                        value: ''
+                    },
+                    item: {
+                        type: Object,
+                        value: {}
+                    },
+                    props: {
+                        type: Boolean,
+                        statePath: 'profile.info.properties'
+                    },
+                    info: {
+                        type: Object,
+                        statePath: 'profile.info'
+                    },
+                };
+            }
+            ready() {
+                super.ready();
+
+                Polymer.RenderStatus.afterNextRender(this, function () {
+
+                });
+            }
+            _disabled() {
+                //     console.log(this.props);
+                if (this.props == true) {
+                    this.$.btnApprove.disabled = true
+                } else {
+                    this.$.btnApprove.disabled = false
+                }
+            }
+            _confirmApprove(e) {
+                console.log(this.info)
+                Nylon.confirm({
+                    title: this.i18n.confirm.approve.title,
+                    msg: this.i18n.confirm.approve.msg,
+                    icon: this.i18n.confirm.approve.icon,
+                    btn: [
+                        {
+                            label: this.i18n.button.confirm.label,
+                            icon: this.i18n.button.confirm.icon,
+                            type: 'success',
+                            'dialog-confirm': true,
+                            'autofocus': true,
+                            style: 'margin-right:5px',
+                            action: () => {
+                                Nylon.dispatch('PROFILE_UPDATE', this.info.id, 'properties', true,
+                                    () => {
+                                        // Nylon.toast('update')
+                                        Nylon.dialog('save')
+                                        Nylon.dispatch('APPROVE_GET_LISTS')
+                                        // this._disabled()
+                                    }
+                                );
+                            }
+                        },
+                        {
+                            label: this.i18n.button.close.label,
+                            icon: this.i18n.button.close.icon,
+                            type: 'default',
+                            'dialog-dismiss': true,
+
+                        },
+                    ]
+                })
+            }
+
+        }
+
+        window.customElements.define(AqaTitleName.is, AqaTitleName);
+    </script>
+</dom-module>

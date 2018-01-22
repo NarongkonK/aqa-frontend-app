@@ -1,0 +1,246 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/lib/elements/dom-if.html">
+
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-progress/paper-progress.html">
+
+
+<dom-module id="nylon-panel-card">
+    <template>
+        <style>
+             :host {
+
+                display: block;
+            }
+
+            .card {
+                position: relative;
+                background-color: #039BE5;
+                color: #FFF;
+                border-radius: 2px;
+                background-color: #fff;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            }
+
+            .card ::slotted([slot=header]) {
+                border-bottom: #EEE solid 1px;
+                background-color: #F5F5F5;
+                height: 48px;
+                border-bottom: #EEE solid 1px;
+                font-size: 1rem;
+                color: #707070;
+            }
+
+            .card ::slotted([slot=footer]) {
+                border-top: #EEE solid 1px;
+                background-color: #F5F5F5;
+                height: 48px;
+                border-bottom: #EEE solid 1px;
+                font-size: 1rem;
+                color: #707070;
+            }
+
+            .card ::slotted([slot=content]) {
+                padding: 1rem;
+                color: rgba(0, 0, 0, 0.64);
+                margin-top:var(--margin-top-content);
+            }
+
+            .card ::slotted([slot=content][sub-slot=grid]) {
+                padding: 0;
+                height: auto;
+                border-left: 0px;
+                border-right: 0px;
+                
+
+                --vaadin-grid-header-cell: {
+                    height: 31px;
+                    color: rgba(0, 0, 0, 0.64);
+                    font-size: 1rem;
+                    background-color: #F5F5F5;
+                    font-weight: bold;
+                }
+                ;
+
+                --vaadin-grid-body-cell: {
+                    height: 48px;
+                    color: rgba(0, 0, 0, 0.64);
+                    font-size: 1rem;
+                }
+                ;
+            }
+
+            .card ::slotted([slot=content][sub-slot="content"]) {
+                padding: 1rem;
+            }
+
+            app-toolbar.notify {
+                height: 48px;
+                font-size: 1rem;
+                color: var(--notify-font-color);
+                background-color: var(--notify-background-color);
+            }
+
+            paper-progress {
+                width: 100%;
+                --paper-progress-indeterminate-cycle-duration: 2s;
+                height: 2px;
+            }
+
+            [progress-top] {
+                position: absolute;
+                top: 48px;
+            }
+
+            [notify-top] {
+                position: absolute;
+                top: 49px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            
+        </style>
+        <div class="card">
+            <slot name="header"></slot>
+            <slot name="content"></slot>
+            <template is="dom-if" if="[[notifyEnable]]">
+                <app-toolbar class="notify" notify-top$="[[notifyTop]]">
+                    <iron-icon icon="[[notifyIcon]]"></iron-icon>&nbsp;&nbsp;
+                    <div main-title>[[notifyMsg]]</div>
+                    <paper-button on-click="notifyClose">
+                        CLOSE
+                    </paper-button>
+                </app-toolbar>
+            </template>
+            <template is="dom-if" if="[[progressEnable]]">
+                <paper-progress id="progress" value="[[progressValue]]" indeterminate="[[progressIndeterminate]]"  progress-top$="[[progressTop]]"></paper-progress>
+            </template>
+            <slot name="footer"></slot>
+        </div>
+
+    </template>
+
+    <script>
+        class NylonPanelCard extends Polymer.Element {
+            static get is() { return 'nylon-panel-card'; }
+            static get properties() {
+                return {
+                    notifyMsg: String,
+                    notifyIcon: String,
+                    notifyEnable: Boolean,
+                    notifyTop:Boolean,
+                    progressEnable: Boolean,
+                    progressIndeterminate: Boolean,
+                    progressValue: Number,
+                    progressTop:Boolean
+                }
+            }
+            ready() {
+                super.ready()
+                
+            }
+
+            connectedCallback() {
+                super.connectedCallback()
+                // window.abc = this
+            }
+
+            progress(option) {
+                option = option || {}
+
+                this.progressTop = false
+                if(option.position){
+                    if(option.position=="top"){
+                        this.progressTop = true
+                    }
+                }
+
+                if (this.progressEnable) {
+                    
+                    this.progressClose()
+
+                } else {
+                    this.progressEnable = true
+                    this.progressIndeterminate = true
+                    this.progressValue = Math.random() * (95 - 70) + 70
+
+                    setTimeout(() => {
+                        this.progressIndeterminate = false;
+                    }, 800)
+
+                    return this.progressClose.bind(this)
+                }
+            }
+
+            progressClose(callback){
+                this.progressValue = 100
+                setTimeout(() => {
+                    this.progressIndeterminate = false;
+                    if(callback)
+                        callback()
+                }, 300)
+
+                setTimeout(() => {
+                    this.progressEnable = false
+                }, 500)
+            }
+
+            notify({ status, msg, position }) {
+
+                this.notifyTop = false
+                this.updateStyles({
+                    '--margin-top-content': '0px'
+                })
+                if(position){
+                    if(position=="top"){
+                        this.notifyTop = true
+                        this.updateStyles({
+                            '--margin-top-content': '48px'
+                        })
+                    }
+                }
+
+                this.notifyMsg = msg || 'Nothing message'
+
+                if (status == 'error') {
+                    this.notifyIcon = 'error'
+                    this.updateStyles({
+                        '--notify-background-color': '#FBE9E7',
+                        '--notify-font-color': '#D50000'
+                    })
+                } else if (status == "success") {
+                    this.notifyIcon = 'done'
+                    this.updateStyles({
+                        '--notify-background-color': '#E3EDD9',
+                        '--notify-font-color': '#7F9559'
+                    })
+                } else {
+                    this.notifyIcon = 'info-outline'
+                    this.updateStyles({
+                        '--notify-background-color': '#E0F3FC',
+                        '--notify-font-color': '#039BE5'
+                    })
+                }
+
+                this.notifyEnable = true;
+                
+                setTimeout(() => {
+                    this.notifyClose()
+                }, 5000)
+            }
+
+            notifyClose() {
+                this.updateStyles({
+                    '--margin-top-content': '0px'
+                })
+                this.notifyEnable = false;
+            }
+        }
+
+        window.customElements.define(NylonPanelCard.is, NylonPanelCard);
+    </script>
+</dom-module>

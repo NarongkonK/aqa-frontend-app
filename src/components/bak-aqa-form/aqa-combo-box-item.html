@@ -1,0 +1,43 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../aqa-font/aqa-trirong-font.html">
+
+<dom-module id="aqa-combo-box-item">
+    <template>
+        <style>
+            * {
+                font-family: TrirongLight;
+                box-sizing: border-box;
+            }
+
+            .item {
+                color: #424242 
+            }
+        </style>
+        <div class="item">[[_itemLabel(item,itemLabelPath)]]</div>
+
+    </template>
+    <script>
+        class AqaComboBoxItem extends Polymer.Element {
+            static get is() { return 'aqa-combo-box-item'; }
+            static get properties() {
+                return {
+                    item:{
+                        type:Object,
+                        value:function(){
+                            return {}
+                        }
+                    },
+                    itemLabelPath:String
+                    
+                }
+            }
+
+            _itemLabel(item,label){
+               return  item[label]
+            }
+
+        }
+        window.customElements.define(AqaComboBoxItem.is, AqaComboBoxItem);
+
+    </script>
+</dom-module>

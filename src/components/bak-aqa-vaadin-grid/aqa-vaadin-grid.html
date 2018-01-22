@@ -1,0 +1,68 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../layout/shared-styles.html">
+
+
+<dom-module id="aqa-vaadin-grid">
+    <template>
+        <style include="shared-styles">
+            .grid ::slotted(*) {
+                height: auto;
+                --divider-color: rgba(0, 0, 0, var(--dark-divider-opacity)); 
+                 --vaadin-grid-cell: {
+                    padding: 0 0.5rem 0 0.5rem;
+                };
+                --vaadin-grid-header-cell: {
+                    color: white;
+                    font-size: 1rem;
+                    background-color:#62a8ea;
+                    padding: 0.5rem;
+                    border-right:1px solid #ddd;
+                    text-align:center;
+                    font-family: MitrLight;
+                };
+                --vaadin-grid-body-cell: {
+                    color: rgba(0, 0, 0, var(--dark-primary-opacity));
+                    font-size: 1rem;
+                    padding:5px;
+                    border-right:1px solid #ddd;
+                    font-family: TrirongRegular;
+                    white-space: normal;
+                    margin:0;
+                };
+
+                --vaadin-grid-body-row-hover-cell: {
+                    background-color:#ECF9FA;
+                };  
+
+                 --vaadin-grid-body-row-selected-cell: {
+                    background-color: var(--paper-grey-100);
+                }; 
+                 --vaadin-grid-body-row-odd-cell: {
+                    background-color: #f3f7f9;
+                }; 
+            }
+        </style>
+        <div class="grid">
+            <slot></slot>
+        </div>
+    </template>
+    <script>
+        class AqaVaadinGrid extends Polymer.Element {
+            static get is() { return 'aqa-vaadin-grid'; }
+            static get properties() {
+                return {
+                    tooltipFor:{
+                        type:String,
+                        value:''
+                    }
+                }
+            }
+            ready(){
+                super.ready()
+            }
+        }
+        window.customElements.define(AqaVaadinGrid.is, AqaVaadinGrid);
+
+    </script>
+</dom-module>
