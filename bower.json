@@ -62,6 +62,7 @@
     "paper-tooltip": "PolymerElements/paper-tooltip#^2.0.1",
     "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
     "nylon-checked-group": "9lon/nylon-checked-group#^0.0.2",
-    "aqa-rating": "9lon/aqa-rating#^0.0.1"
+    "aqa-rating": "9lon/aqa-rating#^0.0.1",
+    "aqa-lightbox": "9lon/aqa-lightbox#^0.0.3"
   }
 }
