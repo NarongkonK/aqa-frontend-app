@@ -41,15 +41,10 @@
             }
         }
         getObject(e) {
-            // console.log(e);
             if ((e.detail.queueProperty === true)
                 && (e.detail.value !== null)) {
                 this.set(`${e.currentTarget.getAttribute('object-name')}`, e.detail.value)
-                // console.log(this[e.currentTarget.getAttribute('object-name')]);
             } else {
-                // console.log(this.bank);
-                // console.log(e.currentTarget.getAttribute('object-name'));
-                // console.log(this.get[e.currentTarget.getAttribute('object-name')]);
                 this.set(`${e.currentTarget.getAttribute('object-name')}`, {})
                 delete this.get[e.currentTarget.getAttribute('object-name')]
             }
