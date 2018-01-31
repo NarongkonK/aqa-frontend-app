@@ -1,0 +1,38 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<dom-module id="nylon-auth">
+    <template>
+        <iframe src="[[_url(path)]]" on-message="_message" style="position: absolute; width: 1px; height: 1px; left: -9999px; display: none;"></iframe>
+    </template>
+    <script>
+      class NylonAuth extends Polymer.Element {
+  
+        static get is() { return 'nylon-auth'; }
+  
+        static get properties() {
+          return {
+            path: {
+              type: String,
+              value: ""
+            }
+          }
+        }
+
+        ready() {
+          super.ready()
+          console.log('ok')
+        }
+        
+        _message(){
+          
+        }
+
+        _url(path) {
+          return this.path
+        }
+  
+  
+      }
+  
+      window.customElements.define(NylonAuth.is, NylonAuth);
+    </script>
+  </dom-module>
