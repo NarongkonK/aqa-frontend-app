@@ -39,11 +39,11 @@ gulp.task('route', function () {
                 }
                 const $ = cheerio.load(data)
 
-                pathRoute = $('dom-module').attr('path') || pathRoute
-                let topic = $('dom-module').attr('topic')
+                pathRoute = domModule.attr('path') || pathRoute
+                let topic = domModule.attr('topic')
 
                 const rule = function () {
-                    if ($('dom-module').attr('rule') != undefined) {
+                    if (domModule.attr('rule') != undefined) {
                         return 'rule'
                     } else {
                         return ''
@@ -121,15 +121,21 @@ gulp.task('route2', function () {
                     callback(err)
                 }
                 const $ = cheerio.load(data)
-                let topic = $('dom-module').attr('topic')
+                let domModule = $('dom-module')
+                if($('dom-module').attr('id') == undefined){
+                    domModule = $('script')
+                }
+                
+
+                let topic = domModule.attr('topic')
 
                 elementList.push({
                     elementName,
                     pathFile,
-                    pathRoute: $('dom-module').attr('path') || pathRoute,
-                    rule: $('dom-module').attr('rule') != undefined,
-                    topic: $('dom-module').attr('topic'),
-                    parentName: $('dom-module').attr('parent')
+                    pathRoute: domModule.attr('path') || pathRoute,
+                    rule: domModule.attr('rule') != undefined,
+                    topic: domModule.attr('topic'),
+                    parentName: domModule.attr('parent')
                 })
 
                 callback();
