@@ -40,6 +40,12 @@
 
       static get properties() {
         return {
+          navigation: {
+            type: Object,
+            value: function(){
+              return gen_navigation
+            }
+          },
           pathName: {
             type: String
           },

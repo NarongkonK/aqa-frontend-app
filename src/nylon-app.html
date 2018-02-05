@@ -7,11 +7,11 @@
 <link rel="import" href="./nylon-axios.html">
 <link rel="import" href="./redux-mixin.html">
 <link rel="import" href="./nylon-init.html">
-<!-- <link rel="import" href="./nylon-auth.html"> -->
+<link rel="import" href="./nylon-auth.html">
 
 <dom-module id="nylon-app">
   <template>
-    <!-- <nylon-auth></nylon-auth> -->
+    <nylon-auth id="nylonAuth"></nylon-auth>
     <nylon-init id="nylonInit" path-name="[[pathName]]"></nylon-init>
   </template>
 
@@ -47,7 +47,7 @@
 
         this.$.nylonInit.addEventListener(
           'nylon-pages-rule',
-          e => this._pageRule(e)
+          e => this.$.nylonAuth.checkRule()
         )
 
       }
@@ -74,7 +74,9 @@
             
             e.detail.active()
 
+            //topic and navigate
             this.$.nylonInit.$.layoutMain.topic = e.detail.element.getAttribute('topic')
+            this.$.nylonInit.$.layoutMain.navigation = JSON.parse(JSON.stringify(this.$.nylonInit.navigation[e.detail.element.localName]))
 
 
           },
@@ -83,6 +85,8 @@
           },
           true);
       }
+
+
 
       _pageRule(e) {
         try {

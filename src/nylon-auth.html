@@ -1,38 +1,76 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<dom-module id="nylon-auth">
-    <template>
-        <iframe src="[[_url(path)]]" on-message="_message" style="position: absolute; width: 1px; height: 1px; left: -9999px; display: none;"></iframe>
-    </template>
-    <script>
-      class NylonAuth extends Polymer.Element {
-  
-        static get is() { return 'nylon-auth'; }
-  
-        static get properties() {
-          return {
-            path: {
-              type: String,
-              value: ""
-            }
-          }
-        }
 
-        ready() {
-          super.ready()
-          console.log('ok')
-        }
-        
-        _message(){
-          
-        }
+<script>
+  class NylonAuth extends Polymer.Element {
 
-        _url(path) {
-          return this.path
+    static get is() { return 'nylon-auth'; }
+    static get template() {
+      return Polymer.html`
+        <iframe id="authIframe" src="[[_url(path)]]" style="position: absolute; width: 1px; height: 1px; left: -9999px; display: none;"></iframe>
+      `
+    }
+
+    static get properties() {
+      return {
+        baseUrl: {
+          type: String,
+          value: 'http://localhost:3000/api/auth'
+        },
+        path: {
+          type: String,
+          value: "/scan"
         }
-  
-  
       }
-  
-      window.customElements.define(NylonAuth.is, NylonAuth);
-    </script>
-  </dom-module>
+    }
+
+    ready() {
+      super.ready()
+      console.log(this.$.authIframe)
+      window.addEventListener("message", this._message.bind(this), false);
+
+     
+    }
+
+    checkRule() {
+      console.log('checkRule')
+    }
+
+    _message(event) {
+      let topic = event.data.split('?')[0]
+
+      switch (topic) {
+        case 'nylonAuth/auth':
+            axios.defaults.headers.common['Authorization'] = this.getParameterByName('accessToken',event.data)
+            break;
+        case 'nylonAuth/noauth':
+            axios.defaults.headers.common['Authorization'] = ''
+            break;
+        default:
+            console.log('xx')
+      }
+
+      // if(topic=='nylonAuth/auth'){
+      //   console.log(this.getParameterByName('accessToken',event.data))
+      // }
+    }
+
+    _url(path) {
+      return this.baseUrl + this.path
+    }
+
+
+    getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+
+  }
+
+  window.customElements.define(NylonAuth.is, NylonAuth);
+</script>
