@@ -6,7 +6,7 @@ const async = require('async')
 const fs = require('fs')
 const cheerio = require('cheerio')
 
-gulp.task('route', function () {
+gulp.task('route2', function () {
 
     glob("./src/routes/**/route-*.html", null, function (er, files) {
 
@@ -98,7 +98,7 @@ gulp.task('route', function () {
 
 
 
-gulp.task('route2', function () {
+gulp.task('route', function () {
 
     glob("./src/routes/**/route-*.html", null, function (er, files) {
 
