@@ -26,7 +26,7 @@
     "aqa-title": "9lon/aqa-title#^0.0.3",
     "aqa-navbar": "9lon/aqa-navbar#^0.0.1",
     "aqa-breadcrumb": "9lon/aqa-breadcrumb#^0.0.2",
-    "nylon-pages": "9lon/nylon-pages#^0.0.7",
+    "nylon-pages": "9lon/nylon-pages#^0.0.8",
     "vaadin-grid": "vaadin/vaadin-grid#^4.0.0",
     "polymer-redux": "tur-nr/polymer-redux#^1.0.2",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
