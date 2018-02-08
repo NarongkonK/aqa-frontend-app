@@ -3,6 +3,7 @@
 
 </script>
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 
 <link rel="import" href="./nylon-axios.html">
 <link rel="import" href="./redux-mixin.html">
@@ -11,8 +12,10 @@
 
 <dom-module id="nylon-app">
   <template>
-    <nylon-auth id="nylonAuth"></nylon-auth>
-    <nylon-init id="nylonInit" path-name="[[pathName]]"></nylon-init>
+    <nylon-auth id="nylonAuth" on-auth="_auth" on-noauth="_noauth" on-disabled="_authDisable" disabled></nylon-auth>
+    <template id="domIfNylonInit" is="dom-if">
+      <nylon-init id="nylonInit" path-name="[[pathName]]" on-ready="_nylonInitReady"></nylon-init>
+    </template>
   </template>
 
   <script>
@@ -29,17 +32,14 @@
         }
       }
 
-      ready() {
-        super.ready()
-      }
-
-      connectedCallback() {
-        super.connectedCallback()
-
+     
+      _nylonInitReady(){
+        this.$.nylonInit = this.shadowRoot.getElementById('nylonInit')
         //Set redirect page of nylon-pages to global
         Nylon.redirect = this.$.nylonInit.$.nylonPage.redirect
 
         //Listener change page
+
         this.$.nylonInit.addEventListener(
           'nylon-pages-changed',
           e => this._pageChanged(e)
@@ -49,8 +49,8 @@
           'nylon-pages-rule',
           e => this.$.nylonAuth.checkRule()
         )
-
       }
+
 
       _pageChanged(e) {
         this.$.nylonInit.$.layoutMain.topic = ""
@@ -113,6 +113,21 @@
         }
 
 
+      }
+
+
+      _auth(e){
+        console.log('xx',e.detail)
+        this.$.domIfNylonInit.if = true
+      }
+
+      _noauth(e){
+        //this._nylonInit()
+        this.$.domIfNylonInit.if = true
+      }
+
+      _authDisable(){
+        this.$.domIfNylonInit.if = true
       }
 
     }

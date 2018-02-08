@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/jwt-decode/jwt-decode.html">
 
 <script>
   class NylonAuth extends Polymer.Element {
@@ -6,7 +7,7 @@
     static get is() { return 'nylon-auth'; }
     static get template() {
       return Polymer.html`
-        <iframe id="authIframe" src="[[_url(path)]]" style="position: absolute; width: 1px; height: 1px; left: -9999px; display: none;"></iframe>
+        <iframe id="authIframe" src="[[_url(path)]]" style="position: absolute; width: 1px; height: 1px; left: -9999px; display: none;" on-error="testza"></iframe>
       `
     }
 
@@ -19,14 +20,24 @@
         path: {
           type: String,
           value: "/scan"
-        }
+        },
+        userInfo: {
+          notify: true,
+          type: Object,
+          value: function(){
+            return {}
+          }
+        },
+        disabled: Boolean
       }
     }
 
     ready() {
       super.ready()
       window.addEventListener("message", this._message.bind(this), false);
-
+      if(this.disabled){
+        this.dispatchEvent(new CustomEvent('disabled'));
+      }
      
     }
 
@@ -35,20 +46,28 @@
     }
 
     _message(event) {
-      console.log(event)
       let topic = event.data.split('?')[0]
 
       switch (topic) {
         case 'nylonAuth/auth':
-            axios.defaults.headers.common['Authorization'] = this.getParameterByName('accessToken',event.data)
-            console.log('auth')
-            axios.get(this.baseUrl+'/checkToken')
-            .then((res)=>{
-              console.log(res.data)
-            })
-            break;
+        
+          let token = this.getParameterByName('accessToken',event.data)
+          axios.defaults.headers.common['Authorization'] = token
+
+          let decoded = jwt_decode(token);
+          this.userInfo = decoded
+          this.dispatchEvent(new CustomEvent('auth', {detail: decoded}));
+
+          // axios.get(this.baseUrl+'/checkToken')
+          // .then((res)=>{
+          //   console.log(res.data)
+          // })
+
+
+          break;
         case 'nylonAuth/noauth':
             axios.defaults.headers.common['Authorization'] = ''
+            this.dispatchEvent(new CustomEvent('noauth'));
             break;
         default:
             console.log('xx')
@@ -72,6 +91,10 @@
         if (!results) return null;
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    testza(){
+      console.log('errorxx')
     }
 
 
