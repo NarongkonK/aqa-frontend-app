@@ -63,6 +63,12 @@
           },
         }
       }
+
+      connectedCallback(){
+        super.connectedCallback()
+        this.dispatchEvent(new CustomEvent('ready'))
+        //console.log('constructor app')
+      }
      
     }
 
