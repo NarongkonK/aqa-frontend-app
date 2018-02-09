@@ -18,7 +18,7 @@
     "aqa-button": "9lon/aqa-button#^0.0.2",
     "aqa-vaadin-grid": "9lon/aqa-vaadin-grid#^0.0.3",
     "aqa-tooltip": "9lon/aqa-tooltip#^0.0.2",
-    "aqa-icons": "9lon/aqa-icons#^0.0.3",
+    "aqa-icons": "9lon/aqa-icons#^0.0.4",
     "aqa-form": "9lon/aqa-form#^0.0.5",
     "aqa-styles": "9lon/aqa-styles#^0.0.3",
     "app-layout": "PolymerElements/app-layout#^2.0.1",
