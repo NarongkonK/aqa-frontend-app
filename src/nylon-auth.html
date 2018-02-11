@@ -28,29 +28,34 @@
             return {}
           }
         },
-        disabled: Boolean
+        disabled: Boolean,
+        testx: {
+          type: String,
+          value: 'testx'
+        }
       }
     }
 
     ready() {
       super.ready()
-      window.addEventListener("message", this._message.bind(this), false);
+      window.addEventListener("message", (e) => this._message(e), false);
       if(this.disabled){
         this.dispatchEvent(new CustomEvent('disabled'));
       }
      
     }
 
-    checkRule() {
-      console.log('checkRule')
-    }
+    
 
     _message(event) {
+
+      
       let topic = event.data.split('?')[0]
 
       switch (topic) {
         case 'nylonAuth/auth':
-        
+          this.status = 'auth';
+
           let token = this.getParameterByName('accessToken',event.data)
           axios.defaults.headers.common['Authorization'] = token
 
@@ -69,10 +74,20 @@
           .then((res)=>{
             console.log(res.data)
           })
+         
 
+          this.token = this.getParameterByName('accessToken',event.data)
+          axios.defaults.headers.common['Authorization'] = this.token
+          this.userInfo = jwt_decode(this.token)
+          this.payload = jwt_decode(this.getParameterByName('payload',event.data))
 
+          this.userInfo = this.userInfod
+          this.dispatchEvent(new CustomEvent('auth', {detail: this.userInfo}))
+          
           break;
         case 'nylonAuth/noauth':
+            this.status = 'noauth';
+
             axios.defaults.headers.common['Authorization'] = ''
             this.dispatchEvent(new CustomEvent('noauth'));
             break;
@@ -80,9 +95,40 @@
             console.log('xx')
       }
 
-      // if(topic=='nylonAuth/auth'){
-      //   console.log(this.getParameterByName('accessToken',event.data))
-      // }
+    }
+
+    checkRule(detail) {
+
+      
+      let elementName = detail.element.localName
+      console.log(elementName)
+      if(!detail.ctx.gotoPage){
+
+        if(this.status=="auth"){
+          let checkPass = this.payload.pageRule.filter((row)=>{
+            return row.path == detail.ctx.pathname
+          })
+
+          if(checkPass.length > 0){
+            detail.pass()
+          }else{
+            detail.ctx.gotoPage = 'page-403'
+            detail.next()
+          }
+
+        } else {
+          detail.ctx.gotoPage = 'page-401'
+          detail.next()
+        }
+        
+      }else{
+        if(elementName == detail.ctx.gotoPage){
+          detail.pass()
+        }else{
+          detail.next()
+        }
+      }
+
     }
 
     _url(path) {
@@ -99,12 +145,6 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
-
-    testza(){
-      console.log('errorxx')
-    }
-
-
   }
 
   window.customElements.define(NylonAuth.is, NylonAuth);

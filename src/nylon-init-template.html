@@ -3,7 +3,8 @@
 <link rel="import" href="./layout/layout-main.html">
 
 <!-- [[gen_import]] -->
-
+<link rel="lazy-import" href="pages/page-401/page-401.html">
+<link rel="lazy-import" href="pages/page-403/page-403.html">
 <link rel="lazy-import" href="pages/page-404/page-404.html">
 <!-- เรียกล็อกอิน -->
 
@@ -25,6 +26,8 @@
     <layout-main id="layoutMain" path-name="[[pathName]]">
       <nylon-pages id="nylonPage">
         <!-- [[gen_route]] -->
+        <page-401 path="*"></page-401>
+        <page-403 path="*"></page-403>
         <page-404 path="*"></page-404>
       </nylon-pages>
     </layout-main>

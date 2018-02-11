@@ -12,7 +12,7 @@
 
 <dom-module id="nylon-app">
   <template>
-    <nylon-auth id="nylonAuth" on-auth="_auth" on-noauth="_noauth" on-disabled="_authDisable" disabled></nylon-auth>
+    <nylon-auth id="nylonAuth" on-auth="_auth" on-noauth="_noauth" on-disabled="_authDisable"></nylon-auth>
     <template id="domIfNylonInit" is="dom-if">
       <nylon-init id="nylonInit" path-name="[[pathName]]" on-ready="_nylonInitReady"></nylon-init>
     </template>
@@ -37,6 +37,7 @@
         this.$.nylonInit = this.shadowRoot.getElementById('nylonInit')
         //Set redirect page of nylon-pages to global
         Nylon.redirect = this.$.nylonInit.$.nylonPage.redirect
+        Nylon.page = this.$.nylonInit.$.nylonPage.redirect
 
         //Listener change page
 
@@ -47,7 +48,7 @@
 
         this.$.nylonInit.addEventListener(
           'nylon-pages-rule',
-          e => this.$.nylonAuth.checkRule()
+          e => this.$.nylonAuth.checkRule(e.detail)
         )
       }
 
@@ -117,12 +118,10 @@
 
 
       _auth(e){
-        console.log('xx',e.detail)
         this.$.domIfNylonInit.if = true
       }
 
       _noauth(e){
-        //this._nylonInit()
         this.$.domIfNylonInit.if = true
       }
 
