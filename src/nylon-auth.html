@@ -58,10 +58,17 @@
           this.userInfo = decoded
           this.dispatchEvent(new CustomEvent('auth', {detail: decoded}));
 
-          // axios.get(this.baseUrl+'/checkToken')
-          // .then((res)=>{
-          //   console.log(res.data)
-          // })
+          
+          axios.get(this.baseUrl+'/checkToken')
+          .then((res)=>{
+            console.log(res.data)
+          })
+
+          console.log('ccc')
+          axios.get('/auth/user')
+          .then((res)=>{
+            console.log(res.data)
+          })
 
 
           break;
