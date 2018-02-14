@@ -77,7 +77,11 @@
 
             //topic and navigate
             this.$.nylonInit.$.layoutMain.topic = e.detail.element.getAttribute('topic')
-            this.$.nylonInit.$.layoutMain.navigation = JSON.parse(JSON.stringify(this.$.nylonInit.navigation[e.detail.element.localName]))
+            let nav = this.$.nylonInit.navigation[e.detail.element.localName]
+            if(nav){
+              this.$.nylonInit.$.layoutMain.navigation = JSON.parse(JSON.stringify(nav))
+            }
+            
 
 
           },
