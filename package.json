@@ -15,7 +15,8 @@
   },
   "scripts": {
     "serve:dev": "polymer serve ./ --port 8080 --hostname 0.0.0.0",
-    "gulp:route": "gulp route"
+    "gulp:route": "gulp route",
+    "gulp:dialog": "gulp dialog"
   },
   "dependencies": {
     "redux": "^3.7.1",

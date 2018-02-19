@@ -132,3 +132,113 @@ gulp.task('route', function () {
 
 });
 
+
+
+gulp.task('dialog', function () {
+
+    glob("./src/routes/**/dialog-*.html", null, function (er, files) {
+
+        let elementList = []
+
+        async.each(files, (file, callback) => {
+
+            console.log('Processing file : ' + file)
+
+            let splitSlash = file.split('/')
+            let fileName = splitSlash[splitSlash.length - 1]
+            let elementName = fileName.split('.')[0]
+            let pathRoute = '/' + elementName.split('dialog-')[1].replace('-', '/')
+            let pathFile = file.split('./src/')[1]
+
+
+
+            fs.readFile(file, "utf8", (err, data) => {
+                if (err) {
+                    callback(err)
+                }
+                const $ = cheerio.load(data)
+                let domModule = $('dom-module')
+                if($('dom-module').attr('id') == undefined){
+                    domModule = $('script')
+                }
+                
+
+                let topic = domModule.attr('topic')
+
+                elementList.push({
+                    elementName,
+                    pathFile,
+                    pathRoute: domModule.attr('path') || pathRoute,
+                    rule: domModule.attr('rule') != undefined,
+                    topic: domModule.attr('topic')
+                })
+
+                callback();
+            });
+
+        }, function (err) {
+            if (err) {
+                console.log('error: ' + err);
+            } else {
+                //console.log(elementList)
+
+                const addAttribute = (name, value) => {
+                    if(value != undefined){
+
+                        if(typeof value == "boolean"){
+                             if(value){
+                                 return name
+                             }else{
+                                 return ''
+                             }
+                        }
+                        return `${name}="${value}"`
+                    }
+                    return ''
+                }
+
+                const navigation = (elementNameSource) => {
+                    const navigationIn = (elementName) => {
+                        let elementNameCut = elementName.split('>')[0]
+                        let getPage = elementList.filter((row) => {
+                            return row.elementName == elementNameCut
+                        })
+
+                        if (getPage.length != 0) {
+                            if (getPage[0].parentName) {
+                                return navigationIn(getPage[0].parentName + '>' + elementName)
+                            }
+                        }
+                
+                        return elementName
+                    }
+
+                    return navigationIn(elementNameSource).split('>')
+                }
+                
+                let im = ''
+                let el = ''
+
+                elementList.map((row)=>{
+                    im = im + `<link rel="lazy-import" href="${row.pathFile}">\n`
+                    el = el + `<${row.elementName} ${addAttribute('topic', row.topic)} path-file="${row.pathFile}" path="${row.pathRoute}"></${row.elementName}>\n`
+                   
+                })
+
+
+                gulp.src(['./src/nylon-init.html'])
+                    .pipe(replace('<!-- [[gen_import_dialog]] -->', im))
+                    .pipe(replace('<!-- [[gen_dialog]] -->', el))
+                    .pipe(rename('nylon-init.html'))
+                    .pipe(gulp.dest('./src/'))
+
+                console.log('**************')
+                console.log('successfully')
+            }
+        });
+
+
+    })
+
+});
+

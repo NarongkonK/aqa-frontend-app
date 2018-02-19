@@ -1,8 +1,10 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/nylon-pages/nylon-pages.html">
+<link rel="import" href="../bower_components/nylon-dialog/nylon-dialog.html">
 <link rel="import" href="./layout/layout-main.html">
 
 <!-- [[gen_import]] -->
+<!-- [[gen_import_dialog]] -->
 <link rel="lazy-import" href="pages/page-401/page-401.html">
 <link rel="lazy-import" href="pages/page-403/page-403.html">
 <link rel="lazy-import" href="pages/page-404/page-404.html">
@@ -31,6 +33,14 @@
         <page-404 path="*"></page-404>
       </nylon-pages>
     </layout-main>
+
+    
+
+    <nylon-dialog path="/a" id="nylonDialog">
+      <!-- [[gen_dialog]] -->
+      <div path="/a">1</div>
+      <div path="/b">2</div>
+    </nylon-dialog>
 
 
 

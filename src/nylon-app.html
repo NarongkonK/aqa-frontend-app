@@ -50,6 +50,11 @@
           'nylon-pages-rule',
           e => this.$.nylonAuth.checkRule(e.detail)
         )
+
+        this.$.nylonInit.$.nylonDialog.addEventListener(
+          'nylon-dialog-changed',
+          e => this._dialogChanged(e)
+        )
       }
 
 
@@ -89,6 +94,29 @@
             console.log('import error')
           },
           true);
+      }
+
+      _dialogChanged(){
+
+        let elementName = e.detail.element.localName
+        let pathFile = e.detail.element.getAttribute('path-file');
+        let resolvedUrl = this.resolveUrl(`pages/${elementName}/${elementName}.html`);
+
+        if(pathFile){
+          resolvedUrl = this.resolveUrl(pathFile);
+        }
+
+         Polymer.importHref(
+          resolvedUrl,
+          () => {
+            console.log('import success')
+          },
+          () => {
+            console.log('import error')
+          },
+          true);
+
+
       }
 
 
