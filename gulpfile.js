@@ -1,3 +1,5 @@
+// @ts-check
+
 const gulp = require('gulp')
 const glob = require("glob")
 const replace = require('gulp-replace')
@@ -73,7 +75,7 @@ gulp.task('route', function () {
 
                 const navigation = (elementNameSource) => {
                     const navigationIn = (elementName) => {
-                        elementNameCut = elementName.split('>')[0]
+                        let elementNameCut = elementName.split('>')[0]
                         let getPage = elementList.filter((row) => {
                             return row.elementName == elementNameCut
                         })
@@ -99,7 +101,7 @@ gulp.task('route', function () {
                     el = el + `<${row.elementName} ${addAttribute('topic', row.topic)} path-file="${row.pathFile}" path="${row.pathRoute}" ${addAttribute('rule',row.rule)} ${addAttribute('parent',row.parentName)}></${row.elementName}>\n`
                     nav[row.elementName] = navigation(row.elementName).map((row)=>{
 
-                        eln = elementList.filter((row2)=>{
+                        let eln = elementList.filter((row2)=>{
                             return row2.elementName == row
                         })[0]
 
