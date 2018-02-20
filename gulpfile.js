@@ -227,7 +227,7 @@ gulp.task('dialog', function () {
         
                         elementList.map((row)=>{
                             im = im + `<link rel="lazy-import" href="${row.pathFile}">\n`
-                            el = el + `<${row.elementName} ${addAttribute('label', row.topic)} path-file="${row.pathFile}" path="${row.pathRoute}"></${row.elementName}>\n`
+                            el = el + `<${row.elementName} ${addAttribute('label', row.topic)} path-file="${row.pathFile}" path="${row.pathRoute}" lazy></${row.elementName}>\n`
                            
                         })
         
