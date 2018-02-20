@@ -96,7 +96,7 @@
           true);
       }
 
-      _dialogChanged(){
+      _dialogChanged(e){
 
         let elementName = e.detail.element.localName
         let pathFile = e.detail.element.getAttribute('path-file');
@@ -109,7 +109,7 @@
          Polymer.importHref(
           resolvedUrl,
           () => {
-            console.log('import success')
+            // console.log('import success')
           },
           () => {
             console.log('import error')
