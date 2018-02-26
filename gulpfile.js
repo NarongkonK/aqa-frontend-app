@@ -1,5 +1,3 @@
-// @ts-check
-
 const gulp = require('gulp')
 const glob = require("glob")
 const replace = require('gulp-replace')
@@ -7,7 +5,8 @@ const rename = require('gulp-rename')
 const async = require('async')
 const fs = require('fs')
 const cheerio = require('cheerio')
-
+const gulpCopy = require('gulp-copy');
+const del = require('del');
 
 gulp.task('route', function () {
 
@@ -99,6 +98,7 @@ gulp.task('route', function () {
                         let nav = {}
         
                         elementList.map((row)=>{
+
                             im = im + `<link rel="lazy-import" href="${row.pathFile}">\n`
                             el = el + `<${row.elementName} ${addAttribute('topic', row.topic)} path-file="${row.pathFile}" path="${row.pathRoute}" ${addAttribute('rule',row.rule)} ${addAttribute('parent',row.parentName)}></${row.elementName}>\n`
                             nav[row.elementName] = navigation(row.elementName).map((row)=>{
@@ -249,3 +249,63 @@ gulp.task('dialog', function () {
 
 });
 
+
+const myRename = function(source,destination){
+    return new Promise(function(resolve, reject) {
+        fs.rename(source, destination, function (err) {
+            if (err) {
+                throw err;
+            }
+            resolve();
+        });
+    })
+}
+
+gulp.task('rename:start', function () {
+
+    return Promise.all([
+        myRename('src/i18n', 'src/_i18n')
+        ,
+        myRename('src/redux', 'src/_redux')
+        ,
+        myRename('src/routes', 'src/_routes')
+        ,
+        myRename('files', '_files')
+    ])
+
+})
+
+gulp.task('rename:end', function () {
+
+    return Promise.all([
+        myRename('src/_i18n', 'src/i18n')
+        ,
+        myRename('src/_redux', 'src/redux')
+        ,
+        myRename('src/_routes', 'src/routes')
+        ,
+        myRename('_files', 'files')
+    ])
+
+})
+
+// const myCopy = function(source,destination){
+//     return new Promise(function(resolve, reject) {
+//         fs.rename(source, destination, function (err) {
+//             if (err) {
+//                 throw err;
+//             }
+//             resolve();
+//         });
+//     })
+// }
+
+gulp.task('copy', function (done) {
+    return gulp.src(['../frontend/**/*']).pipe(gulp.dest('abc'));
+})
+
+gulp.task('del', function (done) {
+    del(['abc']).then(paths => {
+        done()
+    });
+})
