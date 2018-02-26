@@ -12,7 +12,7 @@ gulp.task('route', function () {
 
     return Promise.all([
         new Promise(function(resolve, reject) {
-            glob("./src/routes/**/route-*.html", null, function (er, files) {
+            glob("./src/frontend/routes/**/route-*.html", null, function (er, files) {
 
                 let elementList = []
         
@@ -142,7 +142,7 @@ gulp.task('route', function () {
 gulp.task('dialog', function () {
     return Promise.all([
         new Promise(function(resolve, reject) {
-            glob("./src/routes/**/dialog-*.html", null, function (er, files) {
+            glob("./src/frontend/routes/**/dialog-*.html", null, function (er, files) {
 
                 let elementList = []
         
@@ -250,6 +250,15 @@ gulp.task('dialog', function () {
 });
 
 
+
+
+
+
+
+
+
+
+
 const myRename = function(source,destination){
     return new Promise(function(resolve, reject) {
         fs.rename(source, destination, function (err) {
@@ -261,51 +270,32 @@ const myRename = function(source,destination){
     })
 }
 
-gulp.task('rename:start', function () {
+gulp.task('build:rename', function () {
 
     return Promise.all([
-        myRename('src/i18n', 'src/_i18n')
-        ,
-        myRename('src/redux', 'src/_redux')
-        ,
-        myRename('src/routes', 'src/_routes')
-        ,
-        myRename('files', '_files')
+        myRename('src/frontend', 'src/_frontend')
     ])
 
 })
 
-gulp.task('rename:end', function () {
-
-    return Promise.all([
-        myRename('src/_i18n', 'src/i18n')
-        ,
-        myRename('src/_redux', 'src/redux')
-        ,
-        myRename('src/_routes', 'src/routes')
-        ,
-        myRename('_files', 'files')
-    ])
-
+gulp.task('build:copy', function (done) {
+    return gulp.src(['../frontend/**/*']).pipe(gulp.dest('src/frontend'));
 })
 
-// const myCopy = function(source,destination){
-//     return new Promise(function(resolve, reject) {
-//         fs.rename(source, destination, function (err) {
-//             if (err) {
-//                 throw err;
-//             }
-//             resolve();
-//         });
-//     })
-// }
-
-gulp.task('copy', function (done) {
-    return gulp.src(['../frontend/**/*']).pipe(gulp.dest('abc'));
-})
-
-gulp.task('del', function (done) {
-    del(['abc']).then(paths => {
+gulp.task('build:del', function (done) {
+    del(['src/frontend']).then(paths => {
         done()
     });
 })
+
+gulp.task('build:undo_rename', function () {
+
+    return Promise.all([
+        myRename('src/_frontend', 'src/frontend')
+    ])
+
+})
+
+
+
+

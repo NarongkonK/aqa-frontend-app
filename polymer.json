@@ -2,7 +2,7 @@
     "entrypoint": "index.html",
     "shell": "src/nylon-app.html",
     "fragments": [
-        "src/routes/app/route-app.html"
+        "src/frontend/routes/route-test.html"
     ],
     "sources": [
         "images/**/*",
