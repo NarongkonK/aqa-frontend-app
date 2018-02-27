@@ -7,6 +7,7 @@ const fs = require('fs')
 const cheerio = require('cheerio')
 const gulpCopy = require('gulp-copy');
 const del = require('del');
+const exec = require('child_process').exec;
 
 gulp.task('route', function () {
 
@@ -271,11 +272,9 @@ const myRename = function(source,destination){
 }
 
 gulp.task('build:rename', function () {
-
     return Promise.all([
         myRename('src/frontend', 'src/_frontend')
     ])
-
 })
 
 gulp.task('build:copy', function (done) {
@@ -289,13 +288,66 @@ gulp.task('build:del', function (done) {
 })
 
 gulp.task('build:undo_rename', function () {
-
     return Promise.all([
         myRename('src/_frontend', 'src/frontend')
     ])
-
 })
 
+// gulp.task('build:pre', function () {
+
+//     return Promise.all([
+//         myRename('src/frontend', 'src/_frontend')
+//     ])
+
+// })
+
+// gulp.task('build:sub', function () {
+
+//     return Promise.all([
+//         myRename('src/frontend', 'src/_frontend')
+//     ])
+
+// })
+
+
+// gulp.task('testx', function () {
+
+//     return new Promise(function(resolve, reject) {
+
+       
+//         async.series({
+//             renameSym: function(callback) {
+//                 fs.rename('src/frontend', 'src/_frontend', function (err) {
+//                     if (err) {
+//                         throw err
+//                     }
+//                     callback(null);
+//                 });
+//             },
+//             copySource: function(callback){
+//                 gulp.src('../frontend/**/*').pipe(gulp.dest('src/frontend'))
+//                 .on('error', function(error) {
+//                     throw err;
+//                 })
+//                 .on('end', function() {
+//                     callback(null);
+//                 });
+//             },
+//             execTest: function(callback){
+//                 exec('polymer build', function (err, stdout, stderr) {
+                 
+//                 });
+//             } 
+
+//         }, function(err, results) {
+//             if(err){
+//                 console.log('my error')
+//             }
+//             resolve()
+//         });
+//     })
+
+// })
 
 
 

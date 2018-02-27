@@ -9,7 +9,4 @@ package-lock.json
 src/nylon-init.html
 
 src/frontend
-src/i18n
-src/redux
-src/routes
-files/
+src/_frontend
