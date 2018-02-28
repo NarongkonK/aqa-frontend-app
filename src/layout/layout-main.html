@@ -2,17 +2,17 @@
 <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
-<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<!-- <link rel="import" href="../../bower_components/iron-selector/iron-selector.html"> -->
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<!-- <link rel="import" href="../../bower_components/paper-button/paper-button.html"> -->
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
-<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<!-- <link rel="import" href="../../bower_components/paper-badge/paper-badge.html"> -->
+<!-- <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html"> -->
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
@@ -20,7 +20,7 @@
 <link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
 
 <link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
-<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<!-- <link rel="import" href="../../bower_components/iron-icons/social-icons.html"> -->
 
 <link rel="import" href="../../bower_components/aqa-title/aqa-title.html">
 <link rel="import" href="../../bower_components/aqa-breadcrumb/aqa-breadcrumb.html">
@@ -162,41 +162,6 @@
                     <app-toolbar class="header">
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div main-title>[[appName]]</div>
-                        <!-- <paper-icon-button icon="social:notifications"></paper-icon-button>
-                        <paper-icon-button icon="icons:mail"></paper-icon-button>
-                        <paper-menu-button no-overlap horizontal-align="right">
-                            <div class="divImage" slot="dropdown-trigger" alt="menu">
-                                <img class="img-circle" src$="[[rootPath]][[info.profile_url]]" />
-                            </div>
-                            <paper-listbox slot="dropdown-content">
-
-                                <paper-icon-item disabled>
-                                    <img class="img-circle" src$="[[rootPath]][[info.profile_url]]" / slot="item-icon">
-                                    <paper-item-body two-line>
-                                        <div>[[info.type_academic.POSITIONTHAIDESC]][[info.firstname_th]] [[info.lastname_th]]</div>
-                                    </paper-item-body>
-                                </paper-icon-item>
-
-                                <paper-item>
-                                    <iron-icon icon="social:person"></iron-icon>
-                                    &nbsp;&nbsp;Profile
-                                </paper-item>
-                                <paper-item>
-                                    <iron-icon icon="icons:settings"></iron-icon>
-                                    <paper-item-body two-line>
-                                        &nbsp;&nbsp;Setting
-                                    </paper-item-body>
-                                    <iron-icon class="icon-sm" icon="editor:format-size" size="0.8" on-tap="chFont"></iron-icon>
-                                    <iron-icon class="icon-md" icon="editor:format-size" size="1" on-tap="chFont"></iron-icon>
-                                    <iron-icon class="icon-lg" icon="editor:format-size" size="1.2" on-tap="chFont"></iron-icon>
-                                </paper-item>
-                                <paper-item on-tap="logout">
-                                    <iron-icon icon="icons:exit-to-app"></iron-icon>
-                                    &nbsp;&nbsp;Log-out
-                                </paper-item>
-                            </paper-listbox>
-                        </paper-menu-button> -->
-
                     </app-toolbar>
                     <template is="dom-if" if="[[progressEnable]]">
                         <paper-progress id="progress" value="[[progressValue]]" indeterminate="[[progressIndeterminate]]"></paper-progress>
@@ -206,11 +171,9 @@
                     <div style="padding-left:1rem;padding-top:1rem;">
                         <aqa-title>[[topic]]</aqa-title>
                         <template is="dom-if" if="[[_showBreadcrumb(navigation)]]">
-                                <aqa-breadcrumb items="[[navigation]]"></aqa-breadcrumb>
+                            <aqa-breadcrumb items="[[navigation]]"></aqa-breadcrumb>
                         </template>
-                        
                     </div>
-
                     <slot></slot>
                 </div>
             </app-header-layout>
