@@ -3,7 +3,9 @@
     "shell": "src/nylon-app.html",
     "fragments": [
 		"./src/frontend/routes/common/route-common.html",
+		"./src/frontend/routes/route-import/route-import.html",
 		"./src/frontend/routes/route-test.html",
+		"./src/frontend/routes/common/dialog-common.html",
 		"./src/frontend/routes/dialog-test.html"
 	],
     "sources": [

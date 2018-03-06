@@ -52,7 +52,7 @@
     "vaadin-upload": "^2.0.0",
     "granite-bootstrap": "LostInBrittany/granite-bootstrap#^3.3.7-5",
     "l2t-paper-rating": "Link2Twenty/l2t-paper-rating#^1.2.0",
-    "paper-menu-button": "PolymerElements/paper-menu-button#^2.0.0",
+    "paper-menu-button": "PolymerElements/paper-menu-button#^2.1.0",
     "iron-dropdown": "PolymerElements/iron-dropdown#^2.0.0",
     "c3": "^0.4.17",
     "jwt-decode": "^2.2.0",
