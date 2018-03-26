@@ -9,7 +9,7 @@
             paper-item{
                 width: 100%;
                 box-sizing: border-box;
-                min-width: 150px;
+                min-width: 50px;
                 --paper-item-min-height:30px;
             }
             paper-item:hover{
@@ -20,10 +20,9 @@
                 border-radius: 10px;
             }
         </style>
-        <input type="file">
         <paper-menu-button no-overlap horizontal-align="right" no-animations>
             <aqa-button type="primary" slot="dropdown-trigger">
-                Export 
+                [[title]] 
             </aqa-button>
             <paper-listbox slot="dropdown-content">
                 <paper-item>Word</paper-item>
@@ -48,7 +47,10 @@
              */
             static get properties() {
                 return {
-
+                    title:{
+                        type:String,
+                        value:''
+                    }
                 };
             }
 

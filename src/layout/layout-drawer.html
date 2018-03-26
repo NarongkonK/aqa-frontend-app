@@ -174,10 +174,10 @@
             <app-toolbar>
                 <div main-title>Automated QA </div>
             </app-toolbar>
-            <div style="height:100%">
+            <div>
                 <div name="menu">
                     <template is="dom-repeat" items="{{menu}}">
-                        <div class="title-menu" on-click="toggle">
+                        <div class="title-menu" on-click="toggle" on-mouseover="showMenu">
                             [[item.label]]
                             <paper-icon-button icon="my-icons:expand-more"></paper-icon-button>
                         </div>
@@ -270,7 +270,9 @@
                     return ''
                 }
             }
-
+            showMenu(e){
+                console.log(e.currentTarget)
+            }
         }
 
         window.customElements.define(LayoutDrawer.is, LayoutDrawer);

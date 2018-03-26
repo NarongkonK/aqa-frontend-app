@@ -24,7 +24,7 @@
 
 <link rel="import" href="../../bower_components/aqa-title/aqa-title.html">
 <link rel="import" href="../../bower_components/aqa-breadcrumb/aqa-breadcrumb.html">
-
+<link rel="import" href="../../bower_components/aqa-tooltip/aqa-tooltip.html">
 <link rel="import" href="../../bower_components/aqa-font/aqa-mitr-font.html">
 <link rel="import" href="../../bower_components/aqa-styles/flexbox-grid.html">
 
@@ -109,15 +109,15 @@
             } */
 
             app-toolbar.header {
-                height: 60px;
-
+                height: auto;
+                min-height: 50px;
                 background-color: #fff;
             }
 
             [main-title] {
                 font-family: MitrLight;
                 color: #0288D1;
-                font-size: 1.6rem
+                font-size: 1.2rem
             }
 
             @media screen and (max-width: 480px) {
@@ -151,24 +151,36 @@
                 height: 30px;
                 border-radius: 50%;
             }
+            .content{
+                padding: 0.5rem 1rem 0 1rem;
+            }
         </style>
 
-        <app-drawer-layout responsive-width="2000px">
+        <app-drawer-layout responsive-width="800px">
             <app-drawer slot="drawer" id="drawer">
-                <layout-drawer id="layoutDrawer" path-name="[[pathName]]" on-layout-close-drawer="_closeDrawer"></layout-drawer>
+                <div style="height: 100%; overflow: auto;">
+                    <layout-drawer id="layoutDrawer" path-name="[[pathName]]" on-layout-close-drawer="_closeDrawer"></layout-drawer>
+                </div>
             </app-drawer>
             <app-header-layout>
                 <app-header slot="header" fixed condenses effects="waterfall">
                     <app-toolbar class="header">
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div main-title>[[appName]]</div>
+                        <!-- <aqa-tooltip label="ลบ"> -->
+                        <paper-icon-button icon="editor:format-size"></paper-icon-button>
+                        <paper-icon-button icon="social:notifications"></paper-icon-button>
+                        <!-- </aqa-tooltip> -->
+                        <!-- <aqa-tooltip label="ลบ"> -->
+                        <paper-icon-button icon="social:person"></paper-icon-button>
+                        <!-- </aqa-tooltip> -->
                     </app-toolbar>
                     <template is="dom-if" if="[[progressEnable]]">
                         <paper-progress id="progress" value="[[progressValue]]" indeterminate="[[progressIndeterminate]]"></paper-progress>
                     </template>
                 </app-header>
                 <div id="slotMain">
-                    <div style="padding-left:1rem;padding-top:1rem;">
+                    <div class="content">
                         <aqa-title>[[topic]]</aqa-title>
                         <template is="dom-if" if="[[_showBreadcrumb(navigation)]]">
                             <aqa-breadcrumb items="[[navigation]]"></aqa-breadcrumb>
