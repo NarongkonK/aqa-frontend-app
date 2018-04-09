@@ -1,0 +1,40 @@
+<!-- polymer libraly -->
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<dom-module id="layout-portal-navbar">
+    <template>
+        <style include="aqa-styles">
+            .navbar{
+                background-color: white;
+                text-align: center;
+            }
+            .navbar-item{
+                padding: 0.2rem 0;
+            }
+            .active{
+                color:#0078D7;
+                /* border-bottom: 1px solid #0078D7; */
+            }
+        </style>
+        <div class="navbar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-3 navbar-item active">สมัครผู้ประเมิน</div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 navbar-item">คำถามที่พบบ่อย</div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 navbar-item">คู่มือ</div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 navbar-item">บทสรุปผู้บริหาร</div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        class layoutPortalNavbar extends ReduxMixin(Polymer.Element) {
+            static get is() { return 'layout-portal-navbar'; }
+            static get properties() {
+                return {
+                }
+            }
+        }
+        window.customElements.define(layoutPortalNavbar.is, layoutPortalNavbar);
+    </script>
+</dom-module>

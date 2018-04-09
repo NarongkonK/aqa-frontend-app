@@ -1,0 +1,35 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="./layout-portal-toolbar.html">
+<link rel="import" href="./layout-portal-navbar.html">
+<dom-module id="layout-portal-main">
+    <template>
+        <style>
+            
+        </style>
+        <div>
+            <layout-portal-toolbar>
+                <layout-portal-navbar></layout-portal-navbar>    
+            </layout-portal-toolbar>
+            <slot></slot>
+        </div>
+    </template>
+
+    <script>
+
+        class LayoutPortalMain extends Polymer.Element {
+
+            static get is() {
+                return 'layout-portal-main';
+            }
+
+            static get properties() {
+                return {
+                    
+                };
+            }
+
+        }
+
+        window.customElements.define(LayoutPortalMain.is, LayoutPortalMain);
+    </script>
+</dom-module>

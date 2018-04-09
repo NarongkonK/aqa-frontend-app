@@ -1,0 +1,57 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+
+<dom-module id="layout-portal-toolbar">
+    <template>
+        <style include="aqa-styles">
+            .circle{
+                height: 48px;
+                width: 48px;
+                border-radius: 50%;
+                background-color: #ddd;
+                float: left;
+                margin: 0 1rem;
+            }
+            .sub-title{
+                font-size: 1rem;
+            }
+            .login{
+                font-size: 1rem;
+            }
+            app-toolbar{
+                background-color: #0078D7;
+                color:white;
+            }
+        </style>
+        <app-header reveals>
+            <app-toolbar>
+                <div class="circle"></div>
+                <div main-title>AUTOMATED QA <br> <span class="sub-title">ระบบสารสนเทศเพื่อการประเมินคุณภาพภายนอก ส.ม.ศ</span></div>
+                <div class="login">เข้าสู่ระบบ</div>
+            </app-toolbar>
+            <slot></slot>
+        </app-header>
+    </template>
+
+    <script>
+        class LayoutPortalToolbar extends Polymer.Element {
+
+            static get is() {
+                return 'layout-portal-toolbar';
+            }
+
+            static get properties() {
+                return {
+
+                };
+            }
+
+        }
+
+        window.customElements.define(LayoutPortalToolbar.is, LayoutPortalToolbar);
+    </script>
+</dom-module>
