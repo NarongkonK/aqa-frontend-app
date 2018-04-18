@@ -14,7 +14,8 @@
     "gulp-exec": "^3.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.6.1",
-    "npm-run-all": "^4.0.2"
+    "npm-run-all": "^4.0.2",
+    "yargs": "^11.0.0"
   },
   "scripts": {
     "serve:dev": "polymer serve ./ --port 8080 --hostname 0.0.0.0",
@@ -24,6 +25,7 @@
     "gen": "gulp route"
   },
   "dependencies": {
+    "gulp-param": "^1.0.3",
     "redux": "^3.7.1",
     "redux-thunk": "^2.2.0"
   }

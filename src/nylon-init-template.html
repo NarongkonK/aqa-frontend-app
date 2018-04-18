@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/nylon-pages/nylon-pages.html">
 <link rel="import" href="../bower_components/nylon-dialog/nylon-dialog.html">
-<link rel="import" href="./layout/layout-portal.html">
+<link rel="import" href="./layout/layout-main.html">
 
 <!-- [[gen_import]] -->
 <!-- [[gen_import_dialog]] -->
@@ -25,14 +25,14 @@
     </style>
 
    
-    <layout-portal id="layoutMain" path-name="[[pathName]]">
+    <layout-main id="layoutMain" path-name="[[pathName]]">
       <nylon-pages id="nylonPage">
         <!-- [[gen_route]] -->
         <page-401 path="*" rule></page-401>
         <page-403 path="*" rule></page-403>
         <page-404 path="*"></page-404>
       </nylon-pages>
-    </layout-portal>
+    </layout-main>
 
     
 

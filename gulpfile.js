@@ -9,6 +9,9 @@ const gulpCopy = require('gulp-copy');
 const del = require('del');
 const exec = require('child_process').exec;
 
+var argv = require('yargs').argv;
+var isProduction = (argv.production === undefined) ? false : true;
+
 let arrPath = [];
 
 gulp.task('route', function () {
@@ -118,10 +121,12 @@ gulp.task('route', function () {
                             })
                         })
 
+                        let layoutName = argv.layout || "layout-main"
 
                         gulp.src(['./src/nylon-init-template.html'])
                             .pipe(replace('<!-- [[gen_import]] -->', im))
                             .pipe(replace('<!-- [[gen_route]] -->', el))
+                            .pipe(replace('layout-main', layoutName))
                             .pipe(replace('gen_navigation', JSON.stringify(nav)))
                             .pipe(rename('nylon-init.html'))
                             .pipe(gulp.dest('./src/'))
@@ -136,7 +141,7 @@ gulp.task('route', function () {
         })
     ])
 
-
+    
 
 });
 
