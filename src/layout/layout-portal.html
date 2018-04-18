@@ -1,0 +1,121 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../bower_components/aqa-title/aqa-title.html">
+<link rel="import" href="../../bower_components/aqa-breadcrumb/aqa-breadcrumb.html">
+<dom-module id="layout-portal">
+    <template>
+        <style include="aqa-styles">
+            app-header {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 2;
+            }
+
+            .toolbar {
+                background-color: #0F94EF;
+                color: white;
+                height: 30px;
+            }
+
+            iron-image {
+                width: 45px;
+                height: 45px;
+                margin: 0 1rem;
+                /* border-radius: 50%; */
+            }
+
+            .header {
+                background-color: white;
+                display: flex;
+            }
+
+            .title {
+                font-family: MitrLight;
+                font-size: 1.2rem;
+                font-weight: 100;
+            }
+
+            .sub-title {
+                font-family: MitrLight;
+                font-size: 1rem;
+            }
+
+            .content {
+                padding-top: 6rem;
+                padding-left: 2rem;
+            }
+
+            /* .page {
+                height: calc(100vh - 98px);
+                background-color: red;
+                overflow-y: auto;
+            } */
+
+            /* .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background-color: #0F94EF;
+                height: 30px;
+            } */
+        </style>
+        <app-header fixed>
+            <app-toolbar class="toolbar">
+                <div main-title></div>
+            </app-toolbar>
+            <div class="header container-fluid">
+                <iron-image sizing="contain" src="../../images/72.png"></iron-image>
+                <div>
+                    <div class="title">AUTOMATED QA</div>
+                    <div class="sub-title">ระบบสารสนเทศเพื่อการประเมินคุณภาพภายนอก สมศ.</div>
+                </div>
+            </div>
+        </app-header>
+        <div id="slotMain">
+            <template is="dom-if" if="[[checkTopic(topic)]]">
+                <div class="content">
+                    <div style="margin-bottom:1rem"></div>
+                    <aqa-title>[[topic]]</aqa-title>
+                    <template is="dom-if" if="[[_showBreadcrumb(navigation)]]">
+                        <aqa-breadcrumb items="[[navigation]]"></aqa-breadcrumb>
+                    </template>
+                </div>
+            </template>
+            <div class="page">
+                <slot></slot>
+            </div>
+        </div>
+        <div class="footer">
+
+        </div>
+    </template>
+
+    <script>
+        class LayoutPortal extends Polymer.Element {
+            static get is() {
+                return 'layout-portal';
+            }
+            static get properties() {
+                return {
+                    navigation: Array,
+                    topic: String
+                };
+            }
+            _showBreadcrumb(arr) {
+                return arr.length != 1
+            }
+            checkTopic(val) {
+                if (!val || val == "หน้าแรก") return false
+                else return true
+            }
+        }
+
+        window.customElements.define(LayoutPortal.is, LayoutPortal);
+    </script>
+</dom-module>
