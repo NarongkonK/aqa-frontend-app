@@ -58,21 +58,9 @@
 
           let token = this.getParameterByName('accessToken',event.data)
           axios.defaults.headers.common['Authorization'] = token
-
           let decoded = jwt_decode(token);
           this.userInfo = decoded
           this.dispatchEvent(new CustomEvent('auth', {detail: decoded}));
-
-          
-          axios.get(this.baseUrl+'/checkToken')
-          .then((res)=>{
-            console.log(res.data)
-          })
-
-          axios.get('/auth/user')
-          .then((res)=>{
-            console.log(res.data)
-          })
          
 
           this.token = this.getParameterByName('accessToken',event.data)
@@ -80,7 +68,7 @@
           this.userInfo = jwt_decode(this.token)
           this.payload = jwt_decode(this.getParameterByName('payload',event.data))
 
-          this.userInfo = this.userInfod
+          // console.log(this.userInfo)
           this.dispatchEvent(new CustomEvent('auth', {detail: this.userInfo}))
           
           break;
@@ -98,7 +86,7 @@
 
     checkRule(detail) {
 
-      
+      console.log(detail.ctx.gotoPage)
       let elementName = detail.element.localName
       if(!detail.ctx.gotoPage){
 
