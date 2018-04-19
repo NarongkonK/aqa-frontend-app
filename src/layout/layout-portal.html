@@ -46,24 +46,26 @@
             }
 
             .content {
-                padding-top: 6rem;
+                padding-top: 0.5rem;
                 padding-left: 2rem;
             }
 
-            /* .page {
-                height: calc(100vh - 98px);
+            #slotMain {
+                margin-top:6rem;
+                /* height: calc(100vh - 98px);
                 background-color: red;
-                overflow-y: auto;
-            } */
+                overflow-y: auto; */
+            }
 
-            /* .footer {
-                position: fixed;
-                left: 0;
+            .footer {
+                position: relative;
+                right: 0;
                 bottom: 0;
-                width: 100%;
-                background-color: #0F94EF;
-                height: 30px;
-            } */
+                left: 0;
+                padding: 1rem;
+                background-color: red;
+                text-align: center;
+            }
         </style>
         <app-header fixed>
             <app-toolbar class="toolbar">
@@ -90,9 +92,6 @@
             <div class="page">
                 <slot></slot>
             </div>
-        </div>
-        <div class="footer">
-
         </div>
     </template>
 
