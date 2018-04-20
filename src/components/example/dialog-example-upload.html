@@ -1,0 +1,76 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
+<link rel="import" href="../../../bower_components/paper-progress/paper-progress.html">
+
+<dom-module id="dialog-example-upload" topic="อัพโหลดไฟล์">
+    <template>
+        <style include="aqa-styles">
+           
+            paper-progress{
+                width: 100%;
+                --paper-progress-height:10px;
+            }
+        </style>
+        <div class="modal-body">
+            <div>
+                เลือกไฟล์ที่จะนำเข้า : 
+                <input type="file" id="files" on-change="addFile" hidden>
+                <aqa-button type="primary" on-click="selectFile">choose file</aqa-button>
+            </div>
+            <div>
+                <br>
+                [[fileName]]
+                <paper-progress id="progress"></paper-progress>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <aqa-button type="primary" on-click="saveData">อัพโหลดไฟล์</aqa-button>
+            <aqa-button type="default-outline" on-click="closeDialog">ยกเลิก</aqa-button>
+        </div>
+
+    </template>
+
+    <script>
+
+        class DialogExampleUpload extends Polymer.Element {
+
+            static get is() {
+                return 'dialog-example-upload';
+            }
+
+            static get properties() {
+                return {
+                    fileName:String
+                };
+            }
+            nylonDialogActive(){
+                this.$.files.value = ""
+            }
+            selectFile(){
+                this.$.files.click()
+            }
+            saveData(){
+                this.$.progress.indeterminate = true;
+                setTimeout(
+                    ()=>{
+                        this.$.progress.indeterminate = false;
+                        Nylon.dialog.close()
+                        Nylon.swal({nylon: 'success'})
+                        // this.$.progress.indeterminate = false;
+                    },5000
+                )
+            }
+            addFile(e){
+                this.fileName = e.target.files[0].name;
+                // console.log(e.target.files[0].name)
+            }
+            closeDialog(){
+                Nylon.dialog.close()
+            }
+
+        }
+
+        window.customElements.define(DialogExampleUpload.is, DialogExampleUpload);
+    </script>
+</dom-module>
