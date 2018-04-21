@@ -1,0 +1,36 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../redux-mixin.html">
+<dom-module id="dialog-example" topic="จัดการข้อมูล">
+    <template>
+        <style include="aqa-styles">
+        </style>
+        <div class="modal-body">
+            
+        </div>
+        <div class="modal-footer">
+            <aqa-button type="success" on-click="closeDialog">บันทึก</aqa-button>
+            <aqa-button type="default-outline" on-click="closeDialog">ยกเลิก</aqa-button>
+        </div>
+
+    </template>
+
+    <script>
+        class DialogExample extends ReduxMixin(Polymer.Element) {
+
+            static get is() {
+                return 'dialog-example';
+            }
+
+            static get properties() {
+                return {
+                   
+                };
+            }
+            closeDialog() {
+                Nylon.dialog.close()
+            }
+        }
+
+        window.customElements.define(DialogExample.is, DialogExample);
+    </script>
+</dom-module>
