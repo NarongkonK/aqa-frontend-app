@@ -177,7 +177,7 @@
             <div>
                 <div name="menu">
                     <template is="dom-repeat" items="{{menu}}">
-                        <div class="title-menu" on-click="toggle" on-mouseover="showMenu">
+                        <div class="title-menu" on-click="toggle">
                             [[item.label]]
                             <paper-icon-button icon="my-icons:expand-more"></paper-icon-button>
                         </div>
@@ -271,7 +271,7 @@
                 }
             }
             showMenu(e){
-                console.log(e.currentTarget)
+                // console.log(e.currentTarget)
             }
         }
 
