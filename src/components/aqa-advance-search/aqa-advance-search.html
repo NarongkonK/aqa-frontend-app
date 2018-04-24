@@ -1,0 +1,114 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-input.html">
+<link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-combo-box.html">
+<dom-module id="aqa-advance-search">
+    <template>
+        <style include="aqa-styles">
+            .bgWhite {
+                padding: 0.5rem;
+                background-color: white;
+            }
+
+            .section {
+                margin: auto 0;
+            }
+
+            .row>#checkBtn>#btnAdd,
+            .row>#checkBtn>#btnSearch {
+                display: none;
+            }
+
+            .row:last-of-type>#checkBtn>#btnAdd,
+            .row:last-of-type>#checkBtn>#btnSearch {
+                display: inline-block;
+            }
+        </style>
+        <div style="margin:0rem 0.5rem 0.5rem 0.5rem">
+        <template is="dom-repeat" items="[[itemForm]]">
+            <div class="row center-xs bgWhite">
+                <div class="col-xs-12 col-sm-6 col-md-2 section">
+                    <aqa-combo-box no-label-float placeholder="เลือกข้อมูลที่จะค้นหา" items="[[field]]"></aqa-combo-box>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 section" hidden="[[checkFirstIndex(index)]]">
+                    <aqa-combo-box no-label-float placeholder="ตัวดำเนินการ" items="[[periods]]"></aqa-combo-box>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2 section">
+                    <aqa-input no-label-float placeholder="ข้อความ"></aqa-input>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 section" id="checkBtn" style="text-align:left">
+                    <aqa-button type="primary-outline btn-xs" icon="remove" id="btnRemove" on-click="deleteFilter"></aqa-button>
+                    <aqa-button type="primary-outline btn-xs" id="btnAdd" icon="add" on-click="addFilter"></aqa-button>
+                    <aqa-button type="primary btn-xs" id="btnSearch">ค้นหา</aqa-button>
+                </div>
+            </div>
+        </template>
+        </div>
+    </template>
+
+    <script>
+
+        class AqaAdvanceSearch extends Polymer.Element {
+
+            static get is() {
+                return 'aqa-advance-search';
+            }
+
+            static get properties() {
+                return {
+                    itemForm: {
+                        type: Array,
+                        value: [0]
+                    },
+                    field: {
+                        type: Array,
+                        value: []
+                    },
+                    periods: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'เท่ากับ'
+                            },
+                            {
+                                label: 'ไม่เท่ากับ'
+                            },
+                            {
+                                label: 'มากกว่า'
+                            },
+                            {
+                                label: 'น้อยกว่า'
+                            }
+                        ]
+                    }
+                };
+            }
+
+            checkIndex(val) {
+                // console.log(this.itemForm.length-1,val)
+                if (val == (this.itemForm.length - 1)) {
+                    // console.log('ss')
+                    return false
+                }
+                // return true
+                // if(val == this.itemForm)
+            }
+            checkFirstIndex(val) {
+                if (val == 0) return true;
+                else return false;
+            }
+            addFilter() {
+                this.push('itemForm', this.itemForm.length)
+            }
+            deleteFilter(e) {
+                var index = this.itemForm.indexOf(e.model.item);
+                if (this.itemForm.length > 1) {
+                    this.splice('itemForm', index, 1)
+                }
+            }
+        }
+
+        window.customElements.define(AqaAdvanceSearch.is, AqaAdvanceSearch);
+    </script>
+</dom-module>

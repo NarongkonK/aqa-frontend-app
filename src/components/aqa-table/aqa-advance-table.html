@@ -1,0 +1,119 @@
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-vaadin-grid/aqa-vaadin-grid.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-column-group.html">
+<link rel="import" href="../../../bower_components/aqa-tooltip/aqa-tooltip.html">
+<link rel="import" href="../../../bower_components/aqa-icons/aqa-icons.html">
+<link rel="import" href="../../../bower_components/paper-checkbox/paper-checkbox.html">
+<dom-module id="aqa-advance-table">
+    <template>
+        <vaadin-grid items="[[data]]">
+            <vaadin-grid-column flex-grow="0" width="60px">
+                <template class="header">
+                    <paper-checkbox></paper-checkbox>
+                </template>
+                <template>
+                    <div style="text-align:center">
+                        <paper-checkbox></paper-checkbox>
+                    </div>
+                </template>
+            </vaadin-grid-column>
+
+            <template is="dom-repeat" items="[[collumn]]" as="col">
+                <vaadin-grid-column>
+                    <template class="header">[[col.label]]</template>
+                    <template>
+                        [[_combineRow(col,item)]]
+                    </template>
+                </vaadin-grid-column>
+            </template>
+
+            <vaadin-grid-column-group>
+                <template class="header">[[groupCollumn.title]]</template>
+                <template is="dom-repeat" items="[[groupCollumn.col]]" as="col">
+                    <vaadin-grid-column flex-grow="0">
+                        <template class="header">[[col.label]]</template>
+                        <template>
+                            <template is="dom-if" if="[[_combineRow(col,item)]]">
+                                <div style="text-align:center">
+                                    <paper-icon-button icon="done"></paper-icon-button>
+                                </div>
+                            </template>
+                        </template>
+                    </vaadin-grid-column>
+                </template>
+            </vaadin-grid-column-group>
+            
+            <vaadin-grid-column width="150px" flex-grow="0">
+                <template class="header">เครื่องมือ</template>
+                <template>
+                    <div style="text-align: center;">
+                        <aqa-tooltip label="ดูรายละเอียดทั้งหมด">
+                            <paper-icon-button class="btn-edit" icon="visibility" on-click="openDialog"></paper-icon-button>
+                        </aqa-tooltip>
+                        <aqa-tooltip label="แก้ไขข้อมูล">
+                            <paper-icon-button class="btn-edit" icon="create" on-click="editDialog"></paper-icon-button>
+                        </aqa-tooltip>
+                        <aqa-tooltip label="ลบ">
+                            <paper-icon-button class="btn-edit" icon="aqa-tool:bin" on-click="confirmDelete"></paper-icon-button>
+                        </aqa-tooltip>
+                    </div>
+                </template>
+            </vaadin-grid-column>
+        </vaadin-grid>
+
+
+    </template>
+
+    <script>
+
+        class AqaAdvanceTable extends Polymer.Element {
+
+            static get is() {
+                return 'aqa-advance-table';
+            }
+
+            static get properties() {
+                return {
+                    data: {
+                        type: Array,
+                        value: []
+                    },
+                    collumn: {
+                        type: Array,
+                        value: []
+                    },
+                    groupCollumn: {
+                        type: Array,
+                        value: {
+                            title: '',
+                            col: []
+                        }
+                    },
+                    form:String
+                };
+            }
+            count(col) {
+                return col + 1;
+            }
+            _combineRow(col, row) {
+                if (row) {
+                    var path = col.path;
+                    return row[path]
+                }
+            }
+            editDialog(e) {
+                this.dispatchEvent(new CustomEvent('edit', { detail: e.model.item }));
+            }
+            openDialog(e) {
+                this.dispatchEvent(new CustomEvent('view', { detail: e.model.item }));
+            }
+            confirmDelete(e) {
+                this.dispatchEvent(new CustomEvent('delete', { detail: e.model.item }));
+            }
+        }
+
+        window.customElements.define(AqaAdvanceTable.is, AqaAdvanceTable);
+    </script>
+</dom-module>
