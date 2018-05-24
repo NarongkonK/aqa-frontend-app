@@ -1,0 +1,200 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-input.html">
+<link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-combo-box.html">
+
+<link rel="import" href="../../redux-mixin.html">
+
+<dom-module id="aqa-advance-search-item">
+    <template>
+        <style include="aqa-styles">
+            .bgWhite {
+                padding: 0.5rem;
+                background-color: white;
+            }
+
+            .section {
+                margin: auto 0;
+            }
+
+            .row>#checkBtn>#btnAdd,
+            .row>#checkBtn>#btnSearch {
+                display: none;
+            }
+
+            .row:last-of-type>#checkBtn>#btnAdd,
+            .row:last-of-type>#checkBtn>#btnSearch {
+                display: inline-block;
+            }
+
+            [hidden]{
+                display: none;
+            }
+
+
+        </style>
+        <div class="row center-xs bgWhite">
+            <div class="col-xs-12 col-sm-6 col-md-2 section">
+                <aqa-combo-box no-label-float item-value-path="name" placeholder="เลือกข้อมูลที่จะค้นหา" items="[[fields]]" on-selected-item-changed="_feildChanged"></aqa-combo-box>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-2 section">
+                <aqa-combo-box no-label-float placeholder="ตัวดำเนินการ" items="[[operatorList]]"></aqa-combo-box>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-2 section">
+                
+                <aqa-input no-label-float placeholder="ข้อความ" hidden$="[[!_eqVal('text',fieldType)]]" on-value-changed="_textChanged"></aqa-input>
+                <aqa-combo-box no-label-float placeholder="ตัวเลือก" items="[[selectList]]" hidden$="[[!_eqVal('select',fieldType)]]" on-selected-item-changed="_selectChanged"></aqa-combo-box>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 section" id="checkBtn" style="text-align:left">
+                <aqa-button type="primary-outline btn-xs" icon="remove" id="btnRemove" on-click="_deleteFilter"></aqa-button>
+                <aqa-button type="primary-outline btn-xs" id="btnAdd" icon="add" on-click="_addFilter"></aqa-button>
+                <aqa-button type="primary btn-xs" id="btnSearch">ค้นหา</aqa-button>
+            </div>
+        </div>
+    </template>
+
+    <script>
+
+        class AqaAdvanceSearchItem extends ReduxMixin(Polymer.Element) {
+
+            static get is() {
+                return 'aqa-advance-search-item';
+            }
+
+            static get properties() {
+                return {
+                    // ข้อมูล field ที่มีให้เลือก
+                    fields: Array,
+                    
+                    // ชื่อ field ที่เลือก
+                    name: String,
+
+                    // ข้อมูล field ที่เลือกแล้ว
+                    fieldSelected: Object,
+
+                    // ประเภทการป้อนข้อมูล
+                    fieldType: String,
+
+                    // ข้อมูลตัวดำเนินการ
+                    operatorList: Array,
+
+                    // ตัวที่ state path ให้ seleted
+                    statePath: String,
+                    
+                    // ข้อมูลรายการ สำหรับประเภทที่เลือก
+                    selectList: Array,
+                    
+                    // ค่าที่ป้อน
+                    value: String
+                };
+            }
+
+            ready(){
+                super.ready()
+                this.operatorList = [
+                            {
+                                label: 'เท่ากับ',
+                                vaule: "="
+                            },
+                            {
+                                label: 'ไม่เท่ากับ',
+                                vaule: "!="
+                            },
+                            {
+                                label: 'มากกว่า',
+                                vaule: ">"
+                            },
+                            {
+                                label: 'น้อยกว่า',
+                                vaule: "<"
+                            }
+                        ]
+
+                
+                this.fieldSelected = {}
+                this.name = ""
+                this.fieldType = ""
+                this.statePath = ""
+                this.value = ""
+            }
+
+            _eqVal(val1,val2) {
+                return val1 == val2
+            }
+
+            _addFilter() {
+                this.dispatchEvent(new CustomEvent('add-filter', {detail: {kicked: true}}));
+            }
+            _deleteFilter(e) {
+                this.dispatchEvent(new CustomEvent('del-filter', {detail: {kicked: true}}));
+            }
+
+            _feildChanged(e){
+                if(e.detail.value != null){
+                    this.fieldSelected = e.detail.value
+                    this.fieldType = this.fieldSelected.type
+                    this.name = this.fieldSelected.name
+
+                    if(this.fieldSelected.select){
+                        this.statePath = this.fieldSelected.select.statePath
+                        this._renderAction(this.fieldSelected.select.action)
+                        
+                    }
+                     
+                }else{
+                    this.fieldType = ""
+                }
+                
+                
+            }
+
+            _textChanged(e){
+                this.value = e.target.value
+            }
+
+            _selectChanged(e){
+                this.value = e.target.value
+            }
+
+
+
+            _renderAction(action){
+
+                let repeatItem = this.parentNode.querySelectorAll("[section-search]")
+                let repeatData = {}
+                for(let i=0; i<repeatItem.length; i++){
+                    repeatData[repeatItem[i].name] = repeatItem[i].value
+                }
+                console.log(repeatData)
+                
+                let args = ""
+                action.map((row,i)=>{
+
+                    if(row[0]=="$"){
+                        row = repeatData[row.split('$')[1]]
+                    }
+                    if(i!=0){
+                        args = args+","
+                    }
+                    args=args+"'"+row+"'"
+                })
+                console.log(args)
+                eval("Nylon.dispatch("+args+")")
+            }  
+
+            _stateChanged(store){
+                if(this.statePath!=""){
+                    this.selectList = eval("store."+this.statePath)
+                }
+
+            }
+
+            
+
+
+        }
+
+        window.customElements.define(AqaAdvanceSearchItem.is, AqaAdvanceSearchItem);
+    </script>
+</dom-module>
