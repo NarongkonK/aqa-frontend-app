@@ -10,9 +10,9 @@
     <template>
         <style include="aqa-styles"></style>
         <div style="margin:0rem 0.5rem 0.5rem 0.5rem">
-        <template is="dom-repeat" items="[[itemForm]]">
-            <aqa-advance-search-item section-search fields="[[fields]]" on-add-filter="addFilter" on-del-filter="deleteFilter"></aqa-advance-search-item>
-        </template>
+            <template is="dom-repeat" items="[[itemForm]]">
+                <aqa-advance-search-item section-search count="[[count]]" index="[[index]]" fields="[[fields]]" on-add-filter="addFilter" on-del-filter="deleteFilter" on-search-submit="_submit"></aqa-advance-search-item>
+            </template>
         </div>
     </template>
 
@@ -28,41 +28,50 @@
                 return {
                     itemForm: {
                         type: Array,
-                        value: [{}]
+                        value: [{}],
                     },
                     fields: Array,
-                    operatorList: {
-                        type: Array,
-                        value: [
-                            {
-                                label: 'เท่ากับ'
-                            },
-                            {
-                                label: 'ไม่เท่ากับ'
-                            },
-                            {
-                                label: 'มากกว่า'
-                            },
-                            {
-                                label: 'น้อยกว่า'
-                            }
-                        ]
-                    }
+                    count: String
+
                 };
             }
 
-            connectedCallback(){
-                super.connectedCallback()
+            static get observers() {
+                return ['_itemFormChanged(itemForm.*)']
             }
 
+            
+            _itemFormChanged(ob) {
+                this.count = ob.base.length
+            }
+
+            _count(arr) {
+                return arr.length
+            }
+            
+
             addFilter() {
-                this.push('itemForm', this.itemForm.length)
+                this.push('itemForm', {})
             }
             deleteFilter(e) {
                 var index = this.itemForm.indexOf(e.model.item);
                 if (this.itemForm.length > 1) {
                     this.splice('itemForm', index, 1)
                 }
+            }
+
+            _submit(){
+                
+                let el = this.shadowRoot.querySelectorAll('[section-search]')
+                var data = []
+                for(let i=0; i<el.length; i++){
+                    data.push({
+                        feild: el[i].name,
+                        operator: el[i].operator,
+                        value: el[i].value
+                    })
+                }
+                console.log(data)
             }
         }
 

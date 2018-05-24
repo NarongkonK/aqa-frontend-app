@@ -1,4 +1,5 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
 <link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
 <link rel="import" href="../../../bower_components/aqa-form/aqa-input.html">
 <link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
@@ -39,17 +40,16 @@
                 <aqa-combo-box no-label-float item-value-path="name" placeholder="เลือกข้อมูลที่จะค้นหา" items="[[fields]]" on-selected-item-changed="_feildChanged"></aqa-combo-box>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-2 section">
-                <aqa-combo-box no-label-float placeholder="ตัวดำเนินการ" items="[[operatorList]]"></aqa-combo-box>
+                <aqa-combo-box no-label-float  placeholder="ตัวดำเนินการ" items="[[operatorList]]" on-selected-item-changed="_operatorChanged"></aqa-combo-box>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-2 section">
-                
-                <aqa-input no-label-float placeholder="ข้อความ" hidden$="[[!_eqVal('text',fieldType)]]" on-value-changed="_textChanged"></aqa-input>
-                <aqa-combo-box no-label-float placeholder="ตัวเลือก" items="[[selectList]]" hidden$="[[!_eqVal('select',fieldType)]]" on-selected-item-changed="_selectChanged"></aqa-combo-box>
+                <aqa-input no-label-float placeholder="ข้อความ" hidden$="[[!_eqVal('text',fieldType)]]" on-value-changed="_valChanged"></aqa-input>
+                <aqa-combo-box no-label-float placeholder="ตัวเลือก" items="[[selectList]]" hidden$="[[!_eqVal('select',fieldType)]]" on-selected-item-changed="_valChanged"></aqa-combo-box>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3 section" id="checkBtn" style="text-align:left">
-                <aqa-button type="primary-outline btn-xs" icon="remove" id="btnRemove" on-click="_deleteFilter"></aqa-button>
-                <aqa-button type="primary-outline btn-xs" id="btnAdd" icon="add" on-click="_addFilter"></aqa-button>
-                <aqa-button type="primary btn-xs" id="btnSearch">ค้นหา</aqa-button>
+            <div class="col-xs-12 col-sm-6 col-md-3 section" style="text-align:left">
+                <aqa-button type="primary-outline btn-xs" icon="remove" on-click="_deleteFilter" hidden$="[[_eqVal('1',count)]]"></aqa-button>
+                <aqa-button type="primary-outline btn-xs" icon="add" on-click="_addFilter"></aqa-button>
+                <aqa-button type="primary btn-xs" on-click="_submit" hidden$="[[!_isLast(index,count)]]">ค้นหา</aqa-button>
             </div>
         </div>
     </template>
@@ -86,7 +86,13 @@
                     selectList: Array,
                     
                     // ค่าที่ป้อน
-                    value: String
+                    value: String,
+                    
+                    // ตัวดำเนินการที่เลือก
+                    operator: String,
+                    
+                    // จำนวนแถวของข้อมูลที่ filter
+                    count: String
                 };
             }
 
@@ -95,19 +101,19 @@
                 this.operatorList = [
                             {
                                 label: 'เท่ากับ',
-                                vaule: "="
+                                value: "="
                             },
                             {
                                 label: 'ไม่เท่ากับ',
-                                vaule: "!="
+                                value: "!="
                             },
                             {
                                 label: 'มากกว่า',
-                                vaule: ">"
+                                value: ">"
                             },
                             {
                                 label: 'น้อยกว่า',
-                                vaule: "<"
+                                value: "<"
                             }
                         ]
 
@@ -117,10 +123,15 @@
                 this.fieldType = ""
                 this.statePath = ""
                 this.value = ""
+                this.operator = ""
             }
 
             _eqVal(val1,val2) {
                 return val1 == val2
+            }
+
+            _isLast(index,count){
+                return index+1 == count
             }
 
             _addFilter() {
@@ -149,11 +160,7 @@
                 
             }
 
-            _textChanged(e){
-                this.value = e.target.value
-            }
-
-            _selectChanged(e){
+            _valChanged(e){
                 this.value = e.target.value
             }
 
@@ -166,7 +173,6 @@
                 for(let i=0; i<repeatItem.length; i++){
                     repeatData[repeatItem[i].name] = repeatItem[i].value
                 }
-                console.log(repeatData)
                 
                 let args = ""
                 action.map((row,i)=>{
@@ -179,7 +185,6 @@
                     }
                     args=args+"'"+row+"'"
                 })
-                console.log(args)
                 eval("Nylon.dispatch("+args+")")
             }  
 
@@ -188,6 +193,14 @@
                     this.selectList = eval("store."+this.statePath)
                 }
 
+            }
+
+            _operatorChanged(e){
+                this.operator = e.target.value
+            }
+
+            _submit(){
+                this.dispatchEvent(new CustomEvent('search-submit'));
             }
 
             
