@@ -20,7 +20,7 @@
   "scripts": {
     "serve:dev": "polymer serve ./ --port 8080 --hostname 0.0.0.0",
     "gulp:route": "gulp route",
-    "gulp:portal" : "gulp route --layout layout-portal",
+    "gulp:portal": "gulp route --layout layout-portal",
     "build": "gulp build:rename && gulp build:copy && polymer build && gulp build:del && gulp build:undo_rename",
     "clean": "gulp build:del && gulp build:undo_rename",
     "gen": "gulp route"
