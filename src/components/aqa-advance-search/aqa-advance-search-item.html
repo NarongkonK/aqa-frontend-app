@@ -44,7 +44,7 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-2 section">
                 <aqa-input no-label-float placeholder="ข้อความ" hidden$="[[!_eqVal('text',fieldType)]]" on-value-changed="_valChanged"></aqa-input>
-                <aqa-combo-box no-label-float placeholder="ตัวเลือก" items="[[selectList]]" hidden$="[[!_eqVal('select',fieldType)]]" on-selected-item-changed="_valChanged"></aqa-combo-box>
+                <aqa-combo-box id="selectValue" no-label-float placeholder="ตัวเลือก" items="[[selectList]]" hidden$="[[!_eqVal('select',fieldType)]]" on-selected-item-changed="_valChanged"></aqa-combo-box>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3 section" style="text-align:left">
                 <aqa-button type="primary-outline btn-xs" icon="remove" on-click="_deleteFilter" hidden$="[[_eqVal('1',count)]]"></aqa-button>
@@ -147,9 +147,18 @@
                     this.fieldType = this.fieldSelected.type
                     this.name = this.fieldSelected.name
 
-                    if(this.fieldSelected.select){
-                        this.statePath = this.fieldSelected.select.statePath
-                        this._renderAction(this.fieldSelected.select.action)
+                    let select = this.fieldSelected.select
+                    if(select){
+                        if(select.valuePath){
+                            this.$.selectValue.itemValuePath = select.valuePath
+                        }
+                        if(select.labelPath){
+                            this.$.selectValue.itemLabelPath = select.labelPath
+                        }
+                        
+                        
+                        this.statePath = select.statePath
+                        this._renderAction(select.action)
                         
                     }
                      

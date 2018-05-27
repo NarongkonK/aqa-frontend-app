@@ -79,8 +79,8 @@
 
 
             if ('_stateChanged' in this) {
-                
                 this._stateChanged(Nylon.store.getState())
+
                 Nylon.store.subscribe(() => {
                     this._stateChanged(Nylon.store.getState())
                 })

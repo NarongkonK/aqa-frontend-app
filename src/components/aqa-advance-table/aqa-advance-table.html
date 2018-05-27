@@ -1,0 +1,184 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
+
+<link rel="import" href="../../../bower_components/aqa-vaadin-grid/aqa-vaadin-grid.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-column-group.html">
+
+<link rel="import" href="../../../bower_components/aqa-icons/aqa-icon-tool.html">
+<link rel="import" href="../../../bower_components/aqa-tooltip/aqa-tooltip.html">
+
+<link rel="import" href="../../redux-mixin.html">
+
+
+<script>
+
+    class AqaAdvanceTable extends ReduxMixin(Polymer.Element) {
+
+        static get is() {
+            return 'aqa-advance-table';
+        }
+
+
+
+
+        static get template() {
+            return Polymer.html`
+                <vaadin-grid id="grid" aria-label="Basic Binding Example">
+                    <vaadin-grid-column flex-grow="0">
+                        <template class="header">
+                            <div style="text-align:center">
+                                ลำดับที่
+                            </div>
+                        </template>
+                        <template>
+                            <div style="text-align:center">
+                                [[count(index)]]
+                            </div>
+                        </template>
+                    </vaadin-grid-column>
+        
+                    <template is="dom-repeat" items="[[colunm]]" as="col">
+                        <template is="dom-if" if="[[!col.child]]"> 
+                            <vaadin-grid-column>
+                                <template class="header">[[col.label]]</template>
+                                <template>
+                                    <div>
+                                        [[_showData(item,col.path)]]
+                                    </div>
+                                </template>
+                            </vaadin-grid-column>
+                        </template>
+                        <template is="dom-if" if="[[col.child]]">
+                            <vaadin-grid-column-group>
+                                <template class="header">[[col.label]]</template>
+                                <template is="dom-repeat" items="[[col.child]]" as="col2">
+                                    <vaadin-grid-column>
+                                        <template class="header">[[col2.label]]</template>
+                                        <template>
+                                            <div>
+                                                [[_showData(item,col2.path)]]
+                                            </div>
+                                        </template>
+                                    </vaadin-grid-column>
+                                </template>
+                            </vaadin-grid-column-group>
+                                
+                        </template>
+                    </template>
+                    <template is="dom-if" if="[[_checkTool(toolList)]]">
+                        <vaadin-grid-column width="150px" flex-grow="0">
+                            <template class="header">เครื่องมือ</template>
+                            <template>
+                                <div style="text-align: center;">
+                                    <template is="dom-repeat" items="[[toolList]]" as="toolItem" index-as="toolIndex">
+                                        <div hidden>[[item]]</div>
+                                        <aqa-tooltip label="[[toolItem.label]]">
+                                            <paper-icon-button class="btn-edit" icon="[[toolItem.icon]]" on-click="_toolTrigger" option$="[[toolItem.name]]"></paper-icon-button></aqa-tooltip>
+                                        </aqa-tooltip>
+                                    </template>
+                                </div>
+                            </template>
+                        </vaadin-grid-column>
+                    </template>
+                </vaadin-grid>
+            `
+        }
+
+        static get properties() {
+            return {
+                table: Object,
+                toolList: Array,
+
+
+                list: Array,
+                colunm: Array,
+                form: {
+                    type: String,
+                    value: 'form'
+                }
+            }
+        }
+
+
+        static get observers() {
+            return ['_tableChanged(table)']
+        }
+
+        ready() {
+            super.ready()
+            this.dataList = []
+            this.statePath = ""
+        }
+
+        _tableChanged(table) {
+
+
+            this._renderTool(table.tool)
+            this.statePath = table.statePath
+            this.colunm = table.colunm
+
+        }
+
+        _renderTool(tool) {
+
+            var toolObj = [
+                {
+                    name: "view",
+                    label: "ดูรายละเอียดทั้งหมด",
+                    icon: "visibility",
+                },
+                {
+                    name: "edit",
+                    label: "แก้ไขข้อมูล",
+                    icon: "create",
+                },
+                {
+                    name: "del",
+                    label: "ลบ",
+                    icon: "aqa-tool:bin",
+                }
+            ]
+
+            var toolData = tool.map((row) => {
+                return toolObj.filter((row2) => {
+                    return row == row2.name
+                })[0]
+            })
+
+            this.toolList = toolData
+        }
+
+        _stateChanged(store) {
+            if (this.statePath != "") {
+                this.$.grid.items = eval("store." + this.statePath)
+            }
+
+        }
+
+        _showData(item, path) {
+            if (item) {
+                return item[path]
+            }
+        }
+
+        count(col) {
+            return col + 1;
+        }
+
+        _checkTool(tool){
+            return tool.length != 0
+        }
+
+        _toolTrigger(e){
+            var option = e.currentTarget.getAttribute("option")
+            this.dispatchEvent(new CustomEvent('active-'+option, { detail: e.model.item }));
+        }
+
+    }
+
+    window.customElements.define(AqaAdvanceTable.is, AqaAdvanceTable);
+</script>
