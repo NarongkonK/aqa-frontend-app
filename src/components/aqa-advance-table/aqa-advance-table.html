@@ -92,7 +92,7 @@
             return {
                 table: Object,
                 toolList: Array,
-
+                statePath: String,
 
                 list: Array,
                 colunm: Array,
@@ -106,12 +106,6 @@
 
         static get observers() {
             return ['_tableChanged(table)']
-        }
-
-        ready() {
-            super.ready()
-            this.dataList = []
-            this.statePath = ""
         }
 
         _tableChanged(table) {

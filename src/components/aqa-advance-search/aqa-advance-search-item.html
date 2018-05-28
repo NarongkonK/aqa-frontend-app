@@ -36,17 +36,17 @@
 
         </style>
         <div class="row center-xs bgWhite">
-            <div class="col-xs-12 col-sm-6 col-md-2 section">
+            <div class="col-xs-5 col-sm-3 section">
                 <aqa-combo-box no-label-float item-value-path="name" placeholder="เลือกข้อมูลที่จะค้นหา" items="[[fields]]" on-selected-item-changed="_feildChanged"></aqa-combo-box>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-2 section">
+            <div class="col-xs-2 col-sm-3 section">
                 <aqa-combo-box no-label-float  placeholder="ตัวดำเนินการ" items="[[operatorList]]" on-selected-item-changed="_operatorChanged"></aqa-combo-box>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-2 section">
+            <div class="col-xs-5 col-sm-3 section">
                 <aqa-input no-label-float placeholder="ข้อความ" hidden$="[[!_eqVal('text',fieldType)]]" on-value-changed="_valChanged"></aqa-input>
                 <aqa-combo-box id="selectValue" no-label-float placeholder="ตัวเลือก" items="[[selectList]]" hidden$="[[!_eqVal('select',fieldType)]]" on-selected-item-changed="_valChanged"></aqa-combo-box>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3 section" style="text-align:left">
+            <div class="col-xs-12  col-sm-3 section" style="text-align:left">
                 <aqa-button type="primary-outline btn-xs" icon="remove" on-click="_deleteFilter" hidden$="[[_eqVal('1',count)]]"></aqa-button>
                 <aqa-button type="primary-outline btn-xs" icon="add" on-click="_addFilter"></aqa-button>
                 <aqa-button type="primary btn-xs" on-click="_submit" hidden$="[[!_isLast(index,count)]]">ค้นหา</aqa-button>
