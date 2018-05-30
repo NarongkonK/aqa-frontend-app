@@ -39,7 +39,7 @@
             <div class="col-xs-5 col-sm-3 section">
                 <aqa-combo-box no-label-float item-value-path="name" placeholder="เลือกข้อมูลที่จะค้นหา" items="[[fields]]" on-selected-item-changed="_feildChanged"></aqa-combo-box>
             </div>
-            <div class="col-xs-2 col-sm-3 section">
+            <div class="col-xs-2 col-sm-3 section" hidden$="[[!useOperator]]">
                 <aqa-combo-box no-label-float  placeholder="ตัวดำเนินการ" items="[[operatorList]]" on-selected-item-changed="_operatorChanged"></aqa-combo-box>
             </div>
             <div class="col-xs-5 col-sm-3 section">
@@ -92,7 +92,10 @@
                     operator: String,
                     
                     // จำนวนแถวของข้อมูลที่ filter
-                    count: String
+                    count: String,
+                    
+                    // ใช้ตัวดำเนินการไหม
+                    useOperator: Boolean
                 };
             }
 
@@ -123,7 +126,7 @@
                 this.fieldType = ""
                 this.statePath = ""
                 this.value = ""
-                this.operator = ""
+                this.useOperator = false
             }
 
             _eqVal(val1,val2) {
@@ -146,6 +149,13 @@
                     this.fieldSelected = e.detail.value
                     this.fieldType = this.fieldSelected.type
                     this.name = this.fieldSelected.name
+
+                    if("operator" in e.detail.value){
+                        this.useOperator = true
+                    }else{
+                        this.useOperator = false
+                    }
+
 
                     let select = this.fieldSelected.select
                     if(select){
@@ -180,7 +190,9 @@
                 let repeatItem = this.parentNode.querySelectorAll("[section-search]")
                 let repeatData = {}
                 for(let i=0; i<repeatItem.length; i++){
-                    repeatData[repeatItem[i].name] = repeatItem[i].value
+                    if(i+1!=repeatItem.length){
+                        repeatData[repeatItem[i].name] = repeatItem[i].value
+                    }
                 }
                 
                 let args = ""
@@ -194,6 +206,7 @@
                     }
                     args=args+"'"+row+"'"
                 })
+
                 eval("Nylon.dispatch("+args+")")
             }  
 

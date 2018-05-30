@@ -60,18 +60,50 @@
                 }
             }
 
+            
+
             _submit(){
                 
                 let el = this.shadowRoot.querySelectorAll('[section-search]')
                 var data = []
                 for(let i=0; i<el.length; i++){
+                    
+                    let operator = el[i].operator
+                    if(operator=="" || operator == undefined){
+                        operator = "="
+                    }
+
                     data.push({
                         feild: el[i].name,
-                        operator: el[i].operator,
+                        operator: operator,
                         value: el[i].value
                     })
                 }
-                console.log(data)
+
+                this.dispatchEvent(new CustomEvent('submit', { detail: this.submit() }));
+                // console.log(data)
+            }
+
+            submit(){
+                 
+                let el = this.shadowRoot.querySelectorAll('[section-search]')
+                var data = []
+                for(let i=0; i<el.length; i++){
+                    
+                    let operator = el[i].operator
+                    if(operator=="" || operator == undefined){
+                        operator = "="
+                    }
+
+                    data.push({
+                        feild: el[i].name,
+                        operator: operator,
+                        value: el[i].value
+                    })
+                }
+
+                return data
+
             }
         }
 
