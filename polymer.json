@@ -3,8 +3,13 @@
     "shell": "src/nylon-app.html",
     "fragments": [
 		"./src/frontend/routes/module/route-module.html",
+		"./src/frontend/routes/path/route-path.html",
+		"./src/frontend/routes/role/route-role.html",
+		"./src/frontend/routes/role/route-rule.html",
 		"./src/frontend/routes/dialog-test.html",
-		"./src/frontend/routes/module/dialog-module.html"
+		"./src/frontend/routes/module/dialog-module.html",
+		"./src/frontend/routes/path/dialog-path.html",
+		"./src/frontend/routes/role/dialog-role.html"
 	],
     "sources": [
         "images/**/*",
