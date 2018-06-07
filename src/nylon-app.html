@@ -12,7 +12,7 @@
 
 <dom-module id="nylon-app">
   <template>
-    <nylon-auth id="nylonAuth" on-auth="_auth" on-noauth="_noauth" on-disabled="_authDisable" disabled></nylon-auth>
+    <nylon-auth id="nylonAuth" on-auth="_auth" on-noauth="_noauth" on-disabled="_authDisable"></nylon-auth>
     <template id="domIfNylonInit" is="dom-if">
       <nylon-init id="nylonInit" path-name="[[pathName]]" on-ready="_nylonInitReady"></nylon-init>
     </template>

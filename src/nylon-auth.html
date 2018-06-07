@@ -15,7 +15,8 @@
       return {
         baseUrl: {
           type: String,
-          value: 'http://192.168.10.14:5000/api/auth'
+          value: 'http://user-api.onesqa.com/api/auth'
+          // value: 'http://localhost:3000/api/auth'
         },
         path: {
           type: String,
@@ -49,6 +50,7 @@
 
     _message(event) {
 
+      //console.log(event.data)
       
       let topic = event.data.split('?')[0]
 
@@ -58,6 +60,8 @@
 
           let token = this.getParameterByName('accessToken',event.data)
           axios.defaults.headers.common['Authorization'] = token
+          window.token = token
+
           let decoded = jwt_decode(token);
           this.userInfo = decoded
           this.dispatchEvent(new CustomEvent('auth', {detail: decoded}));
@@ -76,6 +80,7 @@
             this.status = 'noauth';
 
             axios.defaults.headers.common['Authorization'] = ''
+            window.token = ''
             this.dispatchEvent(new CustomEvent('noauth'));
             break;
         default:
