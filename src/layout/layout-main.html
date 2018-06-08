@@ -12,7 +12,7 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/social-icons.html">
 <!-- <link rel="import" href="../../bower_components/paper-badge/paper-badge.html"> -->
-<!-- <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html"> -->
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
@@ -167,17 +167,36 @@
                     <app-toolbar class="header">
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div main-title>[[appName]]</div>
-                        <!-- <aqa-tooltip label="ลบ"> -->
                         <paper-icon-button icon="editor:format-size"></paper-icon-button>
                         <paper-icon-button icon="social:notifications"></paper-icon-button>
-                        <!-- </aqa-tooltip> -->
-                        <!-- <aqa-tooltip label="ลบ"> -->
-                        <paper-icon-button icon="social:person"></paper-icon-button>
-                        <!-- </aqa-tooltip> -->
+                        <!-- <paper-icon-button icon="social:person"></paper-icon-button> -->
+
+                        <template is="dom-if" if="[[checkAccount(user)]]">
+                            <paper-menu-button no-overlap horizontal-align="right" no-animations>
+                                <div class="divImage" slot="dropdown-trigger" alt="menu">
+                                    <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
+                                </div>
+                                <paper-listbox slot="dropdown-content">
+            
+                                    <paper-icon-item disabled>
+                                        <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
+                                        <paper-item-body two-line>
+                                            <div>[[user.fname]]</div>
+                                            <!-- <div secondary>[[user.email]]</div> -->
+                                        </paper-item-body>
+                                    </paper-icon-item>
+            
+                                    <paper-item on-tap="logout">
+                                        <iron-icon icon="icons:exit-to-app"></iron-icon>
+                                        &nbsp;&nbsp;Log-out
+                                    </paper-item>
+                                </paper-listbox>
+                            </paper-menu-button>
+                        </template>
                     </app-toolbar>
-                    <template is="dom-if" if="[[progressEnable]]">
+                    <!-- <template is="dom-if" if="[[progressEnable]]">
                         <paper-progress id="progress" value="[[progressValue]]" indeterminate="[[progressIndeterminate]]"></paper-progress>
-                    </template>
+                    </template> -->
                 </app-header>
                 <div id="slotMain">
                     <div class="content">
@@ -226,7 +245,11 @@
                     appName: {
                         type: String,
                         statePath: 'app.name'
-                    }
+                    },
+                    user: {
+                        type: Object,
+                        statePath: 'nylon.user'
+                    },
                 };
             }
 
@@ -314,6 +337,14 @@
             //     console.log('lgFont')
             //     document.querySelector('body').style.fontSize = '1.2rem'
             // }
+            checkAccount(val) {
+                if (val.id) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
         }
 
         window.customElements.define(LayoutMain.is, LayoutMain);
