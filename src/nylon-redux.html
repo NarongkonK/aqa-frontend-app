@@ -1,0 +1,23 @@
+<script>
+    Nylon.addReducer('nylon', function (state, action) {
+        state = state || {
+            user:{}
+        }
+
+        switch (action.type) {
+            case 'NYLON_SET_USER':
+                return Object.assign({}, state, { user: action.payload})
+            default:
+                return state
+        }
+        return state
+    })
+
+    Nylon.addAction({
+        nylonSetUser: function(data){
+            return dispatch => {
+                dispatch({type: 'NYLON_SET_USER',payload:data})
+            }
+        }
+    })
+</script>
