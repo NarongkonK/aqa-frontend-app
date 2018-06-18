@@ -20,11 +20,11 @@
                 </template>
             </vaadin-grid-column>
             <template is="dom-repeat" items="[[colunm]]" as="col" index-as="count">
-                <vaadin-grid-column>
+                <vaadin-grid-column width="[[col.width]]" flex-grow="[[col.flex]]">
                     <template class="header">[[col.label]]</template>
                     <template>
                         <div>
-                            [[combileData(colunm,count,item)]]
+                            [[combileData(col,item,index)]]
                         </div>
 
                     </template>
@@ -35,9 +35,9 @@
                 <template class="header">เครื่องมือ</template>
                 <template>
                     <div style="text-align: center;">
-                        <aqa-tooltip label="ดูรายละเอียดทั้งหมด">
+                        <!-- <aqa-tooltip label="ดูรายละเอียดทั้งหมด">
                             <paper-icon-button class="btn-edit" icon="visibility" on-click="openDialog"></paper-icon-button>
-                        </aqa-tooltip>
+                        </aqa-tooltip> -->
                         <aqa-tooltip label="แก้ไขข้อมูล">
                             <paper-icon-button class="btn-edit" icon="create" on-click="editDialog"></paper-icon-button>
                         </aqa-tooltip>
@@ -72,10 +72,13 @@
             count(col) {
                 return col + 1;
             }
-            combileData(col, count, row) {
-                var path = col[count].path;
-                if (row)
-                    return row[path];
+            combileData(col,data,index) {
+                if(col && data){
+                    return this.get("list."+index+"."+col.path)
+                }
+                // var path = col[count].path;
+                // if (row)
+                //     return row[path];
             }
             editDialog(e) {
                 this.dispatchEvent(new CustomEvent('edit', { detail: e.model.item }));
