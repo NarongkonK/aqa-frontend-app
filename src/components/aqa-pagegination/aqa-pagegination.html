@@ -1,0 +1,72 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../redux-mixin.html">
+<dom-module id="aqa-pagegination">
+    <template>
+        <style include="aqa-styles">
+        </style>
+        <div class="row end-xs" style="padding: 0.5rem 0">
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-1">
+                <aqa-combo-box items="[[list]]" on-change="changeData" no-label-float></aqa-combo-box>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-1">
+                <aqa-input no-label-float value="10" disabled></aqa-input>
+            </div>
+        </div>
+    </template>
+
+    <script>
+
+        class AqaPagegination extends ReduxMixin(Polymer.Element) {
+
+            static get is() {
+                return 'aqa-pagegination';
+            }
+
+            static get properties() {
+                return {
+                    list: {
+                        type: Array,
+                        value:[]
+                    },
+                    count:{
+                        type:Number,
+                        value:0,
+                        observer: 'setCount'
+                    },
+                    reduxAction:{
+                        action:"",
+                        parrams:""
+                    }
+                };
+            }
+            ready(){
+                super.ready()
+            }
+            setCount() {
+                if (this.count) {
+                    var round = this.count / 10
+                    var arr = []
+                    if (round === round && round % 1 !== 0) round + 1
+                    for (let index = 0; index < round; index++) {
+                        arr.push({ label: (index + 1).toString(), value: index.toString() })
+                    }
+                    this.list = arr
+                }
+            }
+            changeData(e){
+                var action = this.reduxAction.action;
+                var parrams = this.reduxAction.parrams;
+                if (e.target.value == 0){
+                    Nylon.dispatch(action, parrams, e.target.value)
+                }
+                else {
+                    var num = e.target.value * 10
+                    Nylon.dispatch(action, parrams, num)
+                }
+            }
+        }
+
+        window.customElements.define(AqaPagegination.is, AqaPagegination);
+    </script>
+</dom-module>
