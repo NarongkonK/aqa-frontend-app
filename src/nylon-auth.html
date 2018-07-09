@@ -18,8 +18,10 @@
       return {
         baseUrl: {
           type: String,
-          value: 'http://user-api.onesqa.com/api/auth'
-          // value: 'http://localhost:3000/api/auth'
+          //value: 'http://user-api.onesqa.com/api/auth'
+          value: function(){
+            return Nylon.apiURL.user+"/auth"
+          }
         },
         path: {
           type: String,
