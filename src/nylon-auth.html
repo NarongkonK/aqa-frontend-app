@@ -79,7 +79,7 @@
 
           // console.log(this.userInfo)
           this.dispatchEvent(new CustomEvent('auth', {detail: this.userInfo}))
-          Nylon.dispatch('nylonSetUser',this.userInfo)
+          Nylon.dispatch('nylonSetUser',this.userInfo,this.payload)
           
           break;
         case 'nylonAuth/noauth':
