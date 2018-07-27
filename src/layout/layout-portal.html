@@ -62,7 +62,7 @@
             }
 
             #slotMain {
-                margin-top: 6rem;
+                /* margin-top: 6rem; */
                 /* height: calc(100vh - 98px);
                 background-color: red;
                 overflow-y: auto; */
@@ -77,8 +77,47 @@
                 background-color: red;
                 text-align: center;
             }
+
+            .circle {
+                width: 50px;
+                height: 50px;
+                background: #ddd;
+                border-radius: 50%;
+            }
+            app-toolbar{
+                background-color: white;
+            }
         </style>
-        <app-header fixed>
+        <div class="toolbar"></div>
+        <app-toolbar>
+            <iron-image sizing="contain" src="../../images/72.png"></iron-image>
+            <div main-title>
+                <div class="title">AUTOMATED QA</div>
+                <div class="sub-title">ระบบสารสนเทศเพื่อการประเมินคุณภาพภายนอก สมศ.</div>
+            </div>
+            <template is="dom-if" if="[[checkAccount(user)]]">
+                <paper-menu-button no-overlap horizontal-align="right" no-animations>
+                    <div class="divImage" slot="dropdown-trigger" alt="menu">
+                        <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
+                    </div>
+                    <paper-listbox slot="dropdown-content">
+
+                        <paper-icon-item disabled>
+                            <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
+                            <paper-item-body two-line>
+                                <div>[[user.fname]]</div>
+                            </paper-item-body>
+                        </paper-icon-item>
+
+                        <paper-item on-tap="logout">
+                            <iron-icon icon="icons:exit-to-app"></iron-icon>
+                            &nbsp;&nbsp;Log-out
+                        </paper-item>
+                    </paper-listbox>
+                </paper-menu-button>
+            </template>
+        </app-toolbar>
+        <!-- <app-header fixed>
             <app-toolbar class="toolbar">
                 <div main-title></div>
             </app-toolbar>
@@ -88,32 +127,31 @@
                     <div class="title">AUTOMATED QA</div>
                     <div class="sub-title">ระบบสารสนเทศเพื่อการประเมินคุณภาพภายนอก สมศ.</div>
                 </div>
-                <template is="dom-if" if="[[checkAccount(user)]]">
-                        <div>
+                <div>
+                    <template is="dom-if" if="[[checkAccount(user)]]">
                         <paper-menu-button no-overlap horizontal-align="right" no-animations>
                             <div class="divImage" slot="dropdown-trigger" alt="menu">
                                 <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
                             </div>
                             <paper-listbox slot="dropdown-content">
-        
+
                                 <paper-icon-item disabled>
                                     <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
                                     <paper-item-body two-line>
                                         <div>[[user.fname]]</div>
-                                        <!-- <div secondary>[[user.email]]</div> -->
                                     </paper-item-body>
                                 </paper-icon-item>
-        
+
                                 <paper-item on-tap="logout">
                                     <iron-icon icon="icons:exit-to-app"></iron-icon>
                                     &nbsp;&nbsp;Log-out
                                 </paper-item>
                             </paper-listbox>
                         </paper-menu-button>
-                        </div>
                     </template>
+                </div>
             </div>
-        </app-header>
+        </app-header> -->
         <div id="slotMain">
             <template is="dom-if" if="[[checkTopic(topic)]]">
                 <div class="content">
@@ -123,7 +161,6 @@
                         <aqa-breadcrumb items="[[navigation]]"></aqa-breadcrumb>
                     </template>
                 </div>
-
             </template>
             <div class="page">
                 <slot></slot>
