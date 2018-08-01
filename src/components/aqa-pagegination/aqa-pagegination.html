@@ -1,18 +1,43 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../../../bower_components/aqa-tooltip/aqa-tooltip.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-combo-box.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-input.html">
+
 <link rel="import" href="../../redux-mixin.html">
 <dom-module id="aqa-pagegination">
     <template>
         <style include="aqa-styles">
+            .flex-container {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+            }
+
+            .input {
+                width: 100px;
+            }
         </style>
-        <div class="row end-xs" style="padding: 0.5rem 0">
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-1">
-                <aqa-combo-box items="[[list]]" on-change="changeData" no-label-float></aqa-combo-box>
+        <div class="row" style="padding: 0.5rem 0">
+            <div class="col-xs-6">
+                <span>จำนวน [[_quantity(items,count,page,limit)]] / [[count]] รายการ</span>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-1">
-                <aqa-input no-label-float value="10" disabled></aqa-input>
+            <div class="col-xs-6 flex-container">
+                <aqa-tooltip label="ก่อนหน้า">
+                    <paper-icon-button class="btn-edit" icon="icons:chevron-left" on-click="_previous"></paper-icon-button>
+                </aqa-tooltip>
+                <aqa-combo-box class="input" items="[[list]]" on-change="_comboChanged" value="[[page]]" no-label-float></aqa-combo-box>
+                &nbsp;
+                <aqa-input class="input" no-label-float value="[[limit]]" disabled></aqa-input>
+                <aqa-tooltip label="ถัดไป">
+                    <paper-icon-button class="btn-edit" icon="icons:chevron-right" on-click="_next"></paper-icon-button>
+                </aqa-tooltip>
             </div>
-        </div>
+        </div> 
     </template>
 
     <script>
@@ -25,44 +50,71 @@
 
             static get properties() {
                 return {
+                    limit: {
+                        type: Number,
+                        value: 10
+                    },
                     list: {
                         type: Array,
-                        value:[]
+                        value: []
                     },
-                    count:{
-                        type:Number,
-                        value:0,
-                        observer: 'setCount'
+                    count: {
+                        type: Number,
+                        value: 0,
+                        observer: '_setCount'
                     },
-                    reduxAction:{
-                        action:"",
-                        parrams:""
+                    items: {
+                        type: Array,
+                        value: []
+                    },
+                    page: {
+                        type: Number,
+                        value: 1,
+                        observer: '_pageChanged'
                     }
                 };
             }
-            ready(){
-                super.ready()
-            }
-            setCount() {
+
+            _setCount() {
                 if (this.count) {
                     var round = this.count / 10
                     var arr = []
                     if (round === round && round % 1 !== 0) round + 1
                     for (let index = 0; index < round; index++) {
-                        arr.push({ label: (index + 1).toString(), value: index.toString() })
+                        arr.push({ label: (index + 1).toString(), value: index+1 })
                     }
                     this.list = arr
                 }
             }
-            changeData(e){
-                var action = this.reduxAction.action;
-                var parrams = this.reduxAction.parrams;
-                if (e.target.value == 0){
-                    Nylon.dispatch(action, parrams, e.target.value)
+            _comboChanged(e) {
+                this.page = e.target.value
+            }
+
+            _pageChanged(val) {
+                this.dispatchEvent(new CustomEvent('page-change', { detail: { page: val } }));
+                // console.log("event")
+            }
+
+            _quantity(items,count,page,limit){
+                if(items.length==0){
+                    return 0
+                }else{
+                    var start = (page*limit)-limit
+                    var end = start + items.length
+                    return (start+1) + "-" + end
                 }
-                else {
-                    var num = e.target.value * 10
-                    Nylon.dispatch(action, parrams, num)
+
+            }
+
+            _previous(){
+                if(this.page!=1){
+                    this.page = this.page - 1
+                }
+            }
+
+            _next(){
+                if(this.page!=this.list.length){
+                    this.page = this.page + 1
                 }
             }
         }
