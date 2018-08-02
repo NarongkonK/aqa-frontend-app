@@ -118,7 +118,7 @@
                         </template>
                     </template>
                     <template is="dom-if" if="[[_checkTool(toolList)]]">
-                        <vaadin-grid-column width="150px" flex-grow="0">
+                        <vaadin-grid-column width="100px" flex-grow="1">
                             <template class="header">เครื่องมือ</template>
                             <template>
                                 <div style="text-align: center;">
@@ -176,37 +176,90 @@
 
         _renderTool(tool) {
 
-            var toolObj = [
-                {
+            // var toolObj = [
+            //     {
+            //         name: "view",
+            //         label: "ดูรายละเอียดทั้งหมด",
+            //         icon: "visibility",
+            //     },
+            //     {
+            //         name: "edit",
+            //         label: "แก้ไขข้อมูล",
+            //         icon: "create",
+            //     },
+            //     {
+            //         name: "del",
+            //         label: "ลบ",
+            //         icon: "aqa-tool:bin",
+            //     },
+            //     {
+            //         name: "link",
+            //         label: "ตั้งค่าเพิ่มเติม",
+            //         icon: "icons:list"
+
+            //     }
+            // ]
+
+
+            // var toolData = tool.map((row, i) => {
+            //     var a = toolObj.filter((row2, i2) => {
+
+            //         if (typeof row == "string") {
+            //             return row == row2.name
+            //         } else {
+            //             return row.name == row2.name
+            //         }
+
+            //     })[0]
+
+            //     console.log(a)
+
+            //     return a
+            // })
+
+            // this.toolList = toolData
+
+
+
+            var toolObj = {
+                view:{
                     name: "view",
                     label: "ดูรายละเอียดทั้งหมด",
                     icon: "visibility",
                 },
-                {
+                edit:{
                     name: "edit",
                     label: "แก้ไขข้อมูล",
                     icon: "create",
                 },
-                {
+                del:{
                     name: "del",
                     label: "ลบ",
                     icon: "aqa-tool:bin",
                 },
-                {
+                link:{
                     name: "link",
-                    label: "ยังไม่ได้ตั้งชื่อ",
+                    label: "ตั้งค่าเพิ่มเติม",
                     icon: "icons:list"
 
                 }
-            ]
+            }
 
-            var toolData = tool.map((row) => {
-                return toolObj.filter((row2) => {
-                    return row == row2.name
-                })[0]
+            var toolData = tool.map((row, i) => {
+                var obj;
+                if (typeof row == "string") {
+                    obj = toolObj[row]
+                } else {
+
+                    toolObj[row.name].label = row.label
+                    obj = toolObj[row.name]
+                }
+                return obj
+
             })
 
             this.toolList = toolData
+
         }
 
         _stateChanged(store) {
