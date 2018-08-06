@@ -2,10 +2,12 @@
 <link rel="import" href="../../../bower_components/polymer/lib/elements/dom-repeat.html">
 
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
 
 <link rel="import" href="../../../bower_components/aqa-vaadin-grid/aqa-vaadin-grid.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
 <link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-column-group.html">
 
 <link rel="import" href="../../../bower_components/aqa-icons/aqa-icon-tool.html">
@@ -22,13 +24,59 @@
             return 'aqa-advance-table';
         }
 
+        static get properties() {
+            return {
+                table: Object,
+                toolList: Array,
+                statePath: String,
 
+                colunm: Array,
+                form: {
+                    type: String,
+                    value: 'form'
+                },
+                items: {
+                    type: Array,
+                    value: []
+                },
+                selectedItems: {
+                    type: Array,
+                    notify: true
+                },
+                inverted: {
+                    type: Boolean,
+                    value: false
+                },
+                indeterminate: {
+                    type: Boolean,
+                    value: false
+                }
+            }
+        }
+
+        static get observers() {
+            return ['_tableChanged(table)', '_resetSelection(inverted)']
+
+        }
 
 
         static get template() {
             return Polymer.html`
-                <vaadin-grid id="grid" aria-label="Basic Binding Example">
-                    <vaadin-grid-column flex-grow="0">
+                <vaadin-grid id="grid" items="[[items]]" inverted$="[[inverted]]" selected-items="[[selectedItems]]">
+                    <vaadin-grid-column width="50px" flex-grow="0">
+                        <template class="header">
+                            <div style="padding-left:7px">
+                                <paper-checkbox on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"></paper-checkbox>
+                            <div style="padding-left:10px">
+                        </template>
+                        <template>
+                            <div style="padding-left:10px">
+                                <paper-checkbox on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"></paper-checkbox>
+                            </div>
+                        </template>
+                    </vaadin-grid-column>
+                    
+                    <vaadin-grid-column width="70px" flex-grow="0">
                         <template class="header">
                             <div style="text-align:center">
                                 ลำดับที่
@@ -70,14 +118,14 @@
                         </template>
                     </template>
                     <template is="dom-if" if="[[_checkTool(toolList)]]">
-                        <vaadin-grid-column width="150px" flex-grow="0">
+                        <vaadin-grid-column width="100px" flex-grow="1">
                             <template class="header">เครื่องมือ</template>
                             <template>
                                 <div style="text-align: center;">
                                     <template is="dom-repeat" items="[[toolList]]" as="toolItem" index-as="toolIndex">
                                         <div hidden>[[item]]</div>
                                         <aqa-tooltip label="[[toolItem.label]]">
-                                            <paper-icon-button class="btn-edit" icon="[[toolItem.icon]]" on-click="_toolTrigger" option$="[[toolItem.name]]"></paper-icon-button></aqa-tooltip>
+                                            <paper-icon-button class="btn-edit" icon="[[toolItem.icon]]" on-click="_toolTrigger" option$="[[toolItem.name]]"></paper-icon-button>
                                         </aqa-tooltip>
                                     </template>
                                 </div>
@@ -88,72 +136,134 @@
             `
         }
 
-        static get properties() {
-            return {
-                table: Object,
-                toolList: Array,
-                statePath: String,
+        _resetSelection(inverted) {
+            this.$.grid.selectedItems = [];
+            this.updateStyles();
+            this.indeterminate = false;
+        }
 
-                list: Array,
-                colunm: Array,
-                form: {
-                    type: String,
-                    value: 'form'
-                }
+        _invert(e) {
+            this.inverted = !this.inverted;
+        }
+
+        // iOS needs indeterminate + checked at the same time
+        _isChecked(inverted, indeterminate) {
+            return indeterminate || inverted;
+        }
+
+        _selectItem(e) {
+            if (e.target.checked === this.inverted) {
+                this.$.grid.deselectItem(e.model.item);
+            } else {
+                this.$.grid.selectItem(e.model.item);
             }
+            this.indeterminate = this.$.grid.selectedItems.length > 0;
+        }
+
+        _isSelected(inverted, selected) {
+            return inverted != selected;
         }
 
 
-        static get observers() {
-            return ['_tableChanged(table)']
-        }
+
 
         _tableChanged(table) {
-
 
             this._renderTool(table.tool)
             this.statePath = table.statePath
             this.colunm = table.colunm
-
         }
 
         _renderTool(tool) {
 
-            var toolObj = [
-                {
+            // var toolObj = [
+            //     {
+            //         name: "view",
+            //         label: "ดูรายละเอียดทั้งหมด",
+            //         icon: "visibility",
+            //     },
+            //     {
+            //         name: "edit",
+            //         label: "แก้ไขข้อมูล",
+            //         icon: "create",
+            //     },
+            //     {
+            //         name: "del",
+            //         label: "ลบ",
+            //         icon: "aqa-tool:bin",
+            //     },
+            //     {
+            //         name: "link",
+            //         label: "ตั้งค่าเพิ่มเติม",
+            //         icon: "icons:list"
+
+            //     }
+            // ]
+
+
+            // var toolData = tool.map((row, i) => {
+            //     var a = toolObj.filter((row2, i2) => {
+
+            //         if (typeof row == "string") {
+            //             return row == row2.name
+            //         } else {
+            //             return row.name == row2.name
+            //         }
+
+            //     })[0]
+
+            //     console.log(a)
+
+            //     return a
+            // })
+
+            // this.toolList = toolData
+
+
+
+            var toolObj = {
+                view:{
                     name: "view",
                     label: "ดูรายละเอียดทั้งหมด",
                     icon: "visibility",
                 },
-                {
+                edit:{
                     name: "edit",
                     label: "แก้ไขข้อมูล",
                     icon: "create",
                 },
-                {
+                del:{
                     name: "del",
                     label: "ลบ",
                     icon: "aqa-tool:bin",
                 },
-                {
+                link:{
                     name: "link",
-                    label: "ยังไม่ได้ตั้งชื่อ",
+                    label: "ตั้งค่าเพิ่มเติม",
                     icon: "icons:list"
 
                 }
-            ]
+            }
 
-            var toolData = tool.map((row) => {
-                return toolObj.filter((row2) => {
-                    return row == row2.name
-                })[0]
+            var toolData = tool.map((row, i) => {
+                var obj;
+                if (typeof row == "string") {
+                    obj = toolObj[row]
+                } else {
+
+                    toolObj[row.name].label = row.label
+                    obj = toolObj[row.name]
+                }
+                return obj
+
             })
 
             this.toolList = toolData
+
         }
 
         _stateChanged(store) {
-            if (this.statePath != "") {
+            if (this.statePath != "" && this.statePath != undefined) {
                 this.$.grid.items = eval("store." + this.statePath)
             }
 
@@ -169,13 +279,13 @@
             return col + 1;
         }
 
-        _checkTool(tool){
+        _checkTool(tool) {
             return tool.length != 0
         }
 
-        _toolTrigger(e){
+        _toolTrigger(e) {
             var option = e.currentTarget.getAttribute("option")
-            this.dispatchEvent(new CustomEvent('active-'+option, { detail: e.model.item }));
+            this.dispatchEvent(new CustomEvent('active-' + option, { detail: e.model.item }));
         }
 
     }
