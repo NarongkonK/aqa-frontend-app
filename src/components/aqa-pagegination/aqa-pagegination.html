@@ -30,9 +30,10 @@
                 <aqa-tooltip label="ก่อนหน้า">
                     <paper-icon-button class="btn-edit" icon="icons:chevron-left" on-click="_previous"></paper-icon-button>
                 </aqa-tooltip>
-                <aqa-combo-box class="input" items="[[list]]" on-change="_comboChanged" value="[[page]]" no-label-float></aqa-combo-box>
+                <aqa-combo-box prop="page" class="input" items="[[list]]" on-change="_comboChanged" value="[[page]]" no-label-float></aqa-combo-box>
                 &nbsp;
-                <aqa-input class="input" no-label-float value="[[limit]]" disabled></aqa-input>
+                <!-- <aqa-input class="input" no-label-float value="[[limit]]" disabled></aqa-input> -->
+                <aqa-combo-box prop="limit" class="input" on-change="_comboChanged" items="[[limitList]]" value="[[limit]]" no-label-float></aqa-combo-box>
                 <aqa-tooltip label="ถัดไป">
                     <paper-icon-button class="btn-edit" icon="icons:chevron-right" on-click="_next"></paper-icon-button>
                 </aqa-tooltip>
@@ -69,10 +70,36 @@
                     },
                     page: {
                         type: Number,
-                        value: 1,
-                        observer: '_pageChanged'
+                        value: 1
+                    },
+                    limitList: {
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    label:10,
+                                    value:10
+                                },
+                                {
+                                    label:20,
+                                    value:20
+                                },
+                                {
+                                    label:50,
+                                    value:50
+                                },
+                                {
+                                    label:100,
+                                    value:100
+                                }
+                            ]
+                        }
                     }
                 };
+            }
+
+            static get observers() {
+                return ['_pageOrLimitChanged(page,limit)']
             }
 
             _setCount() {
@@ -87,12 +114,11 @@
                 }
             }
             _comboChanged(e) {
-                this.page = e.target.value
+                this.set(e.target.getAttribute("prop"),e.target.value)
             }
 
-            _pageChanged(val) {
-                this.dispatchEvent(new CustomEvent('page-change', { detail: { page: val } }));
-                // console.log("event")
+            _pageOrLimitChanged(page,limit) {
+                this.dispatchEvent(new CustomEvent('page-change', { detail: { page: page,limit:limit } }));
             }
 
             _quantity(items,count,page,limit){
