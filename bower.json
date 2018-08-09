@@ -19,7 +19,7 @@
     "aqa-vaadin-grid": "9lon/aqa-vaadin-grid#0 - 1",
     "aqa-tooltip": "9lon/aqa-tooltip#0 - 1",
     "aqa-icons": "9lon/aqa-icons#0 - 1",
-    "aqa-form": "9lon/aqa-form#0 - 1",
+    "aqa-form": "9lon/aqa-form#0.1.2",
     "aqa-styles": "9lon/aqa-styles#0 - 1",
     "app-layout": "PolymerElements/app-layout#^2.0.1",
     "aqa-sweet-alert": "9lon/aqa-sweet-alert#0 - 1",
@@ -66,6 +66,7 @@
     "aqa-lightbox": "9lon/aqa-lightbox#0 - 1",
     "aqa-tabs": "9lon/aqa-tabs#0 - 1",
     "nylon-dialog": "9lon/nylon-dialog#^0.0.4",
-    "nylon-form": "9lon/nylon-form#^0.0.5"
+    "nylon-form": "9lon/nylon-form#^0.0.5",
+    "my-editor": "kitz-parnupat/my-editor#^0.0.1"
   }
 }
