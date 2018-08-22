@@ -50,6 +50,10 @@
                 indeterminate: {
                     type: Boolean,
                     value: false
+                },
+                checked: {
+                    type: Boolean,
+                    value: false
                 }
             }
         }
@@ -63,18 +67,20 @@
         static get template() {
             return Polymer.html`
                 <vaadin-grid id="grid" items="[[items]]" inverted$="[[inverted]]" selected-items="[[selectedItems]]">
-                    <vaadin-grid-column width="50px" flex-grow="0">
-                        <template class="header">
-                            <div style="padding-left:7px">
-                                <paper-checkbox on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"></paper-checkbox>
-                            <div style="padding-left:10px">
-                        </template>
-                        <template>
-                            <div style="padding-left:10px">
-                                <paper-checkbox on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"></paper-checkbox>
-                            </div>
-                        </template>
-                    </vaadin-grid-column>
+                    <template is="dom-if" if="[[checked]]">
+                        <vaadin-grid-column width="50px" flex-grow="0">
+                            <template class="header">
+                                <div style="padding-left:7px">
+                                    <paper-checkbox on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"></paper-checkbox>
+                                <div style="padding-left:10px">
+                            </template>
+                            <template>
+                                <div style="padding-left:10px">
+                                    <paper-checkbox on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"></paper-checkbox>
+                                </div>
+                            </template>
+                        </vaadin-grid-column>
+                    </template>
                     
                     <vaadin-grid-column width="70px" flex-grow="0">
                         <template class="header">
@@ -88,10 +94,11 @@
                             </div>
                         </template>
                     </vaadin-grid-column>
+                    
         
                     <template is="dom-repeat" items="[[colunm]]" as="col">
                         <template is="dom-if" if="[[!col.child]]"> 
-                            <vaadin-grid-column>
+                            <vaadin-grid-column width="[[col.width]]" flex-grow="[[col.flex]]">
                                 <template class="header">[[col.label]]</template>
                                 <template>
                                     <div>
@@ -100,11 +107,11 @@
                                 </template>
                             </vaadin-grid-column>
                         </template>
-                        <template is="dom-if" if="[[col.child]]">
+                        <!-- <template is="dom-if" if="[[col.child]]">
                             <vaadin-grid-column-group>
                                 <template class="header">[[col.label]]</template>
                                 <template is="dom-repeat" items="[[col.child]]" as="col2">
-                                    <vaadin-grid-column>
+                                    <vaadin-grid-column width="[[col2.width]]" flex-grow="[[col2.flex]]">
                                         <template class="header">[[col2.label]]</template>
                                         <template>
                                             <div>
@@ -115,10 +122,10 @@
                                 </template>
                             </vaadin-grid-column-group>
                                 
-                        </template>
+                        </template> -->
                     </template>
                     <template is="dom-if" if="[[_checkTool(toolList)]]">
-                        <vaadin-grid-column width="100px" flex-grow="1">
+                        <vaadin-grid-column width="200px" flex-grow="0">
                             <template class="header">เครื่องมือ</template>
                             <template>
                                 <div style="text-align: center;">
@@ -133,6 +140,9 @@
                         </vaadin-grid-column>
                     </template>
                 </vaadin-grid>
+
+
+
             `
         }
 
@@ -171,11 +181,22 @@
 
             this._renderTool(table.tool)
             this.statePath = table.statePath
-            this.colunm = table.colunm
+
+            this.colunm = table.colunm.map((row)=>{
+
+                if('width' in row) {
+                    row.flex = 0
+                }
+
+                if(row.flex!=0) {
+                    row.width = "100px"
+                }
+                
+                return row
+            })
         }
 
-        _renderTool(tool) {
-
+        _renderTool(tool=["view","edit","del"]) {
             // var toolObj = [
             //     {
             //         name: "view",
@@ -222,22 +243,22 @@
 
 
             var toolObj = {
-                view:{
+                view: {
                     name: "view",
                     label: "ดูรายละเอียดทั้งหมด",
                     icon: "visibility",
                 },
-                edit:{
+                edit: {
                     name: "edit",
                     label: "แก้ไขข้อมูล",
                     icon: "create",
                 },
-                del:{
+                del: {
                     name: "del",
                     label: "ลบ",
                     icon: "aqa-tool:bin",
                 },
-                link:{
+                link: {
                     name: "link",
                     label: "ตั้งค่าเพิ่มเติม",
                     icon: "icons:list"
@@ -246,15 +267,22 @@
             }
 
             var toolData = tool.map((row, i) => {
+                
                 var obj;
                 if (typeof row == "string") {
                     obj = toolObj[row]
                 } else {
-
-                    toolObj[row.name].label = row.label
-                    obj = toolObj[row.name]
+                    if(typeof toolObj[row.name]!="undefined"){
+                        toolObj[row.name].label = row.label
+                        obj = toolObj[row.name]
+                    }else{
+                        obj = row
+                    }
+                    
                 }
                 return obj
+
+
 
             })
 
