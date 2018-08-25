@@ -72,6 +72,10 @@
                         type: Number,
                         value: 1
                     },
+                    startAs: {
+                        type: Number,
+                        value:1
+                    },
                     limitList: {
                         type: Array,
                         value: function(){
@@ -104,7 +108,7 @@
 
             _setCount() {
                 if (this.count) {
-                    var round = this.count / 10
+                    var round = this.count / this.limit
                     var arr = []
                     if (round === round && round % 1 !== 0) round + 1
                     for (let index = 0; index < round; index++) {
@@ -118,6 +122,7 @@
             }
 
             _pageOrLimitChanged(page,limit) {
+                this.startAt = ((page*limit)+1)-limit
                 this.dispatchEvent(new CustomEvent('page-change', { detail: { page: page,limit:limit } }));
             }
 

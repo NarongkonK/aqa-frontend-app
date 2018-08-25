@@ -63,6 +63,14 @@
                             type:''
                         }
                     }
+                },
+                page: {
+                    type: String,
+                    value: 1
+                },
+                startAs: {
+                    type: Number,
+                    value: 1
                 }
             }
         }
@@ -129,7 +137,7 @@
                         </template>
                         <template>
                             <div style="text-align:center">
-                                [[count(index)]]
+                                [[count(index,startAt)]]
                             </div>
                         </template>
                     </vaadin-grid-column>
@@ -140,7 +148,7 @@
                             <vaadin-grid-column width="[[col.width]]" flex-grow="[[col.flex]]">
                                 <template class="header">
                                     <div>
-                                        <div class="sort-arrow" on-click="_triggerSort">
+                                        <div class="sort-arrow" on-click="_triggerSort" hidden$="[[!col.order]]">
                                             <div class="up" active$="[[_checkActiveSort(order,col.path,'asc')]]"></div>
                                             <div class="down" active$="[[_checkActiveSort(order,col.path,'desc')]]"></div>
                                         </div>
@@ -311,8 +319,8 @@
             }
         }
 
-        count(col) {
-            return col + 1;
+        count(startAs,index) {
+            return startAs+index;
         }
 
         _checkTool(tool) {
