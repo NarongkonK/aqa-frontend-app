@@ -57,10 +57,10 @@
                 },
                 order: {
                     type: Object,
-                    value: function(){
+                    value: function () {
                         return {
-                            field:'',
-                            type:''
+                            field: '',
+                            type: ''
                         }
                     }
                 },
@@ -112,26 +112,45 @@
                         opacity: 1
                     }
 
+                    .grid-header {
+                        font-size:1rem;
+                        font-weight:bold;
+                    }
+
+
+                    vaadin-grid#grid { 
+                        /* font-size: 3rem; */
+                        /* --lumo-font-size-m: 16px; */
+                        --vaadin-grid-header-cell: {
+                            height:20px;
+                        };
+                     }
+
+
                 </style>
-                <vaadin-grid id="grid" items="[[items]]" inverted$="[[inverted]]" selected-items="[[selectedItems]]">
+                
+                <vaadin-grid id="grid" items="[[items]]" theme="compact" inverted$="[[inverted]]" selected-items="[[selectedItems]]">
+                    <slot name="row-details"></slot>
                     <template is="dom-if" if="[[checked]]">
                         <vaadin-grid-column width="50px" flex-grow="0">
                             <template class="header">
-                                <div style="padding-left:7px">
-                                    <paper-checkbox on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"></paper-checkbox>
-                                <div style="padding-left:10px">
+                                <div>
+                                    <!-- <paper-checkbox on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"></paper-checkbox> -->
+                                    <vaadin-checkbox on-change="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"></vaadin-checkbox>
+                                </div>
                             </template>
                             <template>
-                                <div style="padding-left:10px">
-                                    <paper-checkbox on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"></paper-checkbox>
+                                <div style="padding-left:5px">
+                                    <!-- <paper-checkbox on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"></paper-checkbox> -->
+                                    <vaadin-checkbox on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"></vaadin-checkbox>
                                 </div>
                             </template>
                         </vaadin-grid-column>
                     </template>
                     
-                    <vaadin-grid-column width="70px" flex-grow="0">
+                    <vaadin-grid-column width="80px" flex-grow="0">
                         <template class="header">
-                            <div style="text-align:center">
+                            <div class="grid-header">
                                 ลำดับที่
                             </div>
                         </template>
@@ -147,7 +166,7 @@
                         <template is="dom-if" if="[[!col.child]]"> 
                             <vaadin-grid-column width="[[col.width]]" flex-grow="[[col.flex]]">
                                 <template class="header">
-                                    <div>
+                                    <div class="grid-header">
                                         <div class="sort-arrow" on-click="_triggerSort" hidden$="[[!col.order]]">
                                             <div class="up" active$="[[_checkActiveSort(order,col.path,'asc')]]"></div>
                                             <div class="down" active$="[[_checkActiveSort(order,col.path,'desc')]]"></div>
@@ -156,6 +175,7 @@
                                     </div>
                                     
                                 </template>
+                                <slot name="[[col.path]]"></slot>
                                 <template>
                                     <div>
                                         [[_showData(item,col.path)]]
@@ -163,7 +183,7 @@
                                 </template>
                             </vaadin-grid-column>
                         </template>
-                        <!-- <template is="dom-if" if="[[col.child]]">
+                        <template is="dom-if" if="[[col.child]]">
                             <vaadin-grid-column-group>
                                 <template class="header">[[col.label]]</template>
                                 <template is="dom-repeat" items="[[col.child]]" as="col2">
@@ -178,11 +198,30 @@
                                 </template>
                             </vaadin-grid-column-group>
                                 
-                        </template> -->
+                        </template>
+                    </template>
+
+
+                    <!-- [[table.detail]] -->
+                    <template is="dom-if" if="[[_checkDetail()]]">
+                        <vaadin-grid-column width="100px">
+                            <template class="header">
+                                <div class="grid-header">
+                                    แสดงรายละเอียด
+                                </div>
+                            </template>
+                            <template>
+                                <div style="text-align:center;">
+                                    <vaadin-checkbox checked="{{detailsOpened}}">แสดงรายละเอียด</vaadin-checkbox>
+                                </div>
+                            </template>
+                        </vaadin-grid-column>
                     </template>
                     <template is="dom-if" if="[[_checkTool(toolList)]]">
-                        <vaadin-grid-column width="200px" flex-grow="0">
-                            <template class="header">เครื่องมือ</template>
+                        <vaadin-grid-column width="100px" flex-grow="1">
+                            <template class="header">
+                                <div class="grid-header">เครื่องมือ</div>
+                            </template>
                             <template>
                                 <div style="text-align: center;">
                                     <template is="dom-repeat" items="[[toolList]]" as="toolItem" index-as="toolIndex">
@@ -200,6 +239,15 @@
 
 
             `
+        }
+
+        connectedCallback() {
+            super.connectedCallback()
+            // console.log('aqa')
+            // const grid = this.$.grid;
+            // grid.addEventListener('details-opened-items-changed', () => {
+            //     requestAnimationFrame(() => { grid.notifyResize() });
+            // });
         }
 
         _resetSelection(inverted) {
@@ -238,23 +286,23 @@
             this._renderTool(this.table.tool)
             this.statePath = this.table.statePath
             this._renderColumn()
-            
+
         }
-        
-        _renderColumn(){
-            this.colunm = this.table.colunm.map((row)=>{
-                if('width' in row) {
+
+        _renderColumn() {
+            this.colunm = this.table.colunm.map((row) => {
+                if ('width' in row) {
                     row.flex = 0
                 }
-                if(row.flex!=0) {
+                if (row.flex != 0) {
                     row.width = "100px"
                 }
                 return row
             })
         }
 
-        _renderTool(tool=["view","edit","del"]) {
-           
+        _renderTool(tool = ["view", "edit", "del"]) {
+
 
 
 
@@ -283,18 +331,18 @@
             }
 
             var toolData = tool.map((row, i) => {
-                
+
                 var obj;
                 if (typeof row == "string") {
                     obj = toolObj[row]
                 } else {
-                    if(typeof toolObj[row.name]!="undefined"){
+                    if (typeof toolObj[row.name] != "undefined") {
                         toolObj[row.name].label = row.label
                         obj = toolObj[row.name]
-                    }else{
+                    } else {
                         obj = row
                     }
-                    
+
                 }
                 return obj
 
@@ -319,8 +367,8 @@
             }
         }
 
-        count(startAs,index) {
-            return startAs+index;
+        count(startAs, index) {
+            return startAs + index;
         }
 
         _checkTool(tool) {
@@ -333,30 +381,35 @@
         }
 
         _triggerSort(e) {
-            if(this.order.field==e.model.col.path && this.order.type=='asc') {
+            if (this.order.field == e.model.col.path && this.order.type == 'asc') {
                 this.order = {
-                    field:e.model.col.path,
-                    type:'desc'
+                    field: e.model.col.path,
+                    type: 'desc'
                 }
-            }else if(this.order.field==e.model.col.path && this.order.type=='desc') {
+            } else if (this.order.field == e.model.col.path && this.order.type == 'desc') {
                 this.order = {
-                    field:'',
-                    type:''
+                    field: '',
+                    type: ''
                 }
-            }else{
+            } else {
                 this.order = {
-                    field:e.model.col.path,
-                    type:'asc'
+                    field: e.model.col.path,
+                    type: 'asc'
                 }
             }
-            
-            this.dispatchEvent(new CustomEvent('order-changed', { detail:  this.order}));
-            
+
+            this.dispatchEvent(new CustomEvent('order-changed', { detail: this.order }));
+
         }
 
-        _checkActiveSort(order,path,type){
-            return (order.field==path) && (order.type==type)
+        _checkActiveSort(order, path, type) {
+            return (order.field == path) && (order.type == type)
         }
+
+        _checkDetail(){
+            return this.querySelector("[class=row-details]")!=null
+        }
+        
 
     }
 
