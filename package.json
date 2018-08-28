@@ -30,9 +30,10 @@
     "app:user": "gulp route --app aqa-frontend-user",
     "app:support": "gulp route --app aqa-frontend-support",
     "app:academy": "gulp route --app aqa-frontend-academy",
-    "app:academy": "gulp route --app aqa-frontend-academy",
-    "app:academy": "gulp route --app aqa-frontend-academy",
-    "app:academy": "gulp route --app aqa-frontend-academy"
+    "app:basic": "gulp route --app aqa-frontend-basic",
+    "app:assessor": "gulp route --app aqa-frontend-assessor",
+    "app:register": "gulp route --app aqa-frontend-register",
+    "app:report": "gulp route --app aqa-frontend-report"
   },
   "dependencies": {
     "redux": "^3.7.1",
