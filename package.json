@@ -25,7 +25,8 @@
     "gulp:portal": "gulp route --layout layout-portal",
     "build": "gulp build:rename && gulp build:copy && polymer build && gulp build:del && gulp build:undo_rename",
     "clean": "gulp build:del && gulp build:undo_rename",
-    "gen": "gulp route"
+    "gen": "gulp route",
+    "app:user": "gulp route --app aqa-frontend-user"
   },
   "dependencies": {
     "redux": "^3.7.1",

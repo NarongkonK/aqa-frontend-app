@@ -18,7 +18,7 @@ gulp.task('route', function () {
 
     return Promise.all([
         new Promise((resolve, reject) => {
-            glob("./src/frontend/routes/**/route-*.html", null, (er, files) => {
+            glob("./src/"+argv.app+"/routes/**/route-*.html", null, (er, files) => {
                 arrPath = arrPath.concat(files)
                 let elementList = []
 
@@ -126,6 +126,7 @@ gulp.task('route', function () {
                         gulp.src(['./src/nylon-init-template.html'])
                             .pipe(replace('<!-- [[gen_import]] -->', im))
                             .pipe(replace('<!-- [[gen_route]] -->', el))
+                            .pipe(replace('[[app_folder]]', argv.app))
                             .pipe(replace('layout-main', layoutName))
                             .pipe(replace('gen_navigation', JSON.stringify(nav)))
                             .pipe(rename('nylon-init.html'))
@@ -150,7 +151,7 @@ gulp.task('route', function () {
 gulp.task('dialog', () => {
     return Promise.all([
         new Promise((resolve, reject) => {
-            glob("./src/frontend/routes/**/dialog-*.html", null, (er, files) => {
+            glob("./src/"+argv.app+"/routes/**/dialog-*.html", null, (er, files) => {
                 arrPath = arrPath.concat(files)
                 let elementList = []
 
@@ -270,7 +271,6 @@ gulp.task('polymer', function (done) {
         })
         return txt
     }
-    // console.log(arrPath)
 
     gulp.src('./polymer-template.json')
         .pipe(replace(`"fragments": [],`, `"fragments": [\n${comArr(arrPath)}\n\t],`))
@@ -280,110 +280,42 @@ gulp.task('polymer', function (done) {
         .on('end', done)
 
 
-    // glob("./src/frontend/routes/**/dialog-*.html", null, function (er, files) {
-    //     console.log(files)
-    //     done()
-    // })
+
 })
 
 
 
 
-
-
-
-
-
-
-
-const myRename = function (source, destination) {
-    return new Promise(function (resolve, reject) {
-        fs.rename(source, destination, function (err) {
-            if (err) {
-                throw err;
-            }
-            resolve();
-        });
-    })
-}
-
-gulp.task('build:rename', function () {
-    return Promise.all([
-        myRename('src/frontend', 'src/_frontend')
-    ])
-})
-
-gulp.task('build:copy', function (done) {
-    return gulp.src(['../frontend/**/*']).pipe(gulp.dest('src/frontend'));
-})
-
-gulp.task('build:del', function (done) {
-    del(['src/frontend']).then(paths => {
-        done()
-    });
-})
-
-gulp.task('build:undo_rename', function () {
-    return Promise.all([
-        myRename('src/_frontend', 'src/frontend')
-    ])
-})
-
-// gulp.task('build:pre', function () {
-
-//     return Promise.all([
-//         myRename('src/frontend', 'src/_frontend')
-//     ])
-
-// })
-
-// gulp.task('build:sub', function () {
-
-//     return Promise.all([
-//         myRename('src/frontend', 'src/_frontend')
-//     ])
-
-// })
-
-
-// gulp.task('testx', function () {
-
-//     return new Promise(function(resolve, reject) {
-
-
-//         async.series({
-//             renameSym: function(callback) {
-//                 fs.rename('src/frontend', 'src/_frontend', function (err) {
-//                     if (err) {
-//                         throw err
-//                     }
-//                     callback(null);
-//                 });
-//             },
-//             copySource: function(callback){
-//                 gulp.src('../frontend/**/*').pipe(gulp.dest('src/frontend'))
-//                 .on('error', function(error) {
-//                     throw err;
-//                 })
-//                 .on('end', function() {
-//                     callback(null);
-//                 });
-//             },
-//             execTest: function(callback){
-//                 exec('polymer build', function (err, stdout, stderr) {
-
-//                 });
-//             } 
-
-//         }, function(err, results) {
-//             if(err){
-//                 console.log('my error')
+// const myRename = function (source, destination) {
+//     return new Promise(function (resolve, reject) {
+//         fs.rename(source, destination, function (err) {
+//             if (err) {
+//                 throw err;
 //             }
-//             resolve()
+//             resolve();
 //         });
 //     })
+// }
 
+// gulp.task('build:rename', function () {
+//     return Promise.all([
+//         myRename('src/frontend', 'src/_frontend')
+//     ])
 // })
 
+// gulp.task('build:copy', function (done) {
+//     return gulp.src(['../frontend/**/*']).pipe(gulp.dest('src/frontend'));
+// })
 
+// gulp.task('build:del', function (done) {
+//     del(['src/frontend']).then(paths => {
+//         done()
+//     });
+// })
+
+// gulp.task('build:undo_rename', function () {
+//     return Promise.all([
+//         myRename('src/_frontend', 'src/frontend')
+//     ])
+// })
 
