@@ -9,6 +9,11 @@ package-lock.json
 src/nylon-init.html
 polymer.json
 
-src/frontend
-src/_frontend
-
+src/aqa-frontend-portal
+src/aqa-frontend-user
+src/aqa-frontend-support
+src/aqa-frontend-academy
+src/aqa-frontend-basic
+src/aqa-frontend-assessor
+src/aqa-frontend-register
+src/aqa-frontend-report
