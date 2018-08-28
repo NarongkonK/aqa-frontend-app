@@ -27,7 +27,12 @@
     "clean": "gulp build:del && gulp build:undo_rename",
     "gen": "gulp route",
     "app:portal": "gulp route --app aqa-frontend-user --layout layout-portal",
-    "app:user": "gulp route --app aqa-frontend-user"
+    "app:user": "gulp route --app aqa-frontend-user",
+    "app:support": "gulp route --app aqa-frontend-support",
+    "app:academy": "gulp route --app aqa-frontend-academy",
+    "app:academy": "gulp route --app aqa-frontend-academy",
+    "app:academy": "gulp route --app aqa-frontend-academy",
+    "app:academy": "gulp route --app aqa-frontend-academy"
   },
   "dependencies": {
     "redux": "^3.7.1",
