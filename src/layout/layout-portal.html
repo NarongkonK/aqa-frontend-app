@@ -1,0 +1,206 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+
+
+
+<link rel="import" href="../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../bower_components/aqa-title/aqa-title.html">
+<link rel="import" href="../../bower_components/aqa-breadcrumb/aqa-breadcrumb.html">
+<dom-module id="layout-portal">
+    <template>
+        <style include="aqa-styles">
+            app-header {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1;
+            }
+
+            .toolbar {
+                background-color: #0F94EF;
+                color: white;
+                height: 30px;
+            }
+
+            iron-image {
+                width: 45px;
+                height: 45px;
+                margin: 0 1rem;
+                /* border-radius: 50%; */
+            }
+
+            .header {
+                background-color: white;
+                display: flex;
+            }
+
+            .title {
+                font-family: MitrLight;
+                font-size: 1.2rem;
+                font-weight: 100;
+            }
+
+            .sub-title {
+                font-family: MitrLight;
+                font-size: 1rem;
+            }
+
+            .content {
+                padding-top: 0.5rem;
+                padding-left: 2rem;
+            }
+
+            #slotMain {
+                /* margin-top: 6rem; */
+                /* height: calc(100vh - 98px);
+                background-color: red;
+                overflow-y: auto; */
+            }
+
+            .footer {
+                position: relative;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                padding: 1rem;
+                background-color: red;
+                text-align: center;
+            }
+
+            .circle {
+                width: 50px;
+                height: 50px;
+                background: #ddd;
+                border-radius: 50%;
+            }
+            app-toolbar{
+                background-color: white;
+            }
+        </style>
+        <div class="toolbar"></div>
+        <app-toolbar>
+            <iron-image sizing="contain" src="../../images/72.png"></iron-image>
+            <div main-title>
+                <div class="title">AUTOMATED QA</div>
+                <div class="sub-title">ระบบสารสนเทศเพื่อการประเมินคุณภาพภายนอก สมศ.</div>
+            </div>
+            <template is="dom-if" if="[[checkAccount(user)]]">
+                <paper-menu-button no-overlap horizontal-align="right" no-animations>
+                    <div class="divImage" slot="dropdown-trigger" alt="menu">
+                        <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
+                    </div>
+                    <paper-listbox slot="dropdown-content">
+
+                        <paper-icon-item disabled>
+                            <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
+                            <paper-item-body two-line>
+                                <div>[[user.fname]]</div>
+                            </paper-item-body>
+                        </paper-icon-item>
+
+                        <paper-item on-tap="logout">
+                            <iron-icon icon="icons:exit-to-app"></iron-icon>
+                            &nbsp;&nbsp;Log-out
+                        </paper-item>
+                    </paper-listbox>
+                </paper-menu-button>
+            </template>
+        </app-toolbar>
+        <!-- <app-header fixed>
+            <app-toolbar class="toolbar">
+                <div main-title></div>
+            </app-toolbar>
+            <div class="header container-fluid">
+                <iron-image sizing="contain" src="../../images/72.png"></iron-image>
+                <div>
+                    <div class="title">AUTOMATED QA</div>
+                    <div class="sub-title">ระบบสารสนเทศเพื่อการประเมินคุณภาพภายนอก สมศ.</div>
+                </div>
+                <div>
+                    <template is="dom-if" if="[[checkAccount(user)]]">
+                        <paper-menu-button no-overlap horizontal-align="right" no-animations>
+                            <div class="divImage" slot="dropdown-trigger" alt="menu">
+                                <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
+                            </div>
+                            <paper-listbox slot="dropdown-content">
+
+                                <paper-icon-item disabled>
+                                    <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
+                                    <paper-item-body two-line>
+                                        <div>[[user.fname]]</div>
+                                    </paper-item-body>
+                                </paper-icon-item>
+
+                                <paper-item on-tap="logout">
+                                    <iron-icon icon="icons:exit-to-app"></iron-icon>
+                                    &nbsp;&nbsp;Log-out
+                                </paper-item>
+                            </paper-listbox>
+                        </paper-menu-button>
+                    </template>
+                </div>
+            </div>
+        </app-header> -->
+        <div id="slotMain">
+            <template is="dom-if" if="[[checkTopic(topic)]]">
+                <div class="content">
+                    <div style="margin-bottom:1rem"></div>
+                    <aqa-title>[[topic]]</aqa-title>
+                    <template is="dom-if" if="[[_showBreadcrumb(navigation)]]">
+                        <aqa-breadcrumb items="[[navigation]]"></aqa-breadcrumb>
+                    </template>
+                </div>
+            </template>
+            <div class="page">
+                <slot></slot>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        class LayoutPortal extends ReduxMixin(Polymer.Element) {
+            static get is() {
+                return 'layout-portal';
+            }
+            static get properties() {
+                return {
+                    navigation: Array,
+                    topic: String,
+                    user: {
+                        type: Object,
+                        statePath: 'nylon.user'
+                    },
+                };
+            }
+            _showBreadcrumb(arr) {
+                return arr.length != 1
+            }
+            checkTopic(val) {
+                if (!val || val == "หน้าแรก") return false
+                else return true
+            }
+
+            checkAccount(val) {
+                if (val.id) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+
+        window.customElements.define(LayoutPortal.is, LayoutPortal);
+    </script>
+</dom-module>

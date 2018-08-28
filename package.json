@@ -4,24 +4,41 @@
   "devDependencies": {
     "async": "^2.6.0",
     "cheerio": "^1.0.0-rc.2",
+    "del": "^3.0.0",
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-html": "^2.0.0",
     "glob": "^7.1.2",
     "gulp": "^3.9.1",
+    "gulp-copy": "^1.1.0",
+    "gulp-exec": "^3.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.6.1",
     "npm-run-all": "^4.0.2",
-    "del": "^3.0.0",
-    "gulp-copy": "^1.1.0"
+    "gulp-param": "^1.0.3",
+    "yargs": "^11.0.0"
   },
   "scripts": {
-    "serve:dev": "polymer serve ./ --port 8080 --hostname 0.0.0.0",
+    "start": "node index.js",
+    "serve:dev": "polymer serve ./ --port 8081 --hostname 0.0.0.0",
     "gulp:route": "gulp route",
-    "gen": "gulp route"
+    "gulp:portal": "gulp route --layout layout-portal",
+    "build": "gulp build:rename && gulp build:copy && polymer build && gulp build:del && gulp build:undo_rename",
+    "clean": "gulp build:del && gulp build:undo_rename",
+    "gen": "gulp route",
+    "app:portal": "gulp route --app aqa-frontend-user --layout layout-portal",
+    "app:user": "gulp route --app aqa-frontend-user",
+    "app:support": "gulp route --app aqa-frontend-support",
+    "app:academy": "gulp route --app aqa-frontend-academy",
+    "app:basic": "gulp route --app aqa-frontend-basic",
+    "app:assessor": "gulp route --app aqa-frontend-assessor",
+    "app:register": "gulp route --app aqa-frontend-register",
+    "app:report": "gulp route --app aqa-frontend-report"
   },
   "dependencies": {
     "redux": "^3.7.1",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "express": "^4.16.3",
+    "prpl-server": "^1.1.0"
   }
 }

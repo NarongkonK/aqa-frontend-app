@@ -17,7 +17,7 @@
 
 
 <link rel="import" href="../redux-mixin.html">
-<link rel="import" href="../redux/app-redux.html">
+
 
 <dom-module id="layout-drawer">
     <template>
@@ -38,7 +38,7 @@
             }
 
             #drawer {
-                z-index: 1
+                z-index: 1;
             }
 
             iron-selector>paper-icon-item {
@@ -168,15 +168,19 @@
                 background-color: #62a8ea;
                 text-align: center;
             }
+
+            [hidden]{
+                display: none
+            }
             
         </style>
         <div class="page">
             <app-toolbar>
                 <div main-title>Automated QA </div>
             </app-toolbar>
-            <div style="height:100%">
-                <div name="menu">
-                    <template is="dom-repeat" items="{{menu}}">
+            <div name="menu">
+                <template is="dom-repeat" items="{{menu}}">
+                    <div hidden$="[[_checkRuleRootMenu(item,pathRule)]]">
                         <div class="title-menu" on-click="toggle">
                             [[item.label]]
                             <paper-icon-button icon="my-icons:expand-more"></paper-icon-button>
@@ -184,15 +188,16 @@
                         <iron-collapse opened>
                             <iron-selector attr-for-selected="path" selected="[[pathName]]">
                                 <template is="dom-repeat" items="{{item.sub}}">
-                                    <div class="menu-item" path$="[[item.path]][[item.label]]" on-click="_changePage">
+                                    
+                                    <div class="menu-item" path$="[[item.path]][[item.label]]" on-click="_changePage" hidden$="[[_checkRuleMenu(item,pathRule)]]">
                                         <iron-icon icon="aqa-menu:[[item.icon]]"></iron-icon>
                                         <div>[[item.label]]</div>
                                     </div>
                                 </template>
                             </iron-selector>
                         </iron-collapse>
-                    </template>
-                </div>
+                    </div>
+                </template>
             </div>
         </div>
 
@@ -213,7 +218,11 @@
                         type:Array,
                         statePath: 'app.menu'
                     },
-                    pathName:String
+                    pathName:String,
+                    pathRule:{
+                        type: Object,
+                        statePath: 'nylon.payload.pathRule'
+                    }
                 }
             }
 
@@ -270,7 +279,39 @@
                     return ''
                 }
             }
+          
 
+            _checkRuleMenu(menu,rule){
+                if(menu.code==undefined){
+                    return false
+                }else{
+                    if(rule[menu.code]==undefined){
+                        return true
+                    }else{
+                        return false
+                    }
+                }
+                
+                //console.log(Nylon.store.getState().app.menu)
+         
+                // var path = val.pathRule
+                // console.log(path)
+                // var key;
+                // for (key in path) {
+                //     console.log(path[key])
+                // }
+                
+            }
+
+            _checkRuleRootMenu(menu,rule){
+                var result = true
+                menu.sub.map((row)=>{
+                    if(!this._checkRuleMenu(row,rule)){
+                        result = false
+                    }
+                })
+                return result
+            }
         }
 
         window.customElements.define(LayoutDrawer.is, LayoutDrawer);

@@ -1,0 +1,25 @@
+{
+    "entrypoint": "index.html",
+    "shell": "src/nylon-app.html",
+    "fragments": [],
+    "sources": [
+        "images/**/*",
+        "src/**/*",
+        "bower_components/aqa-font/**/*"
+    ],
+    "extraDependencies": [
+        "manifest.json",
+        "service-worker.js",
+        "bower_components/webcomponentsjs/*.js"
+    ],
+    "lint": {
+        "rules": [
+            "polymer-2"
+        ]
+    },
+    "builds": [
+        {
+            "preset": "es5-bundled"
+        }
+    ]
+}

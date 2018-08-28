@@ -1,0 +1,112 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-input.html">
+<link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-combo-box.html">
+
+<link rel="import" href="./aqa-advance-search-item.html">
+
+<dom-module id="aqa-advance-search">
+    <template>
+        <style include="aqa-styles"></style>
+        <div style="margin:0rem 0.5rem 0.5rem 0.5rem">
+            <template is="dom-repeat" items="[[itemForm]]">
+                <aqa-advance-search-item section-search count="[[count]]" index="[[index]]" fields="[[fields]]" on-add-filter="addFilter" on-del-filter="deleteFilter" on-search-submit="_submit"></aqa-advance-search-item>
+            </template>
+        </div>
+    </template>
+
+    <script>
+
+        class AqaAdvanceSearch extends Polymer.Element {
+
+            static get is() {
+                return 'aqa-advance-search';
+            }
+
+            static get properties() {
+                return {
+                    itemForm: {
+                        type: Array,
+                        value: [{}],
+                    },
+                    fields: Array,
+                    count: String
+
+                };
+            }
+
+            static get observers() {
+                return ['_itemFormChanged(itemForm.*)']
+            }
+
+            
+            _itemFormChanged(ob) {
+                this.count = ob.base.length
+            }
+
+            _count(arr) {
+                return arr.length
+            }
+            
+
+            addFilter() {
+                this.push('itemForm', {})
+            }
+            deleteFilter(e) {
+                var index = this.itemForm.indexOf(e.model.item);
+                if (this.itemForm.length > 1) {
+                    this.splice('itemForm', index, 1)
+                }
+            }
+
+            
+
+            _submit(){
+                
+                let el = this.shadowRoot.querySelectorAll('[section-search]')
+                var data = []
+                for(let i=0; i<el.length; i++){
+                    
+                    let operator = el[i].operator
+                    if(operator=="" || operator == undefined){
+                        operator = "="
+                    }
+
+                    data.push({
+                        feild: el[i].name,
+                        operator: operator,
+                        value: el[i].value
+                    })
+                }
+
+                this.dispatchEvent(new CustomEvent('submit', { detail: this.submit() }));
+                // console.log(data)
+            }
+
+            submit(){
+                 
+                let el = this.shadowRoot.querySelectorAll('[section-search]')
+                var data = []
+                for(let i=0; i<el.length; i++){
+                    
+                    let operator = el[i].operator
+                    if(operator=="" || operator == undefined){
+                        operator = "="
+                    }
+
+                    data.push({
+                        feild: el[i].name,
+                        operator: operator,
+                        value: el[i].value
+                    })
+                }
+
+                return data
+
+            }
+        }
+
+        window.customElements.define(AqaAdvanceSearch.is, AqaAdvanceSearch);
+    </script>
+</dom-module>

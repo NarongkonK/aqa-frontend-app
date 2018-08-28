@@ -1,0 +1,249 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-input.html">
+<link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-combo-box.html">
+<link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../redux-mixin.html">
+<!-- <link rel="import" href=""> -->
+<!-- IMPORt COMMON REDUX -->
+<dom-module id="page-search">
+    <template>
+        <style include="aqa-styles">
+            .bgWhite {
+                padding: 0.5rem;
+                background-color: white;
+            }
+
+            .section {
+                margin: auto 0;
+            }
+
+            .row>#checkBtn>#btnAdd,
+            .row>#checkBtn>#btnSearch {
+                display: none;
+            }
+
+            .row:last-of-type>#checkBtn>#btnAdd,
+            .row:last-of-type>#checkBtn>#btnSearch {
+                display: inline-block;
+            }
+        </style>
+        <div style="margin:0rem 0.5rem 0.5rem 0.5rem">
+            <template is="dom-repeat" items="[[itemForm]]">
+                <div class="row center-xs bgWhite" section-form>
+                    <div class="col-xs-12 col-sm-6 col-md-2 section">
+                        <aqa-combo-box no-label-float placeholder="เลือกข้อมูลที่จะค้นหา" items="[[field]]" item-value-path="path" value="{{item.feild}}"></aqa-combo-box>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2 section" hidden="[[checkFirstIndex(index)]]">
+                        <aqa-combo-box no-label-float placeholder="ตัวดำเนินการ" items="[[periods]]" value="{{item.operator}}"></aqa-combo-box>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <template is="dom-if" if="[[selectElement(item.feild)]]">
+                            <aqa-input no-label-float placeholder="ข้อความ" value="{{item.value}}"></aqa-input>
+                        </template>
+                        <template is="dom-if" if="[[!selectElement(item.feild)]]">
+                            <aqa-combo-box form-combobox no-label-float items="[[setDataForCombobox(item.feild)]]" value="{{item.value}}"></aqa-combo-box>
+                        </template>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3 section" id="checkBtn" style="text-align:left">
+                        <aqa-button type="primary-outline btn-xs" icon="remove" id="btnRemove" on-click="deleteFilter"></aqa-button>
+                        <aqa-button type="primary-outline btn-xs" id="btnAdd" icon="add" on-click="addFilter"></aqa-button>
+                        <aqa-button type="primary btn-xs" id="btnSearch" on-click="searchData">ค้นหา</aqa-button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </template>
+
+    <script>
+
+        class PageSearch extends ReduxMixin(Polymer.Element) {
+
+            static get is() {
+                return 'page-search';
+            }
+
+            static get properties() {
+                return {
+                    itemForm: {
+                        type: Array,
+                        value: [
+                            {
+                                feild: "",
+                                operator: "=",
+                                value: "",
+                            }
+                        ],
+                    },
+                    commonData: {
+                        type: Array,
+                        statePath: 'commonData'
+                    },
+                    path: String,
+                    field: {
+                        type: Array,
+                        value: []
+                    },
+                    periods: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'เท่ากับ',
+                                value: '='
+                            },
+                            {
+                                label: 'ไม่เท่ากับ',
+                                value: '!='
+                            },
+                            {
+                                label: 'มากกว่า',
+                                value: '>'
+                            },
+                            {
+                                label: 'น้อยกว่า',
+                                value: '<'
+                            }
+                        ]
+                    }
+                };
+            }
+            ready() {
+                super.ready()
+                this.itemForm = [
+                    {
+                        feild: "",
+                        operator: "=",
+                        value: ""
+                    }
+                ]
+                this.findCommonData()
+            }
+            findCommonData() {
+                var dataName = this.field.filter((val) => {
+                    return val.items
+                }).map((item) => {
+                    this.runReduxAction(item.reduxAction)
+                })
+            }
+            checkElement(val) {
+                var el = this.shadowRoot.querySelectorAll("[section-form]")
+                for (let index = 0; index < el.length; index++) {
+                    console.log(el[index].querySelectorAll("[form-combobox]"))
+                }
+            }
+            // _stateChanged(store){
+            //     // console.log("store",store.commonData)
+            //     // console.log("prop",this.commonData)
+            // }
+            findFieldWithPath(val) {
+                var obj = {}
+                this.field.filter((item) => {
+                    return item.path == val
+                }).map((item) => {
+                    obj = item
+                })
+                return obj
+            }
+            selectElement(val) {
+                var obj = this.findFieldWithPath(val)
+                if (obj.element == 'combobox') {
+                    return false
+                }
+                else return true
+            }
+            runReduxAction(data) {
+                var str = '';
+                var length = data.length;
+                data.map((item, index) => {
+                    str += '\'' + item + '\''
+                    if (index != length - 1) {
+                        str += ','
+                    }
+                })
+                eval("Nylon.dispatch(" + str + ")")
+            }
+            parseDataForCombobox(data, keyLabel, keyValue) {
+                if (data.length) {
+                    var newData = data.map((item) => {
+                        item.label = item[keyLabel]
+                        item.value = item[keyValue]
+                        return item
+                    })
+                    return newData
+                }
+                else return []
+            }
+            setDataForCombobox(val) {
+                var obj = this.findFieldWithPath(val)
+                var path = obj.items;
+                var data = this.commonData[path]
+                var pathLabel = obj.setting.label
+                var pathValue = obj.setting.value
+                return this.parseDataForCombobox(data,pathLabel,pathValue)
+                // var obj = this.findFieldWithPath(val)
+                // var path = obj.items
+                // var str = ''
+                // var length = obj.reduxAction.length;
+                // var str = ''
+                // obj.reduxAction.map((item,index)=>{
+                //     str += '\''+item+'\''
+                //     if(index != length-1){
+                //         str += ','
+                //     }
+                // })
+                // eval("Nylon.dispatch("+str+")")
+                // var items = this.commonData[path]
+                // console.log(items)
+                // if(items.length){
+                //     var pathLabel = obj.setting.label
+                //     var pathValue = obj.setting.value
+                //     var newItem = items.map((data)=>{
+                //         data.label = data[pathLabel]
+                //         data.value = data[pathValue]
+                //         return data
+                //     })
+                //     return newItem
+                // }
+                // else return []
+                // return []
+            }
+            checkIndex(val) {
+                if (val == (this.itemForm.length - 1)) {
+                    return false
+                }
+            }
+            checkFirstIndex(val) {
+                if (val == 0) return true;
+                else return false;
+            }
+            addFilter() {
+                this.push('itemForm', {
+                    feild: "",
+                    operator: "",
+                    value: ""
+                })
+                // this.checkElement()
+            }
+            deleteFilter(e) {
+                var index = this.itemForm.indexOf(e.model.item);
+                if (this.itemForm.length > 1) {
+                    this.splice('itemForm', index, 1)
+                }
+                // this.checkElement()
+            }
+            searchData() {
+                console.log(this.itemForm)
+                // var qurey = this.itemForm.map((item)=>{
+                //     return item.feild+item.operator+item.value
+                // })
+                // console.log(qurey)
+                var enc = btoa(unescape(encodeURIComponent(JSON.stringify(this.itemForm))));
+                Nylon.dispatch('searchCommon', enc, this.path)
+
+            }
+        }
+
+        window.customElements.define(PageSearch.is, PageSearch);
+    </script>
+</dom-module>

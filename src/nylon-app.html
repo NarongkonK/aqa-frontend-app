@@ -4,7 +4,7 @@
 </script>
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
-
+<link rel="import" href="../bower_components/aqa-sweet-alert/aqa-sweet-alert.html">
 <link rel="import" href="./nylon-axios.html">
 <link rel="import" href="./redux-mixin.html">
 <link rel="import" href="./nylon-init.html">
@@ -12,7 +12,7 @@
 
 <dom-module id="nylon-app">
   <template>
-    <nylon-auth id="nylonAuth" on-auth="_auth" on-noauth="_noauth" on-disabled="_authDisable" disabled></nylon-auth>
+    <nylon-auth id="nylonAuth" on-auth="_auth" on-noauth="_noauth" on-disabled="_authDisable"></nylon-auth>
     <template id="domIfNylonInit" is="dom-if">
       <nylon-init id="nylonInit" path-name="[[pathName]]" on-ready="_nylonInitReady"></nylon-init>
     </template>
@@ -60,10 +60,9 @@
 
       _pageChanged(e) {
         this.$.nylonInit.$.layoutMain.topic = ""
-
         let elementName = e.detail.element.localName
         let pathFile = e.detail.element.getAttribute('path-file');
-        let resolvedUrl = this.resolveUrl(`pages/${elementName}/${elementName}.html`);
+        let resolvedUrl = this.resolveUrl(`pages/${elementName}/${elementName}`+'.html');
 
         if(pathFile){
           resolvedUrl = this.resolveUrl(pathFile);

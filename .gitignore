@@ -7,9 +7,8 @@ loggers/
 yarn.lock
 package-lock.json
 src/nylon-init.html
+polymer.json
 
-src/i18n
-src/redux
-src/routes
-files/
 src/frontend
+src/_frontend
+

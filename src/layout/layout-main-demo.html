@@ -1,0 +1,71 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/aqa-font/aqa-mitr-font.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+้<link rel="import" href="../../bower_components/aqa-title/aqa-title.html">
+้<link rel="import" href="../../bower_components/aqa-breadcrumb/aqa-breadcrumb.html">
+<link rel="import" href="./layout-drawer.html">
+<dom-module id="layout-main-demo">
+    <template>
+        <style>
+             :host {
+                font-family: MitrLight;
+            }
+
+            app-toolbar {
+                height: 60px;
+                background-color: #62A7E9;
+                color: white;
+            }
+            #drawer{
+                z-index: 2;
+            }
+        </style>
+
+        <app-header reveals>
+            <app-toolbar>
+                <paper-icon-button icon="menu" on-click="toggleDrawer"></paper-icon-button>
+                <div main-title>ระบบจัดการข้อมูลพื้นฐาน</div>
+            </app-toolbar>
+        </app-header>
+        <app-drawer id="drawer" swipe-open>
+            <layout-drawer></layout-drawer>
+        </app-drawer>
+        <div style="padding-left:1rem;padding-top:1rem;">
+            <aqa-title>[[topic]]</aqa-title>
+            <template is="dom-if" if="[[_showBreadcrumb(navigation)]]">
+                <aqa-breadcrumb items="[[navigation]]"></aqa-breadcrumb>
+            </template>
+        </div>
+        <slot></slot>
+    </template>
+
+    <script>
+        class LayoutMainDemo extends Polymer.Element {
+
+            static get is() {
+                return 'layout-main-demo';
+            }
+
+            static get properties() {
+                return {
+                    topic: String,
+                    navigation: Array,
+                };
+            }
+
+            toggleDrawer() {
+                this.$.drawer.toggle()
+            }
+
+             _showBreadcrumb(arr){
+                return arr.length != 1
+            }
+        }
+
+        window.customElements.define(LayoutMainDemo.is, LayoutMainDemo);
+    </script>
+</dom-module>

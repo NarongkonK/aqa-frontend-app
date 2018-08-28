@@ -68,7 +68,25 @@
         }
     }
 
+
+
     // Create Mixin
-    window.ReduxMixin = PolymerRedux(Nylon.store)
+    Nylon.PreReduxMixin = PolymerRedux(Nylon.store)
+
+    window.ReduxMixin = Parent => class ReduxMixin extends Nylon.PreReduxMixin(Parent) {
+        ready() {
+            super.ready()
+
+
+            if ('_stateChanged' in this) {
+                this._stateChanged(Nylon.store.getState())
+
+                Nylon.store.subscribe(() => {
+                    this._stateChanged(Nylon.store.getState())
+                })
+            }
+
+        }
+    }
 
 </script>

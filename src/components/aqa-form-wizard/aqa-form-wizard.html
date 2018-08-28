@@ -1,0 +1,104 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="aqa-form-wizard">
+    <template>
+        <style include="aqa-styles">
+            iron-icon {
+                background-color: #ddd;
+                border-radius: 50%;
+                margin-right: 0.5rem;
+                color: white;
+                --iron-icon-width: 28px;
+                --iron-icon-height: 28px;
+            }
+
+            .navbar {
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                background-color: white;
+            }
+
+            .navbar-content {
+                text-align: left;
+                padding: 0.5rem;
+                color: #ddd;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .navbar-content:last-of-type {
+                border-bottom: 0px;
+            }
+
+            iron-icon[selected] {
+                color: white;
+                background-color: #28A745;
+            }
+
+            .success>iron-icon {
+                color: white;
+                background-color: #28A745;
+            }
+
+            .success {
+                color: #28A745
+            }
+
+            .active>iron-icon {
+                color: white;
+                background-color: #007BFF;
+            }
+
+            .active {
+                color: #007BFF
+            }
+        </style>
+        <div class="navbar">
+            <template is="dom-repeat" items="[[menu]]">
+                <div class$="navbar-content [[item.class]]">
+                    <iron-icon icon="done"></iron-icon>
+                    [[item.title]]
+                </div>
+            </template>
+        </div>
+    </template>
+
+    <script>
+
+        class AqaFormWizard extends Polymer.Element {
+
+            static get is() {
+                return 'aqa-form-wizard';
+            }
+            static get properties() {
+                return {
+                    selected: {
+                        type: String,
+                        value: '0',
+                        observer: 'updateView'
+                    },
+                    menu: {
+                        type: Array,
+                        value: []
+                    }
+                };
+            }
+            updateView(val) {
+                this.set('menu.' + val + '.class', 'active')
+                this.menu.map((item, index) => {
+                    if (index < val && item.class != 'success') {
+                        this.set('menu.'+index+'.class','success')
+                    }
+                    else if(index > val && item.class != ''){
+                        this.set('menu.'+index+'.class','')
+                    }
+                })
+                // console.log(this.menu)
+            }
+        }
+
+        window.customElements.define(AqaFormWizard.is, AqaFormWizard);
+    </script>
+</dom-module>

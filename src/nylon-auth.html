@@ -1,6 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/jwt-decode/jwt-decode.html">
 
+<link rel="import" href="./redux-mixin.html">
+<link rel="import" href="./nylon-redux.html">
+
 <script>
   class NylonAuth extends Polymer.Element {
 
@@ -15,7 +18,10 @@
       return {
         baseUrl: {
           type: String,
-          value: 'http://localhost:5000/api/auth'
+          //value: 'http://user-api.onesqa.com/api/auth'
+          value: function(){
+            return Nylon.apiURL.user+"/auth"
+          }
         },
         path: {
           type: String,
@@ -49,6 +55,7 @@
 
     _message(event) {
 
+      //console.log(event.data)
       
       let topic = event.data.split('?')[0]
 
@@ -58,21 +65,11 @@
 
           let token = this.getParameterByName('accessToken',event.data)
           axios.defaults.headers.common['Authorization'] = token
+          window.token = token
 
           let decoded = jwt_decode(token);
           this.userInfo = decoded
           this.dispatchEvent(new CustomEvent('auth', {detail: decoded}));
-
-          
-          axios.get(this.baseUrl+'/checkToken')
-          .then((res)=>{
-            console.log(res.data)
-          })
-
-          axios.get('/auth/user')
-          .then((res)=>{
-            console.log(res.data)
-          })
          
 
           this.token = this.getParameterByName('accessToken',event.data)
@@ -80,25 +77,27 @@
           this.userInfo = jwt_decode(this.token)
           this.payload = jwt_decode(this.getParameterByName('payload',event.data))
 
-          this.userInfo = this.userInfod
+          // console.log(this.userInfo)
           this.dispatchEvent(new CustomEvent('auth', {detail: this.userInfo}))
+          Nylon.dispatch('nylonSetUser',this.userInfo,this.payload)
           
           break;
         case 'nylonAuth/noauth':
             this.status = 'noauth';
 
             axios.defaults.headers.common['Authorization'] = ''
+            window.token = ''
             this.dispatchEvent(new CustomEvent('noauth'));
             break;
         default:
-            console.log('xx')
+            //console.log('xx')
       }
 
     }
 
     checkRule(detail) {
 
-      
+      console.log(detail.ctx.gotoPage)
       let elementName = detail.element.localName
       if(!detail.ctx.gotoPage){
 

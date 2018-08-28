@@ -1,0 +1,235 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-input.html">
+<link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
+<link rel="import" href="../../../bower_components/aqa-form/aqa-combo-box.html">
+
+<link rel="import" href="../../redux-mixin.html">
+
+<dom-module id="aqa-advance-search-item">
+    <template>
+        <style include="aqa-styles">
+            .bgWhite {
+                padding: 0.5rem;
+                background-color: white;
+            }
+
+            .section {
+                margin: auto 0;
+            }
+
+            .row>#checkBtn>#btnAdd,
+            .row>#checkBtn>#btnSearch {
+                display: none;
+            }
+
+            .row:last-of-type>#checkBtn>#btnAdd,
+            .row:last-of-type>#checkBtn>#btnSearch {
+                display: inline-block;
+            }
+
+            [hidden]{
+                display: none;
+            }
+
+
+        </style>
+        <div class="row center-xs bgWhite">
+            <div class="col-xs-5 col-sm-3 section">
+                <aqa-combo-box no-label-float item-value-path="name" placeholder="เลือกข้อมูลที่จะค้นหา" items="[[fields]]" on-selected-item-changed="_feildChanged"></aqa-combo-box>
+            </div>
+            <div class="col-xs-2 col-sm-3 section" hidden$="[[!useOperator]]">
+                <aqa-combo-box no-label-float  placeholder="ตัวดำเนินการ" items="[[operatorList]]" on-selected-item-changed="_operatorChanged"></aqa-combo-box>
+            </div>
+            <div class="col-xs-5 col-sm-3 section">
+                <aqa-input no-label-float placeholder="ข้อความ" hidden$="[[!_eqVal('text',fieldType)]]" on-value-changed="_valChanged"></aqa-input>
+                <aqa-combo-box id="selectValue" no-label-float placeholder="ตัวเลือก" items="[[selectList]]" hidden$="[[!_eqVal('select',fieldType)]]" on-selected-item-changed="_valChanged"></aqa-combo-box>
+            </div>
+            <div class="col-xs-12  col-sm-3 section" style="text-align:left">
+                <aqa-button type="primary-outline btn-xs" icon="remove" on-click="_deleteFilter" hidden$="[[_eqVal('1',count)]]"></aqa-button>
+                <aqa-button type="primary-outline btn-xs" icon="add" on-click="_addFilter"></aqa-button>
+                <aqa-button type="primary btn-xs" on-click="_submit" hidden$="[[!_isLast(index,count)]]">ค้นหา</aqa-button>
+            </div>
+        </div>
+    </template>
+
+    <script>
+
+        class AqaAdvanceSearchItem extends ReduxMixin(Polymer.Element) {
+
+            static get is() {
+                return 'aqa-advance-search-item';
+            }
+
+            static get properties() {
+                return {
+                    // ข้อมูล field ที่มีให้เลือก
+                    fields: Array,
+                    
+                    // ชื่อ field ที่เลือก
+                    name: String,
+
+                    // ข้อมูล field ที่เลือกแล้ว
+                    fieldSelected: Object,
+
+                    // ประเภทการป้อนข้อมูล
+                    fieldType: String,
+
+                    // ข้อมูลตัวดำเนินการ
+                    operatorList: Array,
+
+                    // ตัวที่ state path ให้ seleted
+                    statePath: String,
+                    
+                    // ข้อมูลรายการ สำหรับประเภทที่เลือก
+                    selectList: Array,
+                    
+                    // ค่าที่ป้อน
+                    value: String,
+                    
+                    // ตัวดำเนินการที่เลือก
+                    operator: String,
+                    
+                    // จำนวนแถวของข้อมูลที่ filter
+                    count: String,
+                    
+                    // ใช้ตัวดำเนินการไหม
+                    useOperator: Boolean
+                };
+            }
+
+            ready(){
+                super.ready()
+                this.operatorList = [
+                            {
+                                label: 'เท่ากับ',
+                                value: "="
+                            },
+                            {
+                                label: 'ไม่เท่ากับ',
+                                value: "!="
+                            },
+                            {
+                                label: 'มากกว่า',
+                                value: ">"
+                            },
+                            {
+                                label: 'น้อยกว่า',
+                                value: "<"
+                            }
+                        ]
+
+                
+                this.fieldSelected = {}
+                this.name = ""
+                this.fieldType = ""
+                this.statePath = ""
+                this.value = ""
+                this.useOperator = false
+            }
+
+            _eqVal(val1,val2) {
+                return val1 == val2
+            }
+
+            _isLast(index,count){
+                return index+1 == count
+            }
+
+            _addFilter() {
+                this.dispatchEvent(new CustomEvent('add-filter', {detail: {kicked: true}}));
+            }
+            _deleteFilter(e) {
+                this.dispatchEvent(new CustomEvent('del-filter', {detail: {kicked: true}}));
+            }
+
+            _feildChanged(e){
+                if(e.detail.value != null){
+                    this.fieldSelected = e.detail.value
+                    this.fieldType = this.fieldSelected.type
+                    this.name = this.fieldSelected.name
+
+                    if("operator" in e.detail.value){
+                        this.useOperator = true
+                    }else{
+                        this.useOperator = false
+                    }
+
+
+                    let select = this.fieldSelected.select
+                    if(select){
+                        if(select.valuePath){
+                            this.$.selectValue.itemValuePath = select.valuePath
+                        }
+                        if(select.labelPath){
+                            this.$.selectValue.itemLabelPath = select.labelPath
+                        }
+                        
+                        
+                        this.statePath = select.statePath
+                        this._renderAction(select.action)
+                        
+                    }
+                     
+                }else{
+                    this.fieldType = ""
+                }
+                
+                
+            }
+
+            _valChanged(e){
+                this.value = e.target.value
+            }
+
+
+
+            _renderAction(action){
+
+                let repeatItem = this.parentNode.querySelectorAll("[section-search]")
+                let repeatData = {}
+                for(let i=0; i<repeatItem.length; i++){
+                    if(i+1!=repeatItem.length){
+                        repeatData[repeatItem[i].name] = repeatItem[i].value
+                    }
+                }
+                
+                let args = ""
+                action.map((row,i)=>{
+
+                    if(row[0]=="$"){
+                        row = repeatData[row.split('$')[1]]
+                    }
+                    if(i!=0){
+                        args = args+","
+                    }
+                    args=args+"'"+row+"'"
+                })
+
+                eval("Nylon.dispatch("+args+")")
+            }  
+
+            _stateChanged(store){
+                if(this.statePath!=""){
+                    this.selectList = eval("store."+this.statePath)
+                }
+
+            }
+
+            _operatorChanged(e){
+                this.operator = e.target.value
+            }
+
+            _submit(){
+                this.dispatchEvent(new CustomEvent('search-submit'));
+            }
+
+            
+
+
+        }
+
+        window.customElements.define(AqaAdvanceSearchItem.is, AqaAdvanceSearchItem);
+    </script>
+</dom-module>

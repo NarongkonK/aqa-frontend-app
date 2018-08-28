@@ -1,0 +1,61 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/aqa-button/aqa-button.html">
+<dom-module id="aqa-dropdown-button">
+    <template>
+        <style>
+            paper-item{
+                width: 100%;
+                box-sizing: border-box;
+                min-width: 50px;
+                --paper-item-min-height:30px;
+            }
+            paper-item:hover{
+                background-color:#f3f7f9;
+            }
+            paper-listbox{
+                padding: 0;
+                border-radius: 10px;
+            }
+        </style>
+        <paper-menu-button no-overlap horizontal-align="right" no-animations>
+            <aqa-button type="primary" slot="dropdown-trigger">
+                [[title]] 
+            </aqa-button>
+            <paper-listbox slot="dropdown-content">
+                <paper-item>Word</paper-item>
+                <paper-item>PDF</paper-item>
+                <paper-item>Excel</paper-item>
+            </paper-listbox>
+        </paper-menu-button>
+    </template>
+
+    <script>
+
+        class AqaDropDownButton extends Polymer.Element {
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'aqa-dropdown-button';
+            }
+
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+                    title:{
+                        type:String,
+                        value:''
+                    }
+                };
+            }
+
+        }
+
+        window.customElements.define(AqaDropDownButton.is, AqaDropDownButton);
+    </script>
+</dom-module>
