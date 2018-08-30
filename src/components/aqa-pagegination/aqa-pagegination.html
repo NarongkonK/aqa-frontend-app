@@ -30,7 +30,7 @@
                 <aqa-tooltip label="ก่อนหน้า">
                     <paper-icon-button class="btn-edit" icon="icons:chevron-left" on-click="_previous"></paper-icon-button>
                 </aqa-tooltip>
-                <aqa-combo-box prop="page" class="input" items="[[list]]" on-value-changed="_comboChanged" value="[[page]]" no-label-float></aqa-combo-box>
+                <aqa-combo-box id="c_page" prop="page" class="input" items="[[list]]" on-value-changed="_comboChanged" value="[[page]]" no-label-float></aqa-combo-box>
                 &nbsp;
                 <!-- <aqa-input class="input" no-label-float value="[[limit]]" disabled></aqa-input> -->
                 <aqa-combo-box prop="limit" class="input" on-value-changed="_comboChanged" items="[[limitList]]" value="[[limit]]" no-label-float></aqa-combo-box>
@@ -53,7 +53,7 @@
                 return {
                     limit: {
                         type: Number,
-                        value: 10
+                        value: 2
                     },
                     list: {
                         type: Array,
@@ -118,14 +118,20 @@
                 }
             }
             _comboChanged(e) {
-                console.log(e.target.getAttribute("prop"))
+                // console.log(e.target.getAttribute("prop"))
+                if(e.target.getAttribute("prop")=="limit"){
+                    this.$.c_page.value = 1
+                }
                 this.set(e.target.getAttribute("prop"),e.target.value)
             }
 
             _pageOrLimitChanged(page,limit) {
-                console.log(page,limit)
+                // console.log(page,limit)
                 this.startAt = ((page*limit)+1)-limit
                 this.dispatchEvent(new CustomEvent('page-change', { detail: { page: page,limit:limit } }));
+
+
+                this._setCount()
             }
 
             _quantity(items,count,page,limit){
