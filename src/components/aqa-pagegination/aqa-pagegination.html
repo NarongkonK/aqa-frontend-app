@@ -30,10 +30,10 @@
                 <aqa-tooltip label="ก่อนหน้า">
                     <paper-icon-button class="btn-edit" icon="icons:chevron-left" on-click="_previous"></paper-icon-button>
                 </aqa-tooltip>
-                <aqa-combo-box id="c_page" prop="page" class="input" items="[[list]]" on-value-changed="_comboChanged" value="[[page]]" no-label-float></aqa-combo-box>
+                <aqa-combo-box id="c_page" prop="page" class="input" items="[[list]]" on-value-changed="_comboChanged" value="[[page]]" no-label-float no-reset></aqa-combo-box>
                 &nbsp;
                 <!-- <aqa-input class="input" no-label-float value="[[limit]]" disabled></aqa-input> -->
-                <aqa-combo-box prop="limit" class="input" on-value-changed="_comboChanged" items="[[limitList]]" value="[[limit]]" no-label-float></aqa-combo-box>
+                <aqa-combo-box prop="limit" class="input" on-value-changed="_comboChanged" items="[[limitList]]" value="[[limit]]" no-label-float no-reset></aqa-combo-box>
                 <aqa-tooltip label="ถัดไป">
                     <paper-icon-button class="btn-edit" icon="icons:chevron-right" on-click="_next"></paper-icon-button>
                 </aqa-tooltip>
@@ -53,7 +53,7 @@
                 return {
                     limit: {
                         type: Number,
-                        value: 2
+                        value: 10
                     },
                     list: {
                         type: Array,
