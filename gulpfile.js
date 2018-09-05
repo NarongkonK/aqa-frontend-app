@@ -106,7 +106,12 @@ gulp.task('route', function () {
                         elementList.map((row) => {
 
                             im = im + `<link rel="lazy-import" href="${row.pathFile}">\n`
-                            el = el + `<${row.elementName} ${addAttribute('topic', row.topic)} path-file="${row.pathFile}" path="${row.pathRoute}" ${addAttribute('rule', row.rule)} ${addAttribute('parent', row.parentName)}></${row.elementName}>\n`
+                            el = el + `<${row.elementName} ${addAttribute('topic', row.topic)} path-file="${row.pathFile}" path="${row.pathRoute}" ${addAttribute('rule', row.rule)} ${addAttribute('parent', row.parentName)}>`
+                            if(row.elementName=="route-index"){
+                                el = el + `<slot name="recaptcha" slot="recaptcha"></slot>`
+                            }
+                            el = el + `</${row.elementName}>\n`
+                            
                             nav[row.elementName] = navigation(row.elementName).map((row) => {
 
                                 let eln = elementList.filter((row2) => {
