@@ -193,6 +193,7 @@
                                 <template is="dom-repeat" items="[[col.child]]" as="col2">
                                     <vaadin-grid-column width="[[col2.width]]" flex-grow="[[col2.flex]]">
                                         <template class="header">[[col2.label]]</template>
+                                        <slot name="[[col2.path]]"></slot>
                                         <template>
                                             <div>
                                                 [[_showData(item,col2.path)]]
@@ -254,7 +255,7 @@
             // });
         }
 
-        _dataChanged(data){
+        _dataChanged(data) {
             this.items = data.Data
         }
 
@@ -305,6 +306,20 @@
                 if (row.flex != 0) {
                     row.width = "100px"
                 }
+
+                if ('child' in row) {
+                    row.child = row.child.map((row2) => {
+                        if ('width' in row2) {
+                            row2.flex = 0
+                        }
+                        if (row.flex != 0) {
+                            row2.width = "100px"
+                        }
+                        return row2
+                    })
+
+                }
+
                 return row
             })
         }
@@ -334,7 +349,16 @@
                     name: "link",
                     label: "ตั้งค่าเพิ่มเติม",
                     icon: "icons:list"
-
+                },
+                download: {
+                    name: "download",
+                    label: "ดาวน์โหลด",
+                    icon: "icons:get-app"
+                },
+                upload: {
+                    name: "upload",
+                    label: "แนบไฟล์",
+                    icon: "icons:file-upload"
                 }
             }
 
@@ -375,7 +399,7 @@
             }
         }
 
-        count(index,startAs ) {
+        count(index, startAs) {
             return startAs + index;
         }
 
@@ -415,11 +439,11 @@
             return (order.field == path) && (order.type == type)
         }
 
-        _checkDetail(){
-            return this.querySelector("[class=row-details]")!=null
+        _checkDetail() {
+            return this.querySelector("[class=row-details]") != null
         }
 
-        _reqRefresh(){
+        _reqRefresh() {
 
             
 
@@ -427,9 +451,9 @@
             this.startAt = p.startAt
             // console.log(p.limit)
             this.dispatchEvent(new CustomEvent('refresh', {
-                 detail: Object.assign({},this.order,{page:p.page,limit:p.limit})
+                detail: Object.assign({}, this.order, { page: p.page, limit: p.limit })
             }));
-            
+
         }
 
         refresh(){
