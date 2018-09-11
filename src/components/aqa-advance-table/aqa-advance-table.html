@@ -421,6 +421,8 @@
 
         _reqRefresh(){
 
+            
+
             var p = this.$.pagegination
             this.startAt = p.startAt
             // console.log(p.limit)
@@ -428,6 +430,10 @@
                  detail: Object.assign({},this.order,{page:p.page,limit:p.limit})
             }));
             
+        }
+
+        refresh(){
+            this._reqRefresh()
         }
         
 

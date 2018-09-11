@@ -54,9 +54,9 @@
     
 
     _message(event) {
+      if(event.data==null)
+        return;
 
-      //console.log(event.data)
-      
       let topic = event.data.split('?')[0]
 
       switch (topic) {
@@ -97,16 +97,12 @@
 
     checkRule(detail) {
 
-      console.log(detail.ctx.gotoPage)
       let elementName = detail.element.localName
       if(!detail.ctx.gotoPage){
 
         if(this.status=="auth"){
-          let checkPass = this.payload.pageRule.filter((row)=>{
-            return row.path == detail.ctx.pathname
-          })
-
-          if(checkPass.length > 0){
+         
+          if(this.payload.pathRule[detail.rule]!=undefined){
             detail.pass()
           }else{
             detail.ctx.gotoPage = 'page-403'

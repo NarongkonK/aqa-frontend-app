@@ -51,7 +51,7 @@ gulp.task('route', function () {
                             elementName,
                             pathFile,
                             pathRoute: domModule.attr('path') || pathRoute,
-                            rule: domModule.attr('rule') != undefined,
+                            rule: domModule.attr('rule'),
                             topic: domModule.attr('topic'),
                             parentName: domModule.attr('parent')
                         })

@@ -16,6 +16,9 @@
 <link rel="import" href="../../bower_components/aqa-styles/aqa-styles.html">
 <link rel="import" href="../../bower_components/aqa-title/aqa-title.html">
 <link rel="import" href="../../bower_components/aqa-breadcrumb/aqa-breadcrumb.html">
+
+<link rel="import" href="./layout-menu-info.html">
+
 <dom-module id="layout-portal">
     <template>
         <style include="aqa-styles">
@@ -61,13 +64,6 @@
                 padding-left: 2rem;
             }
 
-            #slotMain {
-                /* margin-top: 6rem; */
-                /* height: calc(100vh - 98px);
-                background-color: red;
-                overflow-y: auto; */
-            }
-
             .footer {
                 position: relative;
                 right: 0;
@@ -96,62 +92,10 @@
                 <div class="sub-title">ระบบสารสนเทศเพื่อการประเมินคุณภาพภายนอก สมศ.</div>
             </div>
             <template is="dom-if" if="[[checkAccount(user)]]">
-                <paper-menu-button no-overlap horizontal-align="right" no-animations>
-                    <div class="divImage" slot="dropdown-trigger" alt="menu">
-                        <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
-                    </div>
-                    <paper-listbox slot="dropdown-content">
-
-                        <paper-icon-item disabled>
-                            <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
-                            <paper-item-body two-line>
-                                <div>[[user.fname]]</div>
-                            </paper-item-body>
-                        </paper-icon-item>
-
-                        <paper-item on-tap="logout">
-                            <iron-icon icon="icons:exit-to-app"></iron-icon>
-                            &nbsp;&nbsp;Log-out
-                        </paper-item>
-                    </paper-listbox>
-                </paper-menu-button>
+                <layout-menu-info user="[[user]]"></layout-menu-info>
+               
             </template>
         </app-toolbar>
-        <!-- <app-header fixed>
-            <app-toolbar class="toolbar">
-                <div main-title></div>
-            </app-toolbar>
-            <div class="header container-fluid">
-                <iron-image sizing="contain" src="../../images/72.png"></iron-image>
-                <div>
-                    <div class="title">AUTOMATED QA</div>
-                    <div class="sub-title">ระบบสารสนเทศเพื่อการประเมินคุณภาพภายนอก สมศ.</div>
-                </div>
-                <div>
-                    <template is="dom-if" if="[[checkAccount(user)]]">
-                        <paper-menu-button no-overlap horizontal-align="right" no-animations>
-                            <div class="divImage" slot="dropdown-trigger" alt="menu">
-                                <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
-                            </div>
-                            <paper-listbox slot="dropdown-content">
-
-                                <paper-icon-item disabled>
-                                    <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
-                                    <paper-item-body two-line>
-                                        <div>[[user.fname]]</div>
-                                    </paper-item-body>
-                                </paper-icon-item>
-
-                                <paper-item on-tap="logout">
-                                    <iron-icon icon="icons:exit-to-app"></iron-icon>
-                                    &nbsp;&nbsp;Log-out
-                                </paper-item>
-                            </paper-listbox>
-                        </paper-menu-button>
-                    </template>
-                </div>
-            </div>
-        </app-header> -->
         <div id="slotMain">
             <template is="dom-if" if="[[checkTopic(topic)]]">
                 <div class="content">

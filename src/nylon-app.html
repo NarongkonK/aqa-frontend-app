@@ -101,7 +101,7 @@
 
         let elementName = e.detail.element.localName
         let pathFile = e.detail.element.getAttribute('path-file');
-        let resolvedUrl = this.resolveUrl(`pages/${elementName}/${elementName}.html`);
+        let resolvedUrl = this.resolveUrl('pages/'+elementName+'/'+elementName+'.html');
 
         if(pathFile){
           resolvedUrl = this.resolveUrl(pathFile);
