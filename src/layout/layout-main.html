@@ -28,7 +28,10 @@
 <link rel="import" href="../../bower_components/aqa-font/aqa-mitr-font.html">
 <link rel="import" href="../../bower_components/aqa-styles/flexbox-grid.html">
 
+
 <link rel="import" href="./layout-drawer.html">
+<link rel="import" href="./layout-menu-info.html">
+
 
 <link rel="import" href="../redux-mixin.html">
 <!-- <link rel="import" href="../frontend/redux/app-redux.html"> -->
@@ -172,26 +175,7 @@
                         <!-- <paper-icon-button icon="social:person"></paper-icon-button> -->
 
                         <template is="dom-if" if="[[checkAccount(user)]]">
-                            <paper-menu-button no-overlap horizontal-align="right" no-animations>
-                                <div class="divImage" slot="dropdown-trigger" alt="menu">
-                                    <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
-                                </div>
-                                <paper-listbox slot="dropdown-content">
-            
-                                    <paper-icon-item disabled>
-                                        <img width="40px" class="img-circle" src="../../images/user.png" slot="item-icon">
-                                        <paper-item-body two-line>
-                                            <div>[[user.fname]]</div>
-                                            <!-- <div secondary>[[user.email]]</div> -->
-                                        </paper-item-body>
-                                    </paper-icon-item>
-            
-                                    <paper-item on-tap="logout">
-                                        <iron-icon icon="icons:exit-to-app"></iron-icon>
-                                        &nbsp;&nbsp;Log-out
-                                    </paper-item>
-                                </paper-listbox>
-                            </paper-menu-button>
+                            <layout-menu-info user="[[user]]"></layout-menu-info>
                         </template>
                     </app-toolbar>
                     <!-- <template is="dom-if" if="[[progressEnable]]">
