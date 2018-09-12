@@ -101,8 +101,7 @@
       if(!detail.ctx.gotoPage){
 
         if(this.status=="auth"){
-         
-          if(this.payload.pathRule[detail.rule]!=undefined){
+          if(this.payload.pathRule[detail.rule]!=undefined || detail.rule==""){
             detail.pass()
           }else{
             detail.ctx.gotoPage = 'page-403'
