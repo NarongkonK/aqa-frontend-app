@@ -61,6 +61,8 @@
 
 
       _pageChanged(e) {
+        
+
         this.$.nylonInit.$.layoutMain.topic = ""
         let elementName = e.detail.element.localName
         let pathFile = e.detail.element.getAttribute('path-file');
@@ -87,8 +89,6 @@
             if(nav){
               this.$.nylonInit.$.layoutMain.navigation = JSON.parse(JSON.stringify(nav))
             }
-            
-
 
           },
           () => {

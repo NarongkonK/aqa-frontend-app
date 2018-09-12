@@ -96,8 +96,15 @@
     }
 
     checkRule(detail) {
-
       let elementName = detail.element.localName
+
+      if(elementName=="page-401" && detail.ctx.gotoPage==undefined ){
+        detail.ctx.gotoPage = 'page-404'
+        detail.next()
+        return;
+      }
+
+      
       if(!detail.ctx.gotoPage){
 
         if(this.status=="auth"){
