@@ -21,12 +21,15 @@
             .input {
                 width: 100px;
             }
+            [hidden] {
+                display: none;
+            }
         </style>
         <div class="row" style="padding: 0.5rem 0">
             <div class="col-xs-6">
                 <span>จำนวน [[_quantity(items,count,page,limit)]] / [[count]] รายการ</span>
             </div>
-            <div class="col-xs-6 flex-container">
+            <div class="col-xs-6 flex-container" hidden$="[[paginationDisabled]]">
                 <aqa-tooltip label="ก่อนหน้า">
                     <paper-icon-button class="btn-edit" icon="icons:chevron-left" on-click="_previous"></paper-icon-button>
                 </aqa-tooltip>

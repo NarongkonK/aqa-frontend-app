@@ -75,7 +75,8 @@
                 startAs: {
                     type: Number,
                     value: 1
-                }
+                },
+                paginationDisabled:Boolean
             }
         }
 
@@ -240,7 +241,7 @@
                         </vaadin-grid-column>
                     </template>
                 </vaadin-grid>
-                <aqa-pagegination id="pagegination" count="[[data.TotalCount]]" items="[[data.Data]]" on-page-change="_reqRefresh" hidden$="[[table.noPagegination]]"></aqa-pagegination>
+                <aqa-pagegination id="pagegination" count="[[data.TotalCount]]" items="[[data.Data]]" on-page-change="_reqRefresh" hidden$="[[table.noPagegination]]" pagination-disabled="[[paginationDisabled]]"></aqa-pagegination>
 
 
             `

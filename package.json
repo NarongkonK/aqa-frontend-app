@@ -32,9 +32,10 @@
     "app:report": "gulp route --app aqa-frontend-report"
   },
   "dependencies": {
-    "redux": "^3.7.1",
-    "redux-thunk": "^2.2.0",
+    "cropperjs": "^1.4.1",
     "express": "^4.16.3",
-    "prpl-server": "^1.1.0"
+    "prpl-server": "^1.1.0",
+    "redux": "^3.7.1",
+    "redux-thunk": "^2.2.0"
   }
 }
