@@ -19,7 +19,10 @@
     },
     "builds": [
         {
-            "preset": "es5-bundled"
+            "name": "bundled",
+            "js": {"minify": true},
+            "css": {"minify": true},
+            "html": {"minify": true}
         }
     ]
 }
