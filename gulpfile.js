@@ -324,3 +324,7 @@ gulp.task('polymer', function (done) {
 //     ])
 // })
 
+gulp.task('build', function (done) {
+    return gulp.src('./bower_components/webcomponentsjs/custom-elements-es5-adapter.js')
+    .pipe(gulp.dest('./build/es5-bundled/bower_components/webcomponentsjs/'));
+})
