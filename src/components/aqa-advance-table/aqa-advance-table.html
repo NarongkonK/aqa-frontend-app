@@ -10,7 +10,7 @@
 <link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
 <link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-column-group.html">
 <link rel="import" href="../aqa-pagegination/aqa-pagegination.html">
-
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
 <link rel="import" href="../../../bower_components/aqa-icons/aqa-icon-tool.html">
 <link rel="import" href="../../../bower_components/aqa-tooltip/aqa-tooltip.html">
 
@@ -137,20 +137,20 @@
                 <vaadin-grid id="grid" items="[[items]]" theme="compact" inverted$="[[inverted]]" selected-items="[[selectedItems]]">
                     <slot name="row-details"></slot>
                     <template is="dom-if" if="[[checked]]">
-                        <vaadin-grid-column width="50px" flex-grow="0">
+                        <!-- <vaadin-grid-column width="50px" flex-grow="0">
                             <template class="header">
                                 <div>
-                                    <!-- <paper-checkbox on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"></paper-checkbox> -->
                                     <vaadin-checkbox on-change="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"></vaadin-checkbox>
                                 </div>
                             </template>
                             <template>
                                 <div style="padding-left:5px">
-                                    <!-- <paper-checkbox on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"></paper-checkbox> -->
                                     <vaadin-checkbox on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"></vaadin-checkbox>
                                 </div>
                             </template>
-                        </vaadin-grid-column>
+                        </vaadin-grid-column> -->
+                        <vaadin-grid-selection-column auto-select>
+                        </vaadin-grid-selection-column>
                     </template>
                     
                     <vaadin-grid-column width="80px" flex-grow="0">
@@ -241,7 +241,7 @@
                         </vaadin-grid-column>
                     </template>
                 </vaadin-grid>
-                <aqa-pagegination id="pagegination" count="[[data.TotalCount]]" items="[[data.Data]]" on-page-change="_reqRefresh" hidden$="[[table.noPagegination]]" pagination-disabled="[[paginationDisabled]]"></aqa-pagegination>
+                <aqa-pagegination id="pagegination" count="[[data.total_count]]" items="[[data.data]]" on-page-change="_reqRefresh" hidden$="[[table.noPagegination]]" pagination-disabled="[[paginationDisabled]]"></aqa-pagegination>
 
 
             `
@@ -257,7 +257,7 @@
         }
 
         _dataChanged(data) {
-            this.items = data.Data
+            this.items = data.data
         }
 
         _resetSelection(inverted) {
