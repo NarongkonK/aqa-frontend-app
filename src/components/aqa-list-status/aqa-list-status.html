@@ -1,0 +1,85 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/aqa-styles/aqa-styles.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<dom-module id="aqa-list-status">
+    <template>
+        <style include="aqa-styles">
+            .circle {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                text-align: center;
+                background-color: #ddd;
+                line-height: 40px;
+                float: right;
+                margin: 0 0.2rem;
+            }
+            .circle-red{
+                background-color: #EB000E;
+                color:white;
+            }
+            .circle-light-red{
+                background-color: #E8A878;
+                color:white;
+            }
+            .circle-yellow{
+                background-color: #FDFF00;
+                /* color:white */
+            }
+            .circle-light-green{
+                background-color: #A6CC80;
+                color:white;
+            }
+            .circle-green{
+                background-color: #3FA942;
+                color:white;
+            }
+            .circle:hover{
+                cursor: pointer;
+            }
+        </style>
+        <div class="circle circle-green">
+            [[value.green]]
+        </div>
+        <div class="circle circle-light-green">
+            [[value.lightGreen]]
+        </div>
+        <div class="circle circle-yellow">
+            [[value.yellow]]
+        </div>
+        <div class="circle circle-light-red">
+            [[value.lightRed]]
+        </div>
+        <div class="circle circle-red">
+            [[value.red]]
+        </div>
+    </template>
+
+    <script>
+
+        class AqaListStatus extends Polymer.Element {
+
+            static get is() {
+                return 'aqa-list-status';
+            }
+
+            static get properties() {
+                return {
+                    value:{
+                        type:Object,
+                        value:{
+                            red:"10",
+                            lightRed:"2",
+                            yellow:"6",
+                            lightGreen:"4",
+                            green:"8"
+                        }
+                    }
+                };
+            }
+
+        }
+
+        window.customElements.define(AqaListStatus.is, AqaListStatus);
+    </script>
+</dom-module>
