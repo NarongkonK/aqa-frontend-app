@@ -118,7 +118,7 @@
                 </paper-item>
             </paper-listbox>
         </paper-menu-button>
-
+        <form id="fLogout" action="[[authUrl]]/logout" method="post"></form>
     </template>
 
     <script>
@@ -135,6 +135,12 @@
                         value: function () {
                             return {}
                         }
+                    },
+                    authUrl: {
+                        type: String,
+                        value: function () {
+                            return Nylon.apiURL.auth
+                        }
                     }
                 }
             }
@@ -145,7 +151,8 @@
 
             _logout() {
                 // document.cookie = 'refresh_token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-                window.location = Nylon.apiURL.user+"/auth/logout"
+                //window.location = Nylon.apiURL.user+"/auth/logout"
+                this.$.fLogout.submit()
             }
 
 

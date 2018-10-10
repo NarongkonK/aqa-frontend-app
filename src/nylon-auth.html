@@ -20,12 +20,12 @@
           type: String,
           //value: 'http://user-api.onesqa.com/api/auth'
           value: function(){
-            return Nylon.apiURL.user+"/auth"
+            return Nylon.apiURL.auth
           }
         },
         path: {
           type: String,
-          value: "/scan"
+          value: "/silent"
         },
         userInfo: {
           notify: true,
@@ -43,6 +43,7 @@
     }
 
     ready() {
+      
       super.ready()
       window.addEventListener("message", (e) => this._message(e), false);
       if(this.disabled){
@@ -54,35 +55,45 @@
     
 
     _message(event) {
+      
+      let topic;
       if(event.data==null)
         return;
 
-      let topic = event.data.split('?')[0]
+      if (event.data.match(/\?.*/)==null) {
+        // do something
+        topic = event.data
+        
+      }else {
+        topic = event.data.split('?')[0]
+      }
 
+      
+
+      
+      
       switch (topic) {
         case 'nylonAuth/auth':
+        
+
           this.status = 'auth';
-
-          let token = this.getParameterByName('accessToken',event.data)
-          axios.defaults.headers.common['Authorization'] = token
-          window.token = token
-
-          let decoded = jwt_decode(token);
-          this.userInfo = decoded
-          this.dispatchEvent(new CustomEvent('auth', {detail: decoded}));
-         
 
           this.token = this.getParameterByName('accessToken',event.data)
           axios.defaults.headers.common['Authorization'] = this.token
-          this.userInfo = jwt_decode(this.token)
-          this.payload = jwt_decode(this.getParameterByName('payload',event.data))
+          
+          window.token = this.token
 
-          // console.log(this.userInfo)
-          this.dispatchEvent(new CustomEvent('auth', {detail: this.userInfo}))
-          Nylon.dispatch('nylonSetUser',this.userInfo,this.payload)
+          this.userInfo = jwt_decode(this.token)
+          this.dispatchEvent(new CustomEvent('auth', {detail: this.userInfo}));
+         
+
+          // this.payload = jwt_decode(this.getParameterByName('payload',event.data))
+
+          Nylon.dispatch('nylonSetUser',this.userInfo,this.payload || {})
           
           break;
         case 'nylonAuth/noauth':
+          
             this.status = 'noauth';
 
             axios.defaults.headers.common['Authorization'] = ''
@@ -108,12 +119,15 @@
       if(!detail.ctx.gotoPage){
 
         if(this.status=="auth"){
-          if(this.payload.pathRule[detail.rule]!=undefined || detail.rule==""){
-            detail.pass()
-          }else{
-            detail.ctx.gotoPage = 'page-403'
-            detail.next()
-          }
+          
+          // if(this.payload.pathRule[detail.rule]!=undefined || detail.rule==""){
+          //   detail.pass()
+          // }else{
+          //   detail.ctx.gotoPage = 'page-403'
+          //   detail.next()
+          // }
+
+          detail.pass()
 
         } else {
           detail.ctx.gotoPage = 'page-401'
