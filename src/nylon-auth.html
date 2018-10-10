@@ -55,7 +55,8 @@
     
 
     _message(event) {
-      
+      if (event.origin+"/api/auth" != Nylon.apiURL.auth) return;
+
       let topic;
       if(event.data==null)
         return;
