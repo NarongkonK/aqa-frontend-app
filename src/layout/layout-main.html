@@ -154,7 +154,8 @@
                 height: 30px;
                 border-radius: 50%;
             }
-            .content{
+
+            .content {
                 padding: 0.5rem 1rem 0 1rem;
             }
         </style>
@@ -172,15 +173,10 @@
                         <div main-title>[[appName]]</div>
                         <paper-icon-button icon="editor:format-size"></paper-icon-button>
                         <paper-icon-button icon="social:notifications"></paper-icon-button>
-                        <!-- <paper-icon-button icon="social:person"></paper-icon-button> -->
-
                         <template is="dom-if" if="[[checkAccount(user)]]">
                             <layout-menu-info user="[[user]]"></layout-menu-info>
                         </template>
                     </app-toolbar>
-                    <!-- <template is="dom-if" if="[[progressEnable]]">
-                        <paper-progress id="progress" value="[[progressValue]]" indeterminate="[[progressIndeterminate]]"></paper-progress>
-                    </template> -->
                 </app-header>
                 <div id="slotMain">
                     <div class="content">
@@ -237,8 +233,8 @@
                 };
             }
 
-            logout(){
-                Nylon.dispatch('authLogout') 
+            logout() {
+                Nylon.dispatch('authLogout')
             }
             ready() {
                 super.ready()
@@ -304,7 +300,7 @@
                 document.querySelector('body').style.fontSize = e.currentTarget.getAttribute('size') + 'rem'
             }
 
-            _showBreadcrumb(arr){
+            _showBreadcrumb(arr) {
                 return arr.length != 1
             }
 
