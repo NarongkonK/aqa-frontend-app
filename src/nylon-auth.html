@@ -55,33 +55,24 @@
     
 
     _message(event) {
+      // console.log(event)
       if (event.origin+"/api/auth" != Nylon.apiURL.auth) return;
 
       let topic;
       if(event.data==null)
         return;
 
-      if (event.data.match(/\?.*/)==null) {
-        // do something
-        topic = event.data
-        
-      }else {
-        topic = event.data.split('?')[0]
-      }
-
-      
-
-      
-      
-      switch (topic) {
-        case 'nylonAuth/auth':
+      switch (event.data.action) {
+        case 'auth':
         
 
           this.status = 'auth';
 
-          this.token = this.getParameterByName('accessToken',event.data)
+          // this.token = this.getParameterByName('accessToken',event.data)
+          // axios.defaults.headers.common['Authorization'] = this.token
+          this.token = event.data.token
           axios.defaults.headers.common['Authorization'] = this.token
-          
+
           window.token = this.token
 
           this.userInfo = jwt_decode(this.token)
@@ -93,7 +84,7 @@
           Nylon.dispatch('nylonSetUser',this.userInfo,this.payload || {})
           
           break;
-        case 'nylonAuth/noauth':
+        case 'noauth':
           
             this.status = 'noauth';
 

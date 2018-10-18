@@ -111,10 +111,13 @@
                     </div>
                 </paper-item>
                 <paper-item class="menu" on-click="_changePassword">
-                        <iron-icon icon="icons:refresh"></iron-icon>&nbsp;&nbsp;เปลี่ยนรหัสผ่าน
+                    <iron-icon icon="icons:refresh"></iron-icon>&nbsp;&nbsp;เปลี่ยนรหัสผ่าน
+                </paper-item>
+                <paper-item class="menu" on-click="_changeInfo">
+                    <iron-icon icon="icons:assignment-ind"></iron-icon>&nbsp;&nbsp;ข้อมูลส่วนตัว
                 </paper-item>
                 <paper-item  class="menu" on-click="_logout">
-                        <iron-icon icon="icons:exit-to-app"></iron-icon>&nbsp;&nbsp;Logout
+                    <iron-icon icon="icons:exit-to-app"></iron-icon>&nbsp;&nbsp;Logout
                 </paper-item>
             </paper-listbox>
         </paper-menu-button>
@@ -147,6 +150,10 @@
 
             _changePassword(){
                 Nylon.page("/changepassword")
+            }
+
+            _changeInfo(){
+                window.location = "http://user.onesqa.com/user/info?url="+encodeURI(document.location.href)
             }
 
             _logout() {
