@@ -1,0 +1,190 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<!-- <link rel="import" href="../../lib/font-awesome.html"> -->
+<dom-module id="aqa-stepper">
+    <template>
+        <style>
+            #wizard-progress {
+                width: 100%;
+                margin: 20px auto 0 auto;
+            }
+
+            #wizard-progress .step-indicator {
+                border-collapse: separate;
+                display: table;
+                margin-left: 0px;
+                position: relative;
+                table-layout: fixed;
+                text-align: center;
+                vertical-align: middle;
+                padding-left: 0;
+            }
+
+            #wizard-progress .step-indicator li {
+                display: table-cell;
+                position: relative;
+                float: none;
+                padding: 0;
+                width: 1%;
+            }
+
+            #wizard-progress .step-indicator li:after {
+                background-color: #ccc;
+                content: "";
+                display: block;
+                height: 1px;
+                position: absolute;
+                width: 100%;
+                top: 32px;
+            }
+
+            #wizard-progress .step-indicator li:after {
+                left: 50%;
+            }
+
+            #wizard-progress .step-indicator li:last-of-type:after {
+                display: none;
+            }
+
+            #wizard-progress .step-indicator li.active .step {
+                border-color: #2ca8ff;
+                color: #2ca8ff;
+            }
+
+            #wizard-progress .step-indicator li.active .caption {
+                color: #2ca8ff;
+            }
+
+            #wizard-progress .step-indicator li.complete:after {
+                background-color: #05ae0e;
+            }
+
+            #wizard-progress .step-indicator li.complete .step {
+                border-color: #05ae0e;
+                color: #05ae0e;
+            }
+
+            #wizard-progress .step-indicator li.complete .caption {
+                color: #05ae0e;
+            }
+
+            #wizard-progress .step-indicator .step {
+                background-color: #fff;
+                border-radius: 50%;
+                border: 2px solid #ccc;
+                color: #ccc;
+                font-size: 24px;
+                height: 64px;
+                line-height: 64px;
+                margin: 0 auto;
+                position: relative;
+                width: 64px;
+                z-index: 1;
+            }
+
+            #wizard-progress .step-indicator .step:hover {
+                cursor: pointer;
+            }
+
+            #wizard-progress .step-indicator .caption {
+                color: #ccc;
+                padding: 11px 16px;
+            }
+        </style>
+        <div id="wizard-progress">
+            <ol class="step-indicator">
+                <template is="dom-repeat" items="[[items]]">
+                    <li class$="[[activeClass(index,selected)]]">
+                        <div class="step">
+                            <iron-icon icon="[[activeIcon(index,selected)]]"></iron-icon>
+                        </div>
+                        <div class="caption hidden-xs hidden-sm">[[item.label]]</div>
+                    </li>
+                </template>
+                <!-- <li class="complete">
+                    <div class="step"><iron-icon icon="done"></iron-icon></div>
+                    <div class="caption hidden-xs hidden-sm">ขั้นตอนที่ 2</div>
+                </li>
+                <li class="active">
+                    <div class="step"><iron-icon icon="more-horiz"></iron-icon></i></div>
+                    <div class="caption hidden-xs hidden-sm">ขั้นตอนที่ 3</div>
+                </li>
+                <li>
+                    <div class="step"><iron-icon icon="more-horiz"></iron-icon></div>
+                    <div class="caption hidden-xs hidden-sm">ขั้นตอนที่ 4</div>
+                </li>
+                <li>
+                    <div class="step"><iron-icon icon="more-horiz"></iron-icon></div>
+                    <div class="caption hidden-xs hidden-sm">ขั้นตอนที่ 5</div>
+                </li> -->
+            </ol>
+        </div>
+    </template>
+
+    <script>
+      
+        class AqaStepper extends Polymer.Element {
+            
+            static get is() {
+                return 'aqa-stepper';
+            }
+
+            static get properties() {
+                return {
+                    selected:{
+                        type:String,
+                        value:'2'
+                    },  
+                    items:{
+                        type:Array,
+                        value:[
+                            {
+                                label:'ขั้นตอนที่ 1',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 2',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 3',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 4',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 5',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 6',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 7',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 8',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 9',
+                            },
+                            {
+                                label:'ขั้นตอนที่ 10',
+                            },
+                            
+                        ]
+                    }
+                }
+            }
+            activeClass(index,selected){
+                if(index < selected) return 'complete'
+                else if(index == selected) return 'active'
+                else return ''
+            }
+            activeIcon(index,selected){
+                if(index < selected) return 'done'
+                else return 'more-horiz'
+            }
+        }
+
+        window.customElements.define(AqaStepper.is, AqaStepper);
+    </script>
+</dom-module>
