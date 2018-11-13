@@ -13,11 +13,11 @@ EXPOSE 8080
 CMD ["node", "index.js"]
 
 
-# CMD :: docker build -t aqa/aqa-portal:0.0.2 .
-# CMD :: docker tag aqa/aqa-portal:0.0.2 deploy.onesqa.com:5000/aqa/aqa-portal:0.0.2
-# CMD :: docker push deploy.onesqa.com:5000/aqa/aqa-portal:0.0.2
+# CMD :: docker build -t aqa/aqa-basic:0.0.11 .
+# CMD :: docker tag aqa/aqa-basic:0.0.11 deploy.onesqa.com:5000/aqa/aqa-basic:0.0.11
+# CMD :: docker push deploy.onesqa.com:5000/aqa/aqa-basic:0.0.11
 
 # Other
 # CMD :: docker rm -f $(docker ps -a -q)
 # CMD :: docker rmi -f $(docker images -a -q)
-# CMD :: docker run -p 8080:8080 aqa/aqa-portal:0.0.2
+# CMD :: docker run -p 8080:8080 aqa/aqa-basic:0.0.11
